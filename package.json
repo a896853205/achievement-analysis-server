@@ -20,7 +20,9 @@
     "koa-router": "^7.4.0",
     "koa-static": "^5.0.0",
     "koa-views": "^6.2.0",
-    "mysql": "^2.17.1"
+    "md5": "^2.2.1",
+    "mysql": "^2.17.1",
+    "uuid": "^3.3.3"
   },
   "devDependencies": {
     "babel-core": "^6.26.3",

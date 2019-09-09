@@ -4,7 +4,7 @@ export const dbConfig = {
   host: 'localhost',
   user: 'root',
   password: DATA_BASE_KEY,
-  database: 'me',
+  database: 'college',
   port: 3306,
   // 最大连接数，默认为10
   connectionLimit: 10

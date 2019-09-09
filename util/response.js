@@ -1,4 +1,4 @@
-export class Result {
+export default class Result {
   constructor({
     data = {},
     succ = 200,

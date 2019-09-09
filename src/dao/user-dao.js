@@ -1,0 +1,16 @@
+// 数据库操作
+import { db, SqlObject } from '../resources/db-connect';
+
+// 数据库语句
+import userMapper from '../resources/mapper/user-mapper';
+
+export default {
+  // 通过uuid查询用户
+  selectByUuid: async uuid => {
+    db.query(new SqlObject(userMapper.selectByUuid), [uuid]);
+  },
+  // 通过username查询用户
+  selectByUserName: async userName => {
+    db.query(new SqlObject(userMapper.selectByUserName), [userName]);
+  }
+}

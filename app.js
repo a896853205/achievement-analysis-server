@@ -3,8 +3,8 @@ import json from 'koa-json';
 import onerror from 'koa-onerror';
 import bodyparser from 'koa-bodyparser';
 import logger from 'koa-logger';
-// 路由
 
+// 路由
 import users from './src/routes/users';
 
 const app = new Koa();
@@ -36,4 +36,4 @@ app.on('error', (err, ctx) => {
   console.error('server error', err, ctx)
 });
 
-module.exports = app
+module.exports = app;
