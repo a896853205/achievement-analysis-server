@@ -1,4 +1,6 @@
+// dao
 import userDao from '../dao/user-dao';
+import webToken from '../../util/token';
 // import uuid from 'uuid/v1';
 
 export default {
@@ -12,7 +14,11 @@ export default {
       return;
     }
 
-    return user;
+    // 一切正确,token生成
+    return webToken.parseToken({
+      uuid: user.uuid,
+      role: user.role
+    });
   }
   // 注册
 

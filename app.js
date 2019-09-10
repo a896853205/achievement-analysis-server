@@ -1,22 +1,49 @@
-import Koa from'koa';
+import Koa from 'koa';
 import json from 'koa-json';
 import onerror from 'koa-onerror';
 import bodyparser from 'koa-bodyparser';
 import logger from 'koa-logger';
+// 跨域
 import cors from 'koa2-cors';
-
 // 路由
 import users from './src/routes/users';
+// key
+import { TOKEN_KEY } from './src/constants/keys';
+// 中间件
+import getToken from './src/middle/verify-token';
+import Result from './util/response';
+import jwt from 'koa-jwt';
 
 const app = new Koa();
 
+// 跨域
 app.use(cors());
+
+app.use(async (ctx, next) => {
+  return next().catch((err) => {
+    
+    if (401 == err.status) {
+      ctx.status = 401;
+      ctx.body = new Result({
+        status: 3,
+        msg: '请重新登录'
+      })
+    } else {
+      throw err;
+    }
+  });
+});
+
+app.use(jwt({ secret: TOKEN_KEY }).unless({
+  path: ['/users/login']
+}));
+
 // error handler
 onerror(app)
 
 // middlewares
 app.use(bodyparser({
-  enableTypes:['json', 'form', 'text']
+  enableTypes: ['json', 'form', 'text']
 }))
 app.use(json())
 app.use(logger())
@@ -30,8 +57,11 @@ app.use(async (ctx, next) => {
   console.log(`${ctx.method} ${ctx.url} - ${ms}ms`)
 })
 
+// 获取token中的值
+app.use(getToken);
+
 // routes
-app.use(users.routes(), users.allowedMethods())
+app.use(users.routes(), users.allowedMethods());
 
 // error-handling
 app.on('error', (err, ctx) => {
