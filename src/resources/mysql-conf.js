@@ -1,7 +1,7 @@
 import { DATA_BASE_KEY } from '../constants/keys';
 
 export const dbConfig = {
-  host: 'localhost',
+  host: '62.234.76.58',
   user: 'root',
   password: DATA_BASE_KEY,
   database: 'college',
