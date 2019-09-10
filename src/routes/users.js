@@ -8,9 +8,9 @@ const router = require('koa-router')()
 router.prefix('/users')
 
 // 登录路由
-router.post('/login', ctx => {
+router.post('/login', async ctx => {
   let { userName, passWord } = ctx.request.body,
-    user = userService.login(userName, passWord);
+    user = await userService.login(userName, passWord);
 
   if (user) {
     ctx.body = new Result({

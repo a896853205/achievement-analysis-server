@@ -7,10 +7,14 @@ import userMapper from '../resources/mapper/user-mapper';
 export default {
   // 通过uuid查询用户
   selectByUuid: async uuid => {
-    db.query(new SqlObject(userMapper.selectByUuid), [uuid]);
+    let user = await db.query(new SqlObject(userMapper.selectByUuid, [uuid]));
+
+    return user[0];
   },
   // 通过username查询用户
   selectByUserName: async userName => {
-    db.query(new SqlObject(userMapper.selectByUserName), [userName]);
+    let user = await db.query(new SqlObject(userMapper.selectByUserName, [userName]));
+
+    return user[0];
   }
 }

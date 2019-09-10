@@ -7,6 +7,7 @@ export const db = {
    * @param {SqlObject} sqlObject sql包装对象
    */
   query (sqlObject) {
+
     return new Promise((resolve, reject) => {
       let connection = mysql.createConnection(dbConfig);
 
