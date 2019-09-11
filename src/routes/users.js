@@ -25,6 +25,40 @@ router.post('/login', async ctx => {
   }
 });
 
+// 获取用户基本信息
+router.post('/getUserInfo', async ctx => {
+  let user = ctx.state.data;
+  
+  ctx.body = new Result({
+    data: user
+  })
+});
+
+// 设置用户基本信息(高考决策第一步, 或者个人修改页面)
+router.post('/setUserInfo', async ctx => {
+  let { gender, score, accountCategory } = ctx.request.body,
+    user = ctx.state.data;
+
+  if (user.confirm === 1) {
+    ctx.body = new Result({
+      status: 0,
+      msg: '已经确认基本用户信息,禁止修改'
+    });
+  } else if (user.confirm === 0) {
+    let result = userService.setUserInfo(gender, score, accountCategory, user.uuid);
+    if (result) {
+      ctx.body = new Result({
+        msg: '已更新基本用户信息'
+      });
+    } else {
+      ctx.body = new Result({
+        status: 0,
+        msg: '基本用户信息不完整,请填写完整'
+      });
+    }
+  }
+})
+
 // 注册路由
 router.post('/register', ctx => {
   ctx.body = new Result({});

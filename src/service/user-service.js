@@ -22,6 +22,20 @@ export default {
       }),
       user
     }
+  },
+  setUserInfo: async (gender, score, accountCategory, uuid) => {
+    if (gender === undefined
+      || gender === null
+      || score === undefined
+      || score === null
+      || accountCategory === undefined
+      || accountCategory === null
+      ) {
+        return;
+    } else {
+      let result = await userDao.updateUser({gender, score, accountCategory, confirm: 1, uuid});
+      return result;
+    }
   }
   // 注册
 
