@@ -15,10 +15,13 @@ export default {
     }
 
     // 一切正确,token生成
-    return webToken.parseToken({
-      uuid: user.uuid,
-      role: user.role
-    });
+    return {
+      token: webToken.parseToken({
+        uuid: user.uuid,
+        role: user.role
+      }),
+      user
+    }
   }
   // 注册
 

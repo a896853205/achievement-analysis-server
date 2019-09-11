@@ -10,11 +10,11 @@ router.prefix('/users')
 // 登录路由
 router.post('/login', async ctx => {
   let { userName, passWord } = ctx.request.body,
-    token = await userService.login(userName, passWord);
+    data = await userService.login(userName, passWord);
 
-  if (token) {
+  if (data.token) {
     ctx.body = new Result({
-      data: token,
+      data,
       status: 2
     });
   } else {
