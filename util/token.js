@@ -20,7 +20,7 @@ export default {
     return jwt.sign(
       {
         data,
-        iat: opation.duration
+        exp: opation.duration
       }, opation.secret
     );
   },
@@ -30,8 +30,14 @@ export default {
    */
   resolveToken: async token => {
     let opation = new Opation(),
-      obj = await jwt.verify(token, opation.secret);
+      obj = null;
+
+    try {
+      obj = jwt.verify(token.split(' ')[1], opation.secret);
+    } catch (error) {
+      throw error;
+    }
     
-      return obj.data;
+    return obj.data;
   }
 }

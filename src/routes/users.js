@@ -28,7 +28,8 @@ router.post('/login', async ctx => {
 // 获取用户基本信息
 router.post('/getUserInfo', async ctx => {
   let user = ctx.state.data;
-  
+
+  user = await userService.getUserInfo(user.uuid);
   ctx.body = new Result({
     data: user
   })

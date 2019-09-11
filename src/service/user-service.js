@@ -36,6 +36,11 @@ export default {
       let result = await userDao.updateUser({gender, score, accountCategory, confirm: 1, uuid});
       return result;
     }
+  },
+  getUserInfo: async uuid => {
+    let result = await userDao.selectByUuid(uuid);
+    
+    return result;
   }
   // 注册
 
