@@ -3,7 +3,6 @@ import { db, SqlObject } from '../resources/db-connect';
 
 // 数据库语句
 import userMapper from '../resources/mapper/user-mapper';
-import Result from '../../util/response';
 
 export default {
   // 通过uuid查询用户
@@ -21,8 +20,8 @@ export default {
   },
 
   // 设置用户基本信息
-  updateUser: async ({gender, score, accountCategory, confirm, uuid}) => {
-    let result = await db.query(new SqlObject(userMapper.update, [gender, score, accountCategory, confirm, uuid]));
+  updateUser: async ({nickname, gender, score, accountCategory, confirm, addressProvince, examYear, uuid}) => {
+    let result = await db.query(new SqlObject(userMapper.update, [nickname, gender, score, accountCategory, addressProvince, confirm, examYear, uuid]));
 
     return result;
   }

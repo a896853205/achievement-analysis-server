@@ -37,7 +37,7 @@ router.post('/getUserInfo', async ctx => {
 
 // 设置用户基本信息(高考决策第一步, 或者个人修改页面)
 router.post('/setUserInfo', async ctx => {
-  let { nickname, gender, score, accountCategory } = ctx.request.body,
+  let { nickname, gender, score, accountCategory, addressProvince, examYear } = ctx.request.body,
     user = ctx.state.data;
 
   if (user.confirm === 1) {
@@ -46,7 +46,7 @@ router.post('/setUserInfo', async ctx => {
       msg: '已经确认基本用户信息,禁止修改'
     });
   } else if (user.confirm === 0) {
-    let result = await userService.setUserInfo(nickname, gender, score, accountCategory, user.uuid);
+    let result = await userService.setUserInfo(nickname, gender, score, accountCategory, addressProvince, examYear, user.uuid);
     if (result) {
       ctx.body = new Result({
         msg: '已更新基本用户信息'
@@ -61,8 +61,8 @@ router.post('/setUserInfo', async ctx => {
 })
 
 // 注册路由
-router.post('/register', ctx => {
-  ctx.body = new Result({});
-});
+// router.post('/register', ctx => {
+//   ctx.body = new Result({});
+// });
 
 export default router;

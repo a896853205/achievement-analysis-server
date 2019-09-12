@@ -1,7 +1,6 @@
 // dao
 import userDao from '../dao/user-dao';
 import webToken from '../../util/token';
-// import uuid from 'uuid/v1';
 
 export default {
   // 登录
@@ -23,7 +22,7 @@ export default {
       user
     }
   },
-  setUserInfo: async (nickname, gender, score, accountCategory, uuid) => {
+  setUserInfo: async (nickname, gender, score, accountCategory, addressProvince, examYear, uuid) => {
     if (nickname === undefined
       || nickname === null
       || gender === undefined
@@ -32,10 +31,12 @@ export default {
       || score === null
       || accountCategory === undefined
       || accountCategory === null
+      || addressProvince === undefined
+      || addressProvince === null
       ) {
         return;
     } else {
-      let result = await userDao.updateUser({nickname, gender, score, accountCategory, confirm: 1, uuid});
+      let result = await userDao.updateUser({nickname, gender, score, accountCategory, confirm: 1, addressProvince, examYear, uuid});
       
       return result;
     }
