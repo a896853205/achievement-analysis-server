@@ -21,8 +21,8 @@ export default {
   },
 
   // 设置用户基本信息
-  updateUser: async params => {
-    let result = await db.query(new SqlObject(userMapper.update, [...params]));
+  updateUser: async ({gender, score, accountCategory, confirm, uuid}) => {
+    let result = await db.query(new SqlObject(userMapper.update, [gender, score, accountCategory, confirm, uuid]));
 
     return result;
   }

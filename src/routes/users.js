@@ -29,7 +29,7 @@ router.post('/login', async ctx => {
 router.post('/getUserInfo', async ctx => {
   let user = ctx.state.data;
 
-  user = await userService.getUserInfo(user.uuid);
+  // user = await userService.getUserInfo(user.uuid);
   ctx.body = new Result({
     data: user
   })
@@ -37,7 +37,7 @@ router.post('/getUserInfo', async ctx => {
 
 // 设置用户基本信息(高考决策第一步, 或者个人修改页面)
 router.post('/setUserInfo', async ctx => {
-  let { gender, score, accountCategory } = ctx.request.body,
+  let { nickname, gender, score, accountCategory } = ctx.request.body,
     user = ctx.state.data;
 
   if (user.confirm === 1) {
@@ -46,7 +46,7 @@ router.post('/setUserInfo', async ctx => {
       msg: '已经确认基本用户信息,禁止修改'
     });
   } else if (user.confirm === 0) {
-    let result = userService.setUserInfo(gender, score, accountCategory, user.uuid);
+    let result = await userService.setUserInfo(nickname, gender, score, accountCategory, user.uuid);
     if (result) {
       ctx.body = new Result({
         msg: '已更新基本用户信息'

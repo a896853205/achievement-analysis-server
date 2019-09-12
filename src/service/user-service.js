@@ -23,8 +23,10 @@ export default {
       user
     }
   },
-  setUserInfo: async (gender, score, accountCategory, uuid) => {
-    if (gender === undefined
+  setUserInfo: async (nickname, gender, score, accountCategory, uuid) => {
+    if (nickname === undefined
+      || nickname === null
+      || gender === undefined
       || gender === null
       || score === undefined
       || score === null
@@ -33,7 +35,8 @@ export default {
       ) {
         return;
     } else {
-      let result = await userDao.updateUser({gender, score, accountCategory, confirm: 1, uuid});
+      let result = await userDao.updateUser({nickname, gender, score, accountCategory, confirm: 1, uuid});
+      
       return result;
     }
   },
