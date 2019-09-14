@@ -9,6 +9,7 @@ import cors from 'koa2-cors';
 import users from './src/routes/users';
 import system from './src/routes/system';
 import entryScore from './src/routes/entryScore';
+import school from './src/routes/school';
 // key
 import { TOKEN_KEY } from './src/constants/keys';
 // 中间件
@@ -66,6 +67,7 @@ app.use(getToken);
 app.use(users.routes(), users.allowedMethods());
 app.use(system.routes(), system.allowedMethods());
 app.use(entryScore.routes(), entryScore.allowedMethods());
+app.use(school.routes(), school.allowedMethods());
 
 // error-handling
 app.on('error', (err, ctx) => {
