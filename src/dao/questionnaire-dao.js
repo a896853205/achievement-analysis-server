@@ -35,5 +35,17 @@ export default {
       new SqlObject(questionnaireMapper.queryQuestionnaireMark, [uuid])
     );
     return status;
+  },
+  // 获取问卷结果
+  queryQuestionnaireResult: async uuid => {
+    return await db.query(
+      new SqlObject(questionnaireMapper.queryQuestionnaireResult, [uuid])
+    );
+  },
+  // 获取评分标准
+  queryQuestionnaireStandard: async () => {
+    return await db.query(
+      new SqlObject(questionnaireMapper.queryQuestionnaireStandard)
+    );
   }
 };

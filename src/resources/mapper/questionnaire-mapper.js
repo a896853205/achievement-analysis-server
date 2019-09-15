@@ -29,5 +29,10 @@ export default {
     select *
     from 
     t_user_evaluate_result 
-    where fk_user_id = (select id from t_user where uuid = ?);`
+    where fk_user_id = (select id from t_user where uuid = ?);`,
+  //获取测评标准
+  queryQuestionnaireStandard: `
+    select * 
+    from
+    sys_t_job_interest_type`
 };
