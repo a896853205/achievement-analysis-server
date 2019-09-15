@@ -10,5 +10,12 @@ export default {
 		let schoolList = await db.query(new SqlObject(schoolMapper.querySchoolByLotId, [ lotId ]));
 
 		return schoolList;
+	},
+
+	// 通过学校id和当前年份获取学校
+	queryMajorBySchoolIdAndYear: async (schoolId, year) => {
+		let majorList = await db.query(new SqlObject(schoolMapper.getMajorBySchoolIdAndYear, [ schoolId, year ]));
+
+		return majorList;
 	}
 };

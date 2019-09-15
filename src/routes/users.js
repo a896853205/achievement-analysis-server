@@ -29,10 +29,9 @@ router.post('/login', async ctx => {
 router.post('/getUserInfo', async ctx => {
   let user = ctx.state.data;
 
-  // user = await userService.getUserInfo(user.uuid);
   ctx.body = new Result({
     data: user
-  })
+  });
 });
 
 // 设置用户基本信息(高考决策第一步, 或者个人修改页面)
