@@ -25,4 +25,36 @@ router.post("/getStatus", async ctx => {
   });
 });
 
+router.post("/updateStatus", async ctx => {
+  ctx.body = new Result({
+    data: await questionnaireService.updateQuestionnaireStatus(
+      1,
+      ctx.state.data.uuid
+    )
+  });
+});
+
+router.post("/uploadResult", async ctx => {
+  let { quesResult } = ctx.request.body;
+  let status = await questionnaireService.getQuestionnaireStatus(
+    ctx.state.data.uuid
+  );
+  if (!status.status[0].isEvaluate) {
+    await questionnaireService.updateQuestionnaireStatus(
+      1,
+      ctx.state.data.uuid
+    );
+    ctx.body = new Result({
+      data: await questionnaireService.insertQuestionnaireResult(
+        quesResult.join(","),
+        ctx.state.data.uuid
+      )
+    });
+  } else {
+    ctx.body = new Result({
+      data: "fuck off"
+    });
+  }
+});
+
 export default router;
