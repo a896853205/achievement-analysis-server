@@ -6,5 +6,13 @@ export default {
   update: 'update t_user set nickname=?, gender=?, score=?, account_category=?, address_province=?, confirm=?, exam_year=? where uuid=?',
   selectByUuid: 'select * from t_user where uuid=?',
   selectByUserName: 'select * from t_user where username=?', // 通过用户名查询用户
+  updatePassword: `
+    update
+    t_user
+    set
+    password=?
+    where
+    uuid=?
+  `
   // query: 'select * from equip where importance > 0 order by importance desc',
 }

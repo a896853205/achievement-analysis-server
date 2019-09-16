@@ -31,5 +31,10 @@ export default {
     } catch (error) {
       console.log(error);
     }
+  },
+
+  // 修改密码
+  updateUserPassword: async (newPassword, userUuid) => {
+    return await db.query(new SqlObject(userMapper.updatePassword, [newPassword, userUuid]));
   }
 }

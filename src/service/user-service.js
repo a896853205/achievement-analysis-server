@@ -42,10 +42,20 @@ export default {
       return result;
     }
   },
+
   getUserInfo: async uuid => {
     let result = await userDao.selectByUuid(uuid);
     
     return result;
+  },
+
+  // 修改密码
+  alterPassword: async (oldPassword, newPassword, userPassword, userUuid) => {
+    if (oldPassword === userPassword) {
+      return await userDao.updateUserPassword(newPassword, userUuid);
+    } else {
+      return;
+    }
   }
   // 注册
 
