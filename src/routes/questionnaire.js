@@ -7,9 +7,9 @@ const router = require("koa-router")();
 
 router.prefix("/questionnaire");
 
-router.post("/test", async ctx => {
+router.post("/getList", async ctx => {
   ctx.body = new Result({
-    data: await questionnaireService.getQuestionList(ctx.state.data.uuid)
+    data: await questionnaireService.getQuestionnaireList(ctx.state.data.uuid)
   });
 });
 
