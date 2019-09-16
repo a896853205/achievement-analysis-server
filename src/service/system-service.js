@@ -38,5 +38,12 @@ export default {
     let areaFeatureList = await systemDao.queryAreaFeature();
 
     return areaFeatureList;
+  },
+
+  getLotsOption: async () => {
+    let lotsList = await systemDao.queryLots();
+
+    return lotsList;
   }
+  
 }

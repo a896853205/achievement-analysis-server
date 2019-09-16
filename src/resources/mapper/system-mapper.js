@@ -1,6 +1,12 @@
 export default {
-  queryProvince: 'select * from sys_t_province',
-  querySchoolNature: 'select * from sys_t_school_nature',
+  queryProvince: `
+  select
+  *
+  from sys_t_province`,
+  querySchoolNature: `
+  select
+  *
+  from sys_t_school_nature`,
   querySchoolProperty:`
   select
   *
@@ -16,4 +22,10 @@ export default {
   *
   from
   sys_t_area_feature`,
+  queryLots:`
+  select
+  *
+  from
+  sys_t_lots
+  `,
 }

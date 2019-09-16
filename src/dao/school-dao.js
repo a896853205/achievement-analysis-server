@@ -13,8 +13,8 @@ export default {
 	},
 
 	// 通过学校id和当前年份获取学校
-	queryMajorBySchoolIdAndYear: async (schoolId, year) => {
-		let majorList = await db.query(new SqlObject(schoolMapper.getMajorBySchoolIdAndYear, [ schoolId, year ]));
+	queryMajorBySchoolIdAndYear: async (schoolId, year, lotId) => {
+		let majorList = await db.query(new SqlObject(schoolMapper.getMajorBySchoolIdAndYear, [ schoolId, year, lotId ]));
 
 		return majorList;
 	}

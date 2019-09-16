@@ -36,6 +36,7 @@ export default {
       ) {
         return;
     } else {
+      
       let result = await userDao.updateUser({nickname, gender, score, accountCategory, confirm: 1, addressProvince, examYear, uuid});
       
       return result;
