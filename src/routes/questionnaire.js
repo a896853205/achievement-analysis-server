@@ -9,7 +9,7 @@ router.prefix("/questionnaire");
 
 router.post("/getList", async ctx => {
   ctx.body = new Result({
-    data: await questionnaireService.getQuestionnaireList(ctx.state.data.uuid)
+    data: await questionnaireService.getQuestionList(ctx.state.data.uuid)
   });
 });
 
