@@ -19,24 +19,31 @@ export default {
     return schoolNature;
   },
 
-  // 获取学校办学性质
+  // 获取学校办学属性
   querySchoolProperty: async () => {
     let schoolProperty = await db.query(new SqlObject(systemMapper.querySchoolProperty));
 
     return schoolProperty;
   },
 
-  // 获取学校办学性质
+  // 获取学校办学类型
   querySchoolType: async () => {
     let schoolType = await db.query(new SqlObject(systemMapper.querySchoolType));
 
     return schoolType;
   },
 
-  // 获取学校办学性质
+  // 获取学校地区特色
   queryAreaFeature: async () => {
     let areaFeature = await db.query(new SqlObject(systemMapper.queryAreaFeature));
 
     return areaFeature;
+  },
+
+  // 获取批次信息
+  queryLots: async () => {
+    let lots = await db.query(new SqlObject(systemMapper.queryLots));
+
+    return lots;
   }
 }

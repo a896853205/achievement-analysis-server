@@ -20,16 +20,18 @@ router.post('/getSchool', async (ctx) => {
 
 // 获得专业
 router.post('/getMajor', async (ctx) => {
-	let { schoolId } = ctx.request.body,
+	let { schoolId, lotId } = ctx.request.body,
 		user = ctx.state.data,
 		majorList = [];
 
 	user = await userService.getUserInfo(user.uuid);
-	majorList = await schoolService.getMajorList(schoolId, user.exam_year);
+	majorList = await schoolService.getMajorList(schoolId, user.exam_year, lotId);
 
 	ctx.body = new Result({
 		data: majorList
 	});
 });
+
+// 获取批次
 
 export default router;

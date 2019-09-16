@@ -8,7 +8,6 @@ export default {
 	// 获取所有学校通过批次id
 	getSchoolList: async ({ lotId, natureValues, propertyValues, typeValues, areaFeatureValues }) => {
 		let schoolList = await schoolDao.querySchoolByLotId(lotId);
-
 		// 将筛选出来的学校进行去重
 
 		let resultSchoolList = [];
@@ -33,23 +32,31 @@ export default {
 			let oneSchoolObj = objectHelper.deepCopy(schoolList[i]);
 
 			oneSchoolObj.school_property_id = [];
-			oneSchoolObj.school_property = [];
+			oneSchoolObj.school_property_name = [];
 			oneSchoolObj.school_type_id = [];
-			oneSchoolObj.school_type = [];
+			oneSchoolObj.school_type_name = [];
 			oneSchoolObj.school_type_id = [];
-			oneSchoolObj.school_type = [];
+			oneSchoolObj.school_type_name = [];
+			oneSchoolObj.area_feature_id = [];
+			oneSchoolObj.area_feature_name = [];
 
 			for (let school of oneSchoolArr) {
 				// 判断属性id有没有
 				if (!oneSchoolObj.school_property_id.includes(school.school_property_id)) {
 					oneSchoolObj.school_property_id.push(school.school_property_id);
-					oneSchoolObj.school_property.push(school.school_property);
+					oneSchoolObj.school_property_name.push(school.school_property_name);
 				}
 
 				// 判断类型id有没有
 				if (!oneSchoolObj.school_type_id.includes(school.school_type_id)) {
 					oneSchoolObj.school_type_id.push(school.school_type_id);
-					oneSchoolObj.school_type.push(school.school_type);
+					oneSchoolObj.school_type_name.push(school.school_type_name);
+				}
+
+				// 判断地域id有没有
+				if (!oneSchoolObj.area_feature_id.includes(school.area_feature_id)) {
+					oneSchoolObj.area_feature_id.push(school.area_feature_id);
+					oneSchoolObj.area_feature_name.push(school.area_feature_name);
 				}
 			}
 
@@ -61,6 +68,7 @@ export default {
 		// 一对一的性质如果大于2,就会返回空数组
 		if (natureValues.length) {
 			let fitNatureSchoolList = [];
+
 			if (natureValues.length >= 2) {
 				resultSchoolList = fitNatureSchoolList;
 			}
@@ -117,6 +125,27 @@ export default {
 			resultSchoolList = fitTypeSchoolList;
 		}
 		// 判断地域特色
+		if (areaFeatureValues.length) {
+			let fitTypeSchoolList = [];
+
+			for (let schoolItem of resultSchoolList) {
+				let isFit = true;
+
+				for (let areaFeatureItem of areaFeatureValues) {
+					// 一旦有有一个不包括就不适合
+					if (!schoolItem.area_feature_id.includes(areaFeatureItem)) {
+						isFit = false;
+					}
+				}
+
+				// 如果全适合就push进去
+				if (isFit) {
+					fitTypeSchoolList.push(schoolItem);
+				}
+			}
+
+			resultSchoolList = fitTypeSchoolList;
+		}
 
 		return {
 			schoolList: resultSchoolList
@@ -124,12 +153,12 @@ export default {
 	},
 
 	// 模拟获取专业
-	getMajorList: async (schoolId, examYear) => {
+	getMajorList: async (schoolId, examYear, lotId) => {
 		// 通过schoolID 和 当前年份 获取专业
-		let majorList = await schoolDao.queryMajorBySchoolIdAndYear(schoolId, examYear - 1);
+		let majorList = await schoolDao.queryMajorBySchoolIdAndYear(schoolId, examYear - 1, lotId);
 
 		return {
 			majorList
-		}
+		};
 	}
 };

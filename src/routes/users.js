@@ -48,7 +48,8 @@ router.post('/setUserInfo', async ctx => {
     let result = await userService.setUserInfo(nickname, gender, score, accountCategory, addressProvince, examYear, user.uuid);
     if (result) {
       ctx.body = new Result({
-        msg: '已更新基本用户信息'
+        msg: '已更新基本用户信息',
+        data: result,
       });
     } else {
       ctx.body = new Result({
