@@ -44,6 +44,12 @@ export default {
     let lotsList = await systemDao.queryLots();
 
     return lotsList;
+  },
+
+  getVoluntaryOption: async (lotId) => {
+    let voluntaryOptionList = await systemDao.queryVoluntaryOption(lotId);
+
+    return voluntaryOptionList;
   }
   
 }

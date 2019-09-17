@@ -45,5 +45,12 @@ export default {
     let lots = await db.query(new SqlObject(systemMapper.queryLots));
 
     return lots;
+  },
+
+  // 获取志愿个数
+  queryVoluntaryOption: async (lotsId) => {
+    let voluntaryOption = await db.query(new SqlObject(systemMapper.queryVoluntaryOption, [lotsId]));
+
+    return voluntaryOption;
   }
 }

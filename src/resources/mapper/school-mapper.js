@@ -78,30 +78,38 @@ export default {
 	where a.fk_lots_id = ?;
 `,
 	getMajorBySchoolIdAndYear: `
-		-- 通过schoolID 和 当前年份 获取专业
-		select 
-		a.school_name,
-		a.school_code,
-		b.*
-		from 
-		t_school a
-		join
-		(
+	-- 批次id和学校id和年 查询专业
+	select
+	a.fk_school_id as school_id,
+	c.*,
+	a.tuition,
+	a.education_system,
+	a.enrollment,
+	a.enrollment_score,
+	a.year,
+	a.fk_lot_id as lot_id,
+	b.lots_name as lot_name
+	from 
+	t_major_enrollment_info a
+	left join
+	sys_t_lots b
+	on a.fk_lot_id = b.id
+	left join
+	(
 		select 
 		a.id as major_id,
 		a.major_name,
 		a.major_code,
-		a.tuition,
-		a.school_system,
-		a.fk_school_id as school_id,
-		b.enrollment as enrollment_num,
-		b.year as enrollment_year
-		from 
-		t_major a
+		a.fk_major_category_id as major_category_id,
+		b.major_category as major_category_name,
+		b.major_category_code
+		from
+		sys_t_major a
 		join
-		t_major_enrollment b
-		on a.id = b.fk_major_id
-		) as b
-		on a.id = b.school_id
-		where b.school_id = ? and b.enrollment_year = ?;`
+		sys_t_major_category b
+		on a.fk_major_category_id = b.id
+	) as c
+	on a.fk_major_id = c.major_id
+	where a.fk_school_id =? and a.fk_lot_id =? and a.year =?;
+	`
 };

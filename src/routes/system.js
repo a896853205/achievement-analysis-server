@@ -18,18 +18,24 @@ router.get('/getAddressOption', async (ctx) => {
 });
 
 // 获得学校
-router.get('/getSchoolOption', async (ctx) => {
-	let schoolNature = await systemService.getSchoolNatureOption();
-	let schoolProperty = await systemService.getSchoolPropertyOption();
-	let schoolType = await systemService.getSchoolTypeOption();
-	let areaFeature = await systemService.getAreaFeatureOption();
+router.post('/getSchoolOption', async (ctx) => {
+	let { lotId } = ctx.request.body;
+
+	let [ schoolNature, schoolProperty, schoolType, areaFeature, voluntaryOptionList ] = await Promise.all([
+		systemService.getSchoolNatureOption(),
+		systemService.getSchoolPropertyOption(),
+		systemService.getSchoolTypeOption(),
+		systemService.getAreaFeatureOption(),
+		systemService.getVoluntaryOption(lotId)
+	]);
 
 	ctx.body = new Result({
 		data: {
 			schoolNature,
 			schoolProperty,
 			schoolType,
-			areaFeature
+			areaFeature,
+			voluntaryOptionList
 		}
 	});
 });
