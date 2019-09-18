@@ -36,8 +36,9 @@ export default {
       ) {
         return;
     } else {
-      
-      let result = await userDao.updateUser({nickname, gender, score, accountCategory, confirm: 1, addressProvince, examYear, uuid});
+
+      // 可以修改个人信息
+      let result = await userDao.updateUser({nickname, gender, score, accountCategory, addressProvince, examYear, uuid});
       
       return result;
     }

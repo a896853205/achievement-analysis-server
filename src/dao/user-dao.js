@@ -20,10 +20,10 @@ export default {
   },
 
   // 设置用户基本信息
-  updateUser: async ({nickname, gender, score, accountCategory, confirm, addressProvince, examYear, uuid}) => {
+  updateUser: async ({nickname, gender, score, accountCategory, addressProvince, examYear, uuid}) => {
     try {
       
-      await db.query(new SqlObject(userMapper.update, [nickname, gender, score, accountCategory, addressProvince, confirm, examYear, uuid]));
+      await db.query(new SqlObject(userMapper.update, [nickname, gender, score, accountCategory, addressProvince, examYear, uuid]));
       
       let user = await db.query(new SqlObject(userMapper.selectByUuid, [uuid]));
 

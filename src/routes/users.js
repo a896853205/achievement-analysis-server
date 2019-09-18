@@ -39,12 +39,6 @@ router.post('/setUserInfo', async (ctx) => {
 	let { nickname, gender, score, accountCategory, addressProvince, examYear } = ctx.request.body,
 		user = ctx.state.data;
 
-	if (user.confirm === 1) {
-		ctx.body = new Result({
-			status: 0,
-			msg: '已经确认基本用户信息,禁止修改'
-		});
-	} else if (user.confirm === 0) {
 		let result = await userService.setUserInfo(
 			nickname,
 			gender,
@@ -67,7 +61,7 @@ router.post('/setUserInfo', async (ctx) => {
 			});
 		}
 	}
-});
+);
 
 // 修改密码
 router.post('/alterPassword', async (ctx) => {

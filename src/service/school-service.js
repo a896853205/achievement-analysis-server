@@ -1,6 +1,14 @@
 // dao
 import schoolDao from '../dao/school-dao';
 
+// 筛选算法
+import { 
+	filtrateNatureSchool,
+	filtratePropertySchool,
+	filtrateTypeSchool,
+	filtrateAreaFeatureSchool
+} from './school-filtrate';
+
 // 工具类
 import { objectHelper } from '../../util/object-helper';
 
@@ -63,89 +71,17 @@ export default {
 			resultSchoolList.push(oneSchoolObj);
 		}
 
-		// 把条件加入进行筛选
-		// 判断学校性质
-		// 一对一的性质如果大于2,就会返回空数组
-		if (natureValues.length) {
-			let fitNatureSchoolList = [];
+		// 对办学性质进行筛选
+		resultSchoolList = filtrateNatureSchool(natureValues, resultSchoolList);
 
-			if (natureValues.length >= 2) {
-				resultSchoolList = fitNatureSchoolList;
-			}
+		// 对学校属性进行筛选
+		resultSchoolList = filtratePropertySchool(propertyValues, resultSchoolList);
+		
+		// 对高校类别进行筛选
+		resultSchoolList = filtrateTypeSchool(typeValues, resultSchoolList);
 
-			for (let schoolItem of resultSchoolList) {
-				if (schoolItem.nature_id === natureValues[0]) {
-					fitNatureSchoolList.push(schoolItem);
-				}
-			}
-			resultSchoolList = fitNatureSchoolList;
-		}
-		// 判断学校属性
-		if (propertyValues.length) {
-			let fitPropertySchoolList = [];
-
-			for (let schoolItem of resultSchoolList) {
-				let isFit = true;
-
-				for (let propertyItem of propertyValues) {
-					// 一旦有有一个不包括就不适合
-					if (!schoolItem.school_property_id.includes(propertyItem)) {
-						isFit = false;
-					}
-				}
-
-				// 如果全适合就push进去
-				if (isFit) {
-					fitPropertySchoolList.push(schoolItem);
-				}
-			}
-
-			resultSchoolList = fitPropertySchoolList;
-		}
-		// 判断高校类别
-		if (typeValues.length) {
-			let fitTypeSchoolList = [];
-
-			for (let schoolItem of resultSchoolList) {
-				let isFit = true;
-
-				for (let typeItem of typeValues) {
-					// 一旦有有一个不包括就不适合
-					if (!schoolItem.school_type_id.includes(typeItem)) {
-						isFit = false;
-					}
-				}
-
-				// 如果全适合就push进去
-				if (isFit) {
-					fitTypeSchoolList.push(schoolItem);
-				}
-			}
-
-			resultSchoolList = fitTypeSchoolList;
-		}
-		// 判断地域特色
-		if (areaFeatureValues.length) {
-			let fitTypeSchoolList = [];
-
-			for (let schoolItem of resultSchoolList) {
-				let isFit = true;
-
-				for (let areaFeatureItem of areaFeatureValues) {
-					// 一旦有有一个不包括就不适合
-					if (!schoolItem.area_feature_id.includes(areaFeatureItem)) {
-						isFit = false;
-					}
-				}
-
-				// 如果全适合就push进去
-				if (isFit) {
-					fitTypeSchoolList.push(schoolItem);
-				}
-			}
-
-			resultSchoolList = fitTypeSchoolList;
-		}
+		// 对地域特色进行筛选
+		resultSchoolList = filtrateAreaFeatureSchool(areaFeatureValues, resultSchoolList);
 
 		return {
 			schoolList: resultSchoolList
