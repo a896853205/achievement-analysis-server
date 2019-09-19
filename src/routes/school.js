@@ -10,8 +10,19 @@ router.prefix('/school');
 
 // 获得学校
 router.post('/getSchool', async (ctx) => {
-	let { lotId, natureValues, propertyValues, typeValues, areaFeatureValues } = ctx.request.body,
-		schoolList = await schoolService.getSchoolList({ lotId, natureValues, propertyValues, typeValues, areaFeatureValues });
+	let { lotId, natureValues, propertyValues, typeValues, areaFeatureValues, gatherValue } = ctx.request.body,
+		user = ctx.state.data,
+		schoolList = await schoolService.getSchoolList({
+			lotId,
+			natureValues,
+			propertyValues,
+			typeValues,
+			areaFeatureValues,
+			gatherValue,
+			accountCategory: user.account_category,
+			examYear: user.exam_year,
+			score: user.score
+		});
 
 	ctx.body = new Result({
 		data: schoolList

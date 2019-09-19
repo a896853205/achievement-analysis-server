@@ -1,91 +1,60 @@
 // dao
 import schoolDao from '../dao/school-dao';
+import controlScoreRangeDao from '../dao/control-score-range-dao';
 
 // 筛选算法
-import { 
+import {
 	filtrateNatureSchool,
 	filtratePropertySchool,
 	filtrateTypeSchool,
-	filtrateAreaFeatureSchool
+	filtrateAreaFeatureSchool,
+	parseToOldScore,
+	initSchool,
+	splitSchoolByRange
 } from './school-filtrate';
-
-// 工具类
-import { objectHelper } from '../../util/object-helper';
 
 export default {
 	// 获取所有学校通过批次id
-	getSchoolList: async ({ lotId, natureValues, propertyValues, typeValues, areaFeatureValues }) => {
-		let schoolList = await schoolDao.querySchoolByLotId(lotId);
-		// 将筛选出来的学校进行去重
+	getSchoolList: async ({
+		lotId,
+		natureValues,
+		propertyValues,
+		typeValues,
+		areaFeatureValues,
+		accountCategory,
+		examYear,
+		score,
+		gatherValue
+	}) => {
+		let [ schoolList, { currentRank, oldRank }, scoreRange ] = await Promise.all([
+			schoolDao.querySchoolByLotId(lotId, accountCategory),
+			schoolDao.queryScoreRankByCategoryAndYear(accountCategory, examYear),
+			controlScoreRangeDao.queryScoreRangeByLotsId(lotId)
+		]);
 
-		let resultSchoolList = [];
-
-		for (let i = 0; i < schoolList.length; i++) {
-			if (
-				resultSchoolList.findIndex((resultItem) => {
-					return schoolList[i].school_id === resultItem.school_id;
-				}) !== -1
-			) {
-				continue;
-			}
-
-			let oneSchoolArr = [ schoolList[i] ];
-
-			for (let j = i + 1; j < schoolList.length; j++) {
-				if (schoolList[i].school_id === schoolList[j].school_id) {
-					oneSchoolArr.push(schoolList[j]);
-				}
-			}
-
-			let oneSchoolObj = objectHelper.deepCopy(schoolList[i]);
-
-			oneSchoolObj.school_property_id = [];
-			oneSchoolObj.school_property_name = [];
-			oneSchoolObj.school_type_id = [];
-			oneSchoolObj.school_type_name = [];
-			oneSchoolObj.school_type_id = [];
-			oneSchoolObj.school_type_name = [];
-			oneSchoolObj.area_feature_id = [];
-			oneSchoolObj.area_feature_name = [];
-
-			for (let school of oneSchoolArr) {
-				// 判断属性id有没有
-				if (!oneSchoolObj.school_property_id.includes(school.school_property_id)) {
-					oneSchoolObj.school_property_id.push(school.school_property_id);
-					oneSchoolObj.school_property_name.push(school.school_property_name);
-				}
-
-				// 判断类型id有没有
-				if (!oneSchoolObj.school_type_id.includes(school.school_type_id)) {
-					oneSchoolObj.school_type_id.push(school.school_type_id);
-					oneSchoolObj.school_type_name.push(school.school_type_name);
-				}
-
-				// 判断地域id有没有
-				if (!oneSchoolObj.area_feature_id.includes(school.area_feature_id)) {
-					oneSchoolObj.area_feature_id.push(school.area_feature_id);
-					oneSchoolObj.area_feature_name.push(school.area_feature_name);
-				}
-			}
-
-			resultSchoolList.push(oneSchoolObj);
-		}
+		// 初始化数据
+		let resultSchoolList = initSchool(schoolList);
 
 		// 对办学性质进行筛选
 		resultSchoolList = filtrateNatureSchool(natureValues, resultSchoolList);
 
 		// 对学校属性进行筛选
 		resultSchoolList = filtratePropertySchool(propertyValues, resultSchoolList);
-		
+
 		// 对高校类别进行筛选
 		resultSchoolList = filtrateTypeSchool(typeValues, resultSchoolList);
 
 		// 对地域特色进行筛选
 		resultSchoolList = filtrateAreaFeatureSchool(areaFeatureValues, resultSchoolList);
 
+		// 将新的成绩转化为去年的成绩
+		score = parseToOldScore(score, currentRank, oldRank);
+
+		resultSchoolList = splitSchoolByRange(score, scoreRange, resultSchoolList, gatherValue);
+
 		return {
 			schoolList: resultSchoolList
-		};
+		}
 	},
 
 	// 模拟获取专业

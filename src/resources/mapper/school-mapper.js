@@ -21,8 +21,8 @@ export default {
 		a.name as school_name,
 		a.fk_province_id as province_id,
 		b.province_name,
-		a.fk_nature_id as nature_id,
-		c.type as nature_name,
+		a.fk_nature_id as school_nature_id,
+		c.type as school_nature_name,
 		d.area_feature_id,
 		d.area_feature_name,
 		e.school_property_id,
@@ -111,5 +111,15 @@ export default {
 	) as c
 	on a.fk_major_id = c.major_id
 	where a.fk_school_id =? and a.fk_lot_id =? and a.year =?;
-	`
+	`,
+	queryScoreRankByCategoryAndYear: `
+		select
+		*
+		from
+		t_rank
+		where
+		(account_category=?)
+		AND
+		(year=? OR year=?)
+	`,
 };
