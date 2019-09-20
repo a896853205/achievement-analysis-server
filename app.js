@@ -3,16 +3,21 @@ import json from "koa-json";
 import onerror from "koa-onerror";
 import bodyparser from "koa-bodyparser";
 import logger from "koa-logger";
+
 // 跨域
 import cors from "koa2-cors";
+
 // 路由
 import users from "./src/routes/users";
 import system from "./src/routes/system";
 import entryScore from "./src/routes/entryScore";
 import school from "./src/routes/school";
 import questionnaire from "./src/routes/questionnaire";
+import voluntary from "./src/routes/voluntary";
+
 // key
 import { TOKEN_KEY } from "./src/constants/keys";
+
 // 中间件
 import getToken from "./src/middle/verify-token";
 import Result from "./util/response";
@@ -73,6 +78,7 @@ app.use(system.routes(), system.allowedMethods());
 app.use(entryScore.routes(), entryScore.allowedMethods());
 app.use(school.routes(), school.allowedMethods());
 app.use(questionnaire.routes(), questionnaire.allowedMethods());
+app.use(voluntary.routes(), voluntary.allowedMethods());
 
 // error-handling
 app.on("error", (err, ctx) => {
