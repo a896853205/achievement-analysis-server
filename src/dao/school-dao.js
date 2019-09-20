@@ -4,12 +4,15 @@ import { db, SqlObject } from '../resources/db-connect';
 // 数据库语句
 import schoolMapper from '../resources/mapper/school-mapper';
 
+// 处理数据函数
+import { initSchool } from './school-filtrate';
+
 export default {
 	// 通过批次id查询学校
 	querySchoolByLotId: async (lotId) => {
 		let schoolList = await db.query(new SqlObject(schoolMapper.querySchoolByLotId, [ lotId ]));
 
-		return schoolList;
+		return initSchool(schoolList);
 	},
 
 	// 通过学校id和当前年份获取学校
@@ -42,5 +45,13 @@ export default {
 			currentRank,
 			oldRank
 		};
+	},
+
+	selectSchoolDetail: async (schoolId) => {
+		let schoolDetailList = await db.query(
+			new SqlObject(schoolMapper.querySchoolDetail, [schoolId])
+		);
+
+		return initSchool(schoolDetailList)[0];
 	}
 };

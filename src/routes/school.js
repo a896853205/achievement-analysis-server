@@ -43,6 +43,16 @@ router.post('/getMajor', async (ctx) => {
 	});
 });
 
+router.post('/getSchoolDetail', async (ctx) => {
+	let { schoolId } = ctx.request.body;
+
+	let schoolDetail = await schoolService.getSchoolDetail(schoolId);
+
+	ctx.body = new Result({
+		data: schoolDetail
+	});
+});
+
 // 获取批次
 
 export default router;

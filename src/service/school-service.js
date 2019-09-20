@@ -26,14 +26,11 @@ export default {
 		score,
 		gatherValue
 	}) => {
-		let [ schoolList, { currentRank, oldRank }, scoreRange ] = await Promise.all([
+		let [ resultSchoolList, { currentRank, oldRank }, scoreRange ] = await Promise.all([
 			schoolDao.querySchoolByLotId(lotId, accountCategory),
 			schoolDao.queryScoreRankByCategoryAndYear(accountCategory, examYear),
 			controlScoreRangeDao.queryScoreRangeByLotsId(lotId)
 		]);
-
-		// 初始化数据
-		let resultSchoolList = initSchool(schoolList);
 
 		// 对办学性质进行筛选
 		resultSchoolList = filtrateNatureSchool(natureValues, resultSchoolList);
@@ -65,5 +62,11 @@ export default {
 		return {
 			majorList
 		};
+	},
+
+	getSchoolDetail: async (schoolId) => {
+		let schoolDetail = await schoolDao.selectSchoolDetail(schoolId);
+
+		return schoolDetail;
 	}
 };
