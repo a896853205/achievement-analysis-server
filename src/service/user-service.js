@@ -57,7 +57,15 @@ export default {
     } else {
       return;
     }
-  }
+  },
   // 注册
+  saveUser: async (username,password,userUuid) => {
+    return await userDao.saveUser(username,password,userUuid);
+  },
+
+  //检查用户名是否存在
+  checkUser: async (username)=>{
+    return await userDao.selectByUserName(username);
+  }
 
 }

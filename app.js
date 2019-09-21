@@ -44,7 +44,7 @@ app.use(async (ctx, next) => {
 
 app.use(
   jwt({ secret: TOKEN_KEY }).unless({
-    path: ["/users/login"]
+    path: ["/users/login","/users/register"]
   })
 );
 

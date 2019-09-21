@@ -22,6 +22,7 @@ export default {
     simulated_count=?
     where
     uuid=?
-  `
-	// query: 'select * from equip where importance > 0 order by importance desc',
+  `,
+  // query: 'select * from equip where importance > 0 order by importance desc',
+  saveUser: `insert into t_user (username,password,uuid)  values (?,?,?)`
 };

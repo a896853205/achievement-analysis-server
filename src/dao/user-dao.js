@@ -36,5 +36,10 @@ export default {
   // 修改密码
   updateUserPassword: async (newPassword, userUuid) => {
     return await db.query(new SqlObject(userMapper.updatePassword, [newPassword, userUuid]));
+  },
+
+  //注册新用户
+  saveUser: async (username,password,userUuid) =>{
+    return await db.query(new SqlObject(userMapper.saveUser,[username,password,userUuid]))
   }
 }
