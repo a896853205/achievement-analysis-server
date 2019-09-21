@@ -80,9 +80,10 @@ router.post('/alterPassword', async (ctx) => {
     });
   }
 });
+
 // 注册路由
-// router.post('/register', ctx => {
-//   ctx.body = new Result({});
-// });
+router.post('/register', ctx => {
+  ctx.body = new Result({});
+});
 
 export default router;

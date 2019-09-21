@@ -13,26 +13,31 @@ router.post('/saveVoluntary', async (ctx) => {
 
 	let voluntaryUuid = await voluntaryService.saveVoluntary(lotId, voluntary, user);
 
-	if (voluntaryUuid) {
-    ctx.body = new Result({
-      data: voluntaryUuid
-    });
-  } else {
-    ctx.body = new Result({
-      status: 0,
-      msg: '没有生成报表的机会,请充值VIP'
-    })
-  }
+	if (voluntaryUuid === 0) {
+		ctx.body = new Result({
+			status: 0,
+			msg: '没有生成报表的机会,请充值VIP'
+		});
+	} else if (voluntaryUuid === -1) {
+		ctx.body = new Result({
+			status: 0,
+			msg: '请至少选择一个志愿'
+		});
+	} else {
+		ctx.body = new Result({
+			data: voluntaryUuid
+		});
+	}
 });
 
 router.post('/getVoluntaryResult', async (ctx) => {
-  let { voluntaryUuid } = ctx.request.body;
+	let { voluntaryUuid } = ctx.request.body;
 
-  let voluntaryResult = await voluntaryService.culVoluntaryResult(voluntaryUuid);
+	let voluntaryResult = await voluntaryService.culVoluntaryResult(voluntaryUuid);
 
-  ctx.body = new Result({
-    data: voluntaryResult
-  });
-})
+	ctx.body = new Result({
+		data: voluntaryResult
+	});
+});
 
 export default router;
