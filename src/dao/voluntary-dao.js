@@ -16,6 +16,6 @@ export default {
 
 		await db.transactions([ sqlInsertVoluntary, updateUserCount ]);
 
-		return voluntaryUuid;
+		// return voluntaryUuid;
 	}
 };

@@ -6,7 +6,7 @@ import Result from '../../util/response';
 import userService from '../service/user-service';
 
 export default async (ctx, next) => {
-  if (ctx.url.match('/users/login')) {
+  if (ctx.url.match('/users/login') || ctx.url.match('/users/register')) {
     await next();
   } else {
     // 获取jwt

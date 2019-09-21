@@ -38,7 +38,7 @@ export default {
         return -1;
       }
 
-			voluntaryUuid = await voluntaryDao.saveVoluntary(allParam, user);
+			await voluntaryDao.saveVoluntary(allParam, user);
 		} else {
       // 没有次数了
       return 0;
