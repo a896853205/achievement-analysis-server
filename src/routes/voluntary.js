@@ -23,7 +23,16 @@ router.post('/saveVoluntary', async (ctx) => {
       msg: '没有生成报表的机会,请充值VIP'
     })
   }
-	
 });
+
+router.post('/getVoluntaryResult', async (ctx) => {
+  let { voluntaryUuid } = ctx.request.body;
+
+  let voluntaryResult = await voluntaryService.culVoluntaryResult(voluntaryUuid);
+
+  ctx.body = new Result({
+    data: voluntaryResult
+  });
+})
 
 export default router;

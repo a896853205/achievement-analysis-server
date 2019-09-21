@@ -11,6 +11,11 @@ export default {
 
     // 一切正确,token生成
     return voluntaryUuid;
+  },
+
+  culVoluntaryResult: async (voluntaryUuid) => {
+    // 这里计算结果
+    return { content: '有问题!还是没有问题!' };
   }
 
 }
