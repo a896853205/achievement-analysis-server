@@ -42,9 +42,11 @@ app.use(async (ctx, next) => {
 	});
 });
 
+let unlessPathArr = [ '/users/register', '/users/login', /^\/system/ ];
+
 app.use(
 	jwt({ secret: TOKEN_KEY }).unless({
-		path: [ '/users/register', '/users/login' ]
+		path: unlessPathArr
 	})
 );
 
@@ -70,7 +72,11 @@ app.use(async (ctx, next) => {
 });
 
 // 获取token中的值
-app.use(getToken);
+app.use(async (ctx, next) => {
+	if (await getToken(ctx, next, unlessPathArr)) {
+		await next();
+	}
+});
 
 // routes
 app.use(users.routes(), users.allowedMethods());

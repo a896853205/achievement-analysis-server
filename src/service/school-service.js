@@ -9,13 +9,12 @@ import {
 	filtrateTypeSchool,
 	filtrateAreaFeatureSchool,
 	parseToOldScore,
-	initSchool,
 	splitSchoolByRange
 } from './school-filtrate';
 
 export default {
 	// 获取所有学校通过批次id
-	getSchoolList: async ({
+	getSchoolListByLotsScore: async ({
 		lotId,
 		natureValues,
 		propertyValues,
@@ -51,7 +50,28 @@ export default {
 
 		return {
 			schoolList: resultSchoolList
-		}
+		};
+	},
+
+	// 获取所有学校的详细信息
+	getSchoolList: async ({ natureValues, propertyValues, typeValues, areaFeatureValues }) => {
+		let resultSchoolList = await schoolDao.querySchool();
+
+		// 对办学性质进行筛选
+		resultSchoolList = filtrateNatureSchool(natureValues, resultSchoolList);
+
+		// 对学校属性进行筛选
+		resultSchoolList = filtratePropertySchool(propertyValues, resultSchoolList);
+
+		// 对高校类别进行筛选
+		resultSchoolList = filtrateTypeSchool(typeValues, resultSchoolList);
+
+		// 对地域特色进行筛选
+		resultSchoolList = filtrateAreaFeatureSchool(areaFeatureValues, resultSchoolList);
+
+		return {
+			schoolList: resultSchoolList
+		};
 	},
 
 	// 模拟获取专业

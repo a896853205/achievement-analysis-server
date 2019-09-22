@@ -15,6 +15,13 @@ export default {
 		return initSchool(schoolList);
 	},
 
+	// 查询所有学校
+	querySchool: async () => {
+		let schoolList = await db.query(new SqlObject(schoolMapper.querySchool, []))
+
+		return initSchool(schoolList);
+	},
+
 	// 通过学校id和当前年份获取学校
 	queryMajorBySchoolIdAndYear: async (schoolId, year, lotId) => {
 		let majorList = await db.query(
