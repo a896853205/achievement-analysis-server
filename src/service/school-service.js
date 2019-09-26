@@ -8,9 +8,12 @@ import {
 	filtratePropertySchool,
 	filtrateTypeSchool,
 	filtrateAreaFeatureSchool,
-	parseToOldScore,
 	splitSchoolByRange
 } from './school-filtrate';
+
+import {
+	proxyParseToOldScore,
+} from './rank-filtrate'
 
 export default {
 	// 获取所有学校通过批次id
@@ -44,7 +47,7 @@ export default {
 		resultSchoolList = filtrateAreaFeatureSchool(areaFeatureValues, resultSchoolList);
 
 		// 将新的成绩转化为去年的成绩
-		score = parseToOldScore(score, currentRank, oldRank);
+		score = proxyParseToOldScore(score, currentRank, oldRank);
 
 		resultSchoolList = splitSchoolByRange(score, scoreRange, resultSchoolList, gatherValue);
 

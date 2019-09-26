@@ -1,5 +1,10 @@
 // dao
 import userDao from '../dao/user-dao';
+import schoolDao from '../dao/school-dao';
+
+// 算法函数
+import { parseCurrentScore } from './rank-filtrate';
+
 import webToken from '../../util/token';
 
 export default {
@@ -20,33 +25,49 @@ export default {
         role: user.role
       }),
       user
-    }
+    };
   },
-  setUserInfo: async (nickname, gender, score, accountCategory, addressProvince, examYear, uuid) => {
-    if (nickname === undefined
-      || nickname === null
-      || gender === undefined
-      || gender === null
-      || score === undefined
-      || score === null
-      || accountCategory === undefined
-      || accountCategory === null
-      || addressProvince === undefined
-      || addressProvince === null
-      ) {
-        return;
+  setUserInfo: async (
+    nickname,
+    gender,
+    score,
+    accountCategory,
+    addressProvince,
+    examYear,
+    uuid
+  ) => {
+    if (
+      nickname === undefined ||
+      nickname === null ||
+      gender === undefined ||
+      gender === null ||
+      score === undefined ||
+      score === null ||
+      accountCategory === undefined ||
+      accountCategory === null ||
+      addressProvince === undefined ||
+      addressProvince === null
+    ) {
+      return;
     } else {
-
       // 可以修改个人信息
-      let result = await userDao.updateUser({nickname, gender, score, accountCategory, addressProvince, examYear, uuid});
-      
+      let result = await userDao.updateUser({
+        nickname,
+        gender,
+        score,
+        accountCategory,
+        addressProvince,
+        examYear,
+        uuid
+      });
+
       return result;
     }
   },
 
   getUserInfo: async uuid => {
     let result = await userDao.selectByUuid(uuid);
-    
+
     return result;
   },
 
@@ -59,13 +80,28 @@ export default {
     }
   },
   // 注册
-  saveUser: async (username,password,userUuid) => {
-    return await userDao.saveUser(username,password,userUuid);
+  saveUser: async (username, password, userUuid) => {
+    return await userDao.saveUser(username, password, userUuid);
   },
 
   //检查用户名是否存在
-  checkUser: async (username)=>{
+  checkUser: async username => {
     return await userDao.selectByUserName(username);
-  }
+  },
 
-}
+  // 根据年份和分数计算两年内的位次和线差
+  getScoreRank: async ({ score, examYear, accountCategory }) => {
+    // 获取两个位次的数组 根据年份和文科理科
+    let {
+      currentRank,
+      oldRank
+    } = await schoolDao.queryScoreRankByCategoryAndYear(
+      accountCategory,
+      examYear
+    );
+
+    // parseCurrentScore
+    // 换算之后之间返回就好了
+    return parseCurrentScore(score, currentRank, oldRank);
+  }
+};

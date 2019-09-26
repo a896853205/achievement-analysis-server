@@ -106,35 +106,6 @@ export const filtrateAreaFeatureSchool = (areaFeatureValues, schoolList) => {
 	}
 };
 
-// 将新的分数转换为旧的分数
-export const parseToOldScore = (score, currentRank, oldRank) => {
-	currentRank.sort((one, two) => {
-		return two.score - one.score;
-	});
-
-	oldRank.sort((one, two) => {
-		return two.rank - one.rank;
-	});
-
-	let fitCurrent = null,
-		fitOld = null;
-
-	for (let currentItem of currentRank) {
-		if (score >= currentItem.score) {
-			fitCurrent = currentItem;
-			break;
-		}
-  }
-  
-	for (let oldItem of oldRank) {
-		if (oldItem.rank >= fitCurrent.rank) {
-			fitOld = oldItem;
-		}
-  }
-
-	return fitOld.score;
-};
-
 export const splitSchoolByRange = (score, scoreRange, schoolList, gatherValue) => {
 	let score1 = score - scoreRange.down_score_1,
 		score2 = score - scoreRange.down_score_2,

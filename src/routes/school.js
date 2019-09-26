@@ -14,8 +14,6 @@ router.post('/getSchool', async (ctx) => {
 		user = ctx.state.data,
 		schoolList = [];
 
-		console.log(lotId);
-
 		// 如果有lotsid说明是有成绩和批次的判断出五种类型
 		if (lotId) {
 			schoolList = await schoolService.getSchoolListByLotsScore({
