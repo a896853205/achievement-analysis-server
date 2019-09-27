@@ -14,17 +14,40 @@ export default {
 
   // 通过username查询用户
   selectByUserName: async userName => {
-    let user = await db.query(new SqlObject(userMapper.selectByUserName, [userName]));
+    let user = await db.query(
+      new SqlObject(userMapper.selectByUserName, [userName])
+    );
 
     return user[0];
   },
 
   // 设置用户基本信息
-  updateUser: async ({nickname, gender, score, accountCategory, addressProvince, examYear, uuid}) => {
+  updateUser: async ({
+    nickname,
+    gender,
+    score,
+    accountCategory,
+    addressProvince,
+    examYear,
+    uuid,
+    phone,
+    email
+  }) => {
     try {
-      
-      await db.query(new SqlObject(userMapper.update, [nickname, gender, score, accountCategory, addressProvince, examYear, uuid]));
-      
+      await db.query(
+        new SqlObject(userMapper.update, [
+          nickname,
+          gender,
+          phone,
+          email,
+          score,
+          accountCategory,
+          addressProvince,
+          examYear,
+          uuid
+        ])
+      );
+
       let user = await db.query(new SqlObject(userMapper.selectByUuid, [uuid]));
 
       return user[0];
@@ -35,11 +58,15 @@ export default {
 
   // 修改密码
   updateUserPassword: async (newPassword, userUuid) => {
-    return await db.query(new SqlObject(userMapper.updatePassword, [newPassword, userUuid]));
+    return await db.query(
+      new SqlObject(userMapper.updatePassword, [newPassword, userUuid])
+    );
   },
 
   //注册新用户
-  saveUser: async (username,password,userUuid) =>{
-    return await db.query(new SqlObject(userMapper.saveUser,[username,password,userUuid]))
+  saveUser: async (username, password, userUuid) => {
+    return await db.query(
+      new SqlObject(userMapper.saveUser, [username, password, userUuid])
+    );
   }
-}
+};

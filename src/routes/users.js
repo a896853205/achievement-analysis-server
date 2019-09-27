@@ -42,22 +42,26 @@ router.post('/setUserInfo', async ctx => {
   let {
       nickname,
       gender,
+      phone,
+      email,
       score,
       accountCategory,
       addressProvince,
       examYear
     } = ctx.request.body,
     user = ctx.state.data;
-
-  let result = await userService.setUserInfo(
+  
+  let result = await userService.setUserInfo({
     nickname,
     gender,
+    phone,
+    email,
     score,
     accountCategory,
     addressProvince,
     examYear,
-    user.uuid
-  );
+    uuid: user.uuid
+  });
 
   if (result) {
     ctx.body = new Result({

@@ -27,15 +27,17 @@ export default {
       user
     };
   },
-  setUserInfo: async (
+  setUserInfo: async ({
     nickname,
     gender,
     score,
     accountCategory,
     addressProvince,
     examYear,
-    uuid
-  ) => {
+    uuid,
+    phone,
+    email
+  }) => {
     if (
       nickname === undefined ||
       nickname === null ||
@@ -58,7 +60,9 @@ export default {
         accountCategory,
         addressProvince,
         examYear,
-        uuid
+        uuid,
+        phone,
+        email
       });
 
       return result;
@@ -79,7 +83,7 @@ export default {
       return;
     }
   },
-  
+
   // 注册
   saveUser: async (username, password, userUuid) => {
     return await userDao.saveUser(username, password, userUuid);
