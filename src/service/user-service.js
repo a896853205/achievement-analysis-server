@@ -48,7 +48,9 @@ export default {
       accountCategory === undefined ||
       accountCategory === null ||
       addressProvince === undefined ||
-      addressProvince === null
+      addressProvince === null ||
+      phone === null ||
+      phone === undefined
     ) {
       return;
     } else {
@@ -99,7 +101,7 @@ export default {
     // 获取两个位次的数组 根据年份和文科理科
     let [{ currentRank, oldRank }, lotsScoreList] = await Promise.all([
       schoolDao.queryScoreRankByCategoryAndYear(accountCategory, examYear),
-      schoolDao.queryLotsScore(examYear)
+      schoolDao.queryLotsScore(examYear, accountCategory)
     ]);
 
     // parseCurrentScore

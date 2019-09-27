@@ -44,10 +44,13 @@ export const computeLotsScoreDifferMsg = (score, lotsScoreList) => {
   });
 
   if (lotsScoreObj.fk_lots_id > 5) {
-    // 分数小于2批b
+    // 分数小于二本线
+    lotsScoreObj = lotsScoreList.find(item => {
+      return item.fk_lots_id === 5;
+    });
     lotsScoreDifferMsg = lotsStrategy[5](score, lotsScoreObj);
   } else {
-    // 分数大于2批b
+    // 分数大于二本线
     lotsScoreDifferMsg = lotsStrategy[lotsScoreObj.fk_lots_id](score, lotsScoreObj);
   }
 
@@ -69,9 +72,9 @@ let lotsStrategy = {
   2: (score, lotsScoreObj) => {
     let differ = score - lotsScoreObj.score;
     if (differ) {
-			return `高出一本A线${differ}分`;
+			return `高出一本线${differ}分`;
     } else {
-			return `与一本A线分数恰好相同`;
+			return `与一本线分数恰好相同`;
     }
 	},
 	
@@ -79,9 +82,9 @@ let lotsStrategy = {
   3: (score, lotsScoreObj) => {
 		let differ = score - lotsScoreObj.score;
     if (differ) {
-			return `高出一本B线${differ}分`;
+			return `高出一本线${differ}分`;
     } else {
-			return `与一本B线分数恰好相同`;
+			return `与一本线分数恰好相同`;
     }
 	},
   
@@ -89,20 +92,20 @@ let lotsStrategy = {
   4: (score, lotsScoreObj) => {
 		let differ = score - lotsScoreObj.score;
     if (differ) {
-			return `高出二本A线${differ}分`;
+			return `高出二本线${differ}分`;
     } else {
-			return `与二本A线分数恰好相同`;
+			return `与二本线分数恰好相同`;
     }
 	},
   // 二批B
   5: (score, lotsScoreObj) => {
 		let differ = score - lotsScoreObj.score;
     if (differ > 0) {
-			return `高出二本B线${differ}分`;
+			return `高出二本线${differ}分`;
     } else if (!differ) {
-			return `与二本A线分数恰好相同`;
+			return `与二本线分数恰好相同`;
     } else if (differ < 0) {
-			return `低于二本B线${-differ}分`;
+			return `低于二本线${-differ}分`;
 		}
 	}
 };

@@ -62,9 +62,9 @@ export default {
 		return initSchool(schoolDetailList)[0];
 	},
 
-	queryLotsScore: async (examYear) => {
+	queryLotsScore: async (examYear, accountCategory) => {
 		// 查询去年的lots
-		let lotsScoreList = await db.query(new SqlObject(schoolMapper.queryLotsScore, [examYear - 1]))
+		let lotsScoreList = await db.query(new SqlObject(schoolMapper.queryLotsScore, [examYear - 1, accountCategory]));
 		
 		return lotsScoreList;
 	}

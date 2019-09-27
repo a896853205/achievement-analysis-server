@@ -1,7 +1,7 @@
 export default {
-	// 通过批次查询对应学校
-	querySchool:
-	`select 
+  // 通过批次查询对应学校
+  querySchool: `
+	select 
 	a.id as school_id,
 	a.code as school_code,
 	a.name as school_name,
@@ -59,7 +59,7 @@ export default {
 		on a.fk_school_type_id = b.id
 	) as f
 	on a.id = f.school_id`,
-	querySchoolByLotId: `
+  querySchoolByLotId: `
 	-- 根据批次id 查学校
 	select 
 	a.fk_lots_id as lot_id,
@@ -136,7 +136,7 @@ export default {
 	on a.fk_school_id = c.school_id
 	where a.fk_lots_id = ?;
 `,
-	getMajorBySchoolIdAndYear: `
+  getMajorBySchoolIdAndYear: `
 	-- 批次id和学校id和年 查询专业
 	select
 	a.fk_school_id as school_id,
@@ -171,7 +171,7 @@ export default {
 	on a.fk_major_id = c.major_id
 	where a.fk_school_id =? and a.fk_lot_id =? and a.year =?;
 	`,
-	queryScoreRankByCategoryAndYear: `
+  queryScoreRankByCategoryAndYear: `
 		select
 		*
 		from
@@ -181,7 +181,7 @@ export default {
 		AND
 		(year=? OR year=?)
 	`,
-	querySchoolDetail: `select 
+  querySchoolDetail: `select 
 	a.id as school_id,
 	a.code as school_code,
 	a.name as school_name,
@@ -253,12 +253,14 @@ export default {
 	t_school_accepted_principles h
 	on a.id = h.fk_school_id
 	where a.id = ?`,
-	queryLotsScore: `
+  queryLotsScore: `
 		select
 		*
 		from
 		sys_t_lots_score
 		where
 		year = ?
+		AND
+		accountCategory = ?
 	`
 };
