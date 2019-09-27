@@ -8,7 +8,7 @@ export default {
 	saveVoluntary: async (lotId, voluntary, user) => {
 		let voluntaryUuid = undefined;
 
-		if (user.simulated_count > 0) {
+		if (user.simulatedCount > 0) {
 			let allParam = [],
 				voluntaryUuid = uuid();
 

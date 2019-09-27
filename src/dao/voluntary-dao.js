@@ -12,7 +12,7 @@ export default {
 
 		// 将好多行的数组放到这行的数组中去.
 		let sqlInsertVoluntary = new SqlObject(voluntaryMapper.insertVoluntary, [ allParam ]),
-			updateUserCount = new SqlObject(userMapper.updateSimulatedCount, [ user.simulated_count - 1, user.uuid ]);
+			updateUserCount = new SqlObject(userMapper.updateSimulatedCount, [ user.simulatedCount - 1, user.uuid ]);
 
 		await db.transactions([ sqlInsertVoluntary, updateUserCount ]);
 

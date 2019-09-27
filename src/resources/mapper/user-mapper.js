@@ -4,7 +4,7 @@ export default {
 	// insert: 'insert into equip(uuid, name, money, des, importance) values(?, ?, ?, ?, ?)',
 	// deleteById: 'delete from equip where uuid = ?',
 	update:
-		'update t_user set nickname=?, gender=?, score=?, account_category=?, address_province=?, exam_year=? where uuid=?',
+		'update t_user set nickname=?, gender=?, score=?, accountCategory=?, addressProvince=?, examYear=? where uuid=?',
 	selectByUuid: 'select * from t_user where uuid=?',
 	selectByUserName: 'select * from t_user where username=?', // 通过用户名查询用户
 	updatePassword: `
@@ -19,7 +19,7 @@ export default {
     update
     t_user
     set
-    simulated_count=?
+    simulatedCount=?
     where
     uuid=?
   `,

@@ -23,8 +23,8 @@ router.post('/getSchool', async (ctx) => {
 				typeValues,
 				areaFeatureValues,
 				gatherValue,
-				accountCategory: user.account_category,
-				examYear: user.exam_year,
+				accountCategory: user.accountCategory,
+				examYear: user.examYear,
 				score: user.score
 			});
 		} else {
@@ -49,7 +49,7 @@ router.post('/getMajor', async (ctx) => {
 		majorList = [];
 
 	user = await userService.getUserInfo(user.uuid);
-	majorList = await schoolService.getMajorList(schoolId, user.exam_year, lotId);
+	majorList = await schoolService.getMajorList(schoolId, user.examYear, lotId);
 
 	ctx.body = new Result({
 		data: majorList

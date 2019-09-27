@@ -79,6 +79,7 @@ export default {
       return;
     }
   },
+  
   // 注册
   saveUser: async (username, password, userUuid) => {
     return await userDao.saveUser(username, password, userUuid);
@@ -105,8 +106,6 @@ export default {
       fitOld.score,
       lotsScoreList
     );
-
-    console.log(lotsScoreDifferMsg)
 
     return { fitCurrent, fitOld, lotsScoreDifferMsg };
   }

@@ -177,7 +177,7 @@ export default {
 		from
 		t_rank
 		where
-		(account_category=?)
+		(accountCategory=?)
 		AND
 		(year=? OR year=?)
 	`,
