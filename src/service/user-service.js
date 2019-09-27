@@ -3,7 +3,7 @@ import userDao from '../dao/user-dao';
 import schoolDao from '../dao/school-dao';
 
 // 算法函数
-import { parseCurrentScore } from './rank-filtrate';
+import { parseCurrentScore, computeLotsScoreDifferMsg } from './rank-filtrate';
 
 import webToken from '../../util/token';
 
@@ -92,16 +92,22 @@ export default {
   // 根据年份和分数计算两年内的位次和线差
   getScoreRank: async ({ score, examYear, accountCategory }) => {
     // 获取两个位次的数组 根据年份和文科理科
-    let {
-      currentRank,
-      oldRank
-    } = await schoolDao.queryScoreRankByCategoryAndYear(
-      accountCategory,
-      examYear
-    );
+    let [{ currentRank, oldRank }, lotsScoreList] = await Promise.all([
+      schoolDao.queryScoreRankByCategoryAndYear(accountCategory, examYear),
+      schoolDao.queryLotsScore(examYear)
+    ]);
 
     // parseCurrentScore
-    // 换算之后之间返回就好了
-    return parseCurrentScore(score, currentRank, oldRank);
+    // 当年的分换算为当年的和去年的分数和位次
+    let { fitCurrent, fitOld } = parseCurrentScore(score, currentRank, oldRank);
+
+    let lotsScoreDifferMsg = computeLotsScoreDifferMsg(
+      fitOld.score,
+      lotsScoreList
+    );
+
+    console.log(lotsScoreDifferMsg)
+
+    return { fitCurrent, fitOld, lotsScoreDifferMsg };
   }
 };

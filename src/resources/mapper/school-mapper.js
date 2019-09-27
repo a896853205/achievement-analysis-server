@@ -253,4 +253,12 @@ export default {
 	t_school_accepted_principles h
 	on a.id = h.fk_school_id
 	where a.id = ?`,
+	queryLotsScore: `
+		select
+		*
+		from
+		sys_t_lots_score
+		where
+		year = ?
+	`
 };

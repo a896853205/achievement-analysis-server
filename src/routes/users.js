@@ -32,6 +32,14 @@ router.post('/login', async ctx => {
 router.post('/getUserInfo', async ctx => {
   let user = ctx.state.data;
 
+  user.accountCategory = user.account_category;
+  user.addressProvince = user.address_province;
+  user.examYear = user.exam_year;
+
+  delete user.account_category;
+  delete user.address_province;
+  delete user.exam_year;
+
   ctx.body = new Result({
     data: user
   });
