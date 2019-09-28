@@ -5,7 +5,7 @@ import jwt from 'jsonwebtoken';
 // TOKEN配置项
 class Opation {
   constructor() {
-    this.duration = Math.floor(Date.now() / 1000) + 60 * 60 * 2;
+    this.duration = Math.floor(Date.now() / 1000) + 60 * 60 * 24* 7;
     this.secret = TOKEN_KEY;
   }
 }

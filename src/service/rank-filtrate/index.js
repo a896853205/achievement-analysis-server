@@ -43,7 +43,7 @@ export const computeLotsScoreDifferMsg = (score, lotsScoreList) => {
     return score >= item.score;
   });
 
-  if (lotsScoreObj.fk_lots_id > 5) {
+  if (!lotsScoreObj || lotsScoreObj.fk_lots_id > 5) {
     // 分数小于二本线
     lotsScoreObj = lotsScoreList.find(item => {
       return item.fk_lots_id === 5;
