@@ -121,14 +121,19 @@ export const splitSchoolByRange = (score, scoreRange, schoolList, gatherValue) =
 
 	for (let schoolItem of schoolList) {
 		if (schoolItem.score >= score1 && schoolItem.score < score2) {
+			schoolItem.gather = 'a';
 			schoolListA.push(schoolItem);
 		} else if (schoolItem.score >= score2 && schoolItem.score < score3) {
+			schoolItem.gather = 'b';
 			schoolListB.push(schoolItem);
 		} else if (schoolItem.score >= score3 && schoolItem.score < score4) {
+			schoolItem.gather = 'c';
 			schoolListC.push(schoolItem);
 		} else if (schoolItem.score >= score4 && schoolItem.score < score5) {
+			schoolItem.gather = 'd';
 			schoolListD.push(schoolItem);
 		} else if (schoolItem.score >= score5 && schoolItem.score < score6) {
+			schoolItem.gather = 'e';
 			schoolListE.push(schoolItem);
 		}
 	}

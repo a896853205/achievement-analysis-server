@@ -6,11 +6,10 @@ import uuid from 'uuid/v1';
 export default {
 	// 保存志愿信息
 	saveVoluntary: async (lotId, voluntary, user) => {
-		let voluntaryUuid = undefined;
+		let voluntaryUuid = uuid();
 
 		if (user.simulatedCount > 0) {
-			let allParam = [],
-				voluntaryUuid = uuid();
+			let allParam = [];
 
 			for (let schoolOption of voluntary) {
 				schoolOption.major.forEach((majorOption, majorIndex) => {
@@ -25,7 +24,8 @@ export default {
 							majorIndex,
 							new Date(),
 							lotId,
-							user.uuid
+							user.uuid,
+							schoolOption.gather
 						);
 
 						allParam.push(param);
@@ -50,6 +50,7 @@ export default {
 
 	culVoluntaryResult: async (voluntaryUuid) => {
 		// 这里计算结果
-		return { content: '有问题!还是没有问题!' };
+		let voluntary = await voluntaryDao.queryVoluntaryResult(voluntaryUuid);
+		return voluntary;
 	}
 };
