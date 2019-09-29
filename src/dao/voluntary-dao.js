@@ -31,7 +31,9 @@ export default {
         voluntaryUuid
       ])
 		);
-		
-		return initVoluntary(voluntaryList);
+    
+    // 进行深层次处理
+    // return initVoluntary(voluntaryList);
+    return voluntaryList;
   }
 };
