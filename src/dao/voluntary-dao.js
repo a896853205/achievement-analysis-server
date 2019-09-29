@@ -14,7 +14,7 @@ export default {
     // 插入voluntary 而且 将 用户的测评次数-1
 
     // 将好多行的数组放到这行的数组中去.
-    let sqlInsertVoluntary = new SqlObject(voluntaryMapper.insertVoluntary, [
+    let insertVoluntary = new SqlObject(voluntaryMapper.insertVoluntary, [
         allParam
       ]),
       updateUserCount = new SqlObject(userMapper.updateSimulatedCount, [
@@ -22,7 +22,7 @@ export default {
         user.uuid
       ]);
 
-    await db.transactions([sqlInsertVoluntary, updateUserCount]);
+    await db.transactions([insertVoluntary, updateUserCount]);
   },
 
   queryVoluntaryResult: async voluntaryUuid => {

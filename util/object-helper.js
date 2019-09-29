@@ -3,7 +3,7 @@ import { isArray } from "util";
 export let objectHelper = {};
 
 objectHelper.deepCopy = obj => {
-  if (typeof obj !== 'object') {
+  if (typeof obj !== 'object' || obj === null) {
     return obj;
   }
 

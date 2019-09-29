@@ -2,19 +2,19 @@ export default {
   // 通过批次查询对应学校
   querySchool: `
 	select 
-	a.id as school_id,
-	a.code as school_code,
-	a.name as school_name,
-	a.fk_province_id as province_id,
-	b.province_name,
-	a.fk_nature_id as school_nature_id,
-	c.type as school_nature_name,
-	d.area_feature_id,
-	d.area_feature_name,
-	e.school_property_id,
-	e.school_property_name,
-	f.school_type_id,
-	f.school_type_name
+		a.id as school_id,
+		a.code as school_code,
+		a.name as school_name,
+		a.fk_province_id as province_id,
+		b.province_name,
+		a.fk_nature_id as school_nature_id,
+		c.type as school_nature_name,
+		d.area_feature_id,
+		d.area_feature_name,
+		e.school_property_id,
+		e.school_property_name,
+		f.school_type_id,
+		f.school_type_name
 	from t_school a
 	left join
 	sys_t_province b
@@ -65,6 +65,8 @@ export default {
 	a.fk_lots_id as lot_id,
 	a.score,
 	a.year,
+	a.gender,
+	a.poverty,
 	b.lots_name as lot_name,
 	c.*
 	from 

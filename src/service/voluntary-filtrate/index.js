@@ -1,0 +1,370 @@
+const VOLUNTARY_NAME = ['志愿A', '志愿B', '志愿C', '志愿D', '志愿E'];
+const GATHER_NAME = {
+  a: '高风险型',
+  b: '中风险型',
+  c: '低风险型',
+  d: '微风险型',
+  e: '稳妥型'
+};
+
+// 判断6个志愿是不是完整了
+let verifyMajor = voluntaryList => {
+  let unWriteMajorArr = [];
+
+  for (let i = 0; i <= 5; i++) {
+    // 如果没有查到
+    if (voluntaryList.findIndex(item => i === item.major_index) === -1) {
+      unWriteMajorArr.push(`专业${i + 1}`);
+    }
+  }
+
+  return unWriteMajorArr;
+};
+
+export const voluntaryCompleteStrategy = {
+  // 提前批
+  1: voluntaryList => {
+    let unWriteSchoolArr = [];
+
+    // 判断两个志愿全不全
+    for (let i = 0; i < 2; i++) {
+      if (
+        voluntaryList.findIndex(item => item.fk_five_volunteer_id === i + 1) ===
+        -1
+      ) {
+        // 如果没找到
+        unWriteSchoolArr.push(`未填写${VOLUNTARY_NAME[i]}`);
+      } else {
+        let unWriteMajorArr = verifyMajor(
+          voluntaryList.filter(item => item.fk_five_volunteer_id === i + 1)
+        );
+        unWriteSchoolArr.push(`${VOLUNTARY_NAME[i]}的${unWriteMajorArr}未填写`);
+      }
+    }
+
+    return unWriteSchoolArr;
+  },
+  // 一批A
+  2: voluntaryList => {
+    let unWriteSchoolArr = [];
+    // 判断五个志愿全不全
+    for (let i = 0; i < 4; i++) {
+      if (
+        voluntaryList.findIndex(item => item.fk_five_volunteer_id === i + 1) ===
+        -1
+      ) {
+        // 如果没找到
+        unWriteSchoolArr.push(`未填写${VOLUNTARY_NAME[i]}`);
+      } else {
+        let unWriteMajorArr = verifyMajor(
+          voluntaryList.filter(item => item.fk_five_volunteer_id === i + 1)
+        );
+        unWriteSchoolArr.push(`${VOLUNTARY_NAME[i]}的${unWriteMajorArr}未填写`);
+      }
+    }
+
+    return unWriteSchoolArr;
+  },
+  // 一批B
+  3: voluntaryList => {},
+  // 二批A
+  4: voluntaryList => {
+    let unWriteSchoolArr = [];
+    // 判断五个志愿全不全
+    for (let i = 0; i < 4; i++) {
+      if (
+        voluntaryList.findIndex(item => item.fk_five_volunteer_id === i + 1) ===
+        -1
+      ) {
+        // 如果没找到
+        unWriteSchoolArr.push(`未填写${VOLUNTARY_NAME[i]}`);
+      } else {
+        let unWriteMajorArr = verifyMajor(
+          voluntaryList.filter(item => item.fk_five_volunteer_id === i + 1)
+        );
+        unWriteSchoolArr.push(`${VOLUNTARY_NAME[i]}的${unWriteMajorArr}未填写`);
+      }
+    }
+
+    return unWriteSchoolArr;
+  },
+  // 二批B
+  5: voluntaryList => {},
+  // 三批
+  6: voluntaryList => {
+    let unWriteSchoolArr = [];
+    // 判断五个志愿全不全
+    for (let i = 0; i < 4; i++) {
+      if (
+        voluntaryList.findIndex(item => item.fk_five_volunteer_id === i + 1) ===
+        -1
+      ) {
+        // 如果没找到
+        unWriteSchoolArr.push(`未填写${VOLUNTARY_NAME[i]}`);
+      } else {
+        let unWriteMajorArr = verifyMajor(
+          voluntaryList.filter(item => item.fk_five_volunteer_id === i + 1)
+        );
+        unWriteSchoolArr.push(`${VOLUNTARY_NAME[i]}的${unWriteMajorArr}未填写`);
+      }
+    }
+
+    return unWriteSchoolArr;
+  },
+  // 专科
+  7: voluntaryList => {
+    let unWriteSchoolArr = [];
+    // 判断五个志愿全不全
+    for (let i = 0; i < 4; i++) {
+      if (
+        voluntaryList.findIndex(item => item.fk_five_volunteer_id === i + 1) ===
+        -1
+      ) {
+        // 如果没找到
+        unWriteSchoolArr.push(`未填写${VOLUNTARY_NAME[i]}`);
+      } else {
+        let unWriteMajorArr = verifyMajor(
+          voluntaryList.filter(item => item.fk_five_volunteer_id === i + 1)
+        );
+        unWriteSchoolArr.push(`${VOLUNTARY_NAME[i]}的${unWriteMajorArr}未填写`);
+      }
+    }
+
+    return unWriteSchoolArr;
+  }
+};
+
+/**
+ * A志愿不能从(D,E)集合中选.
+ * B志愿不能从(E)集合选
+ * C志愿不能从(A,E)集合选
+ * D志愿不能从(A,B)集合选
+ * E志愿不能从(A,B,C,D)集合选
+ */
+const _verifyGradeStrategy = {
+  1: voluntaryObj => {
+    if (voluntaryObj.gather === 'd' || voluntaryObj.gather === 'e') {
+      return `${VOLUNTARY_NAME[0]}应选择“冲”类高校，${
+        voluntaryObj.name
+      }不属于“冲”类高校，推荐考生在${
+        GATHER_NAME.a
+      }中选择。`;
+    }
+  },
+  2: voluntaryObj => {
+    if (voluntaryObj.gather === 'e') {
+      return `${VOLUNTARY_NAME[1]}应选择“冲”和“稳”类高校，${
+        voluntaryObj.name
+      }不属于“冲”和“稳”类高校，推荐考生在${
+        GATHER_NAME.b
+      }和${GATHER_NAME.c}中选择。`;
+    }
+  },
+  3: voluntaryObj => {
+    if (voluntaryObj.gather === 'a' || voluntaryObj.gather === 'e') {
+      return `${VOLUNTARY_NAME[2]}应选择“稳”类高校，${
+        voluntaryObj.name
+      }不属于“稳”类高校，推荐考生在${
+        GATHER_NAME.c
+      }中选择。`;
+    }
+  },
+  4: voluntaryObj => {
+    if (voluntaryObj.gather === 'a' || voluntaryObj.gather === 'b') {
+      return `${VOLUNTARY_NAME[3]}应选择“保”类高校，${
+        voluntaryObj.name
+      }不属于“保”类高校，推荐考生在${
+        GATHER_NAME.d
+      }和${GATHER_NAME.e}中选择。`;
+    }
+  },
+  5: voluntaryObj => {
+    if (
+      voluntaryObj.gather === 'a' ||
+      voluntaryObj.gather === 'b' ||
+      voluntaryObj.gather === 'd' ||
+      voluntaryObj.gather === 'c'
+    ) {
+      return `${VOLUNTARY_NAME[4]}应选择“保”类高校中最为保底的，${
+        voluntaryObj.name
+      }不属于“保”类高校，推荐考生在${
+        GATHER_NAME.e
+      }中选择。`;
+    }
+  }
+};
+
+export const voluntaryGradedStrategy = {
+  // 提前批
+  1: voluntaryList => {
+    return [];
+  },
+  // 一批A
+  2: voluntaryList => {
+    // 判断不能志愿都一样
+    let gradeDetailArr = [];
+
+    // 第一步判断一下是不是从一个集合里选出来的
+    // 记录集合个数
+    let gatherNum = {
+      a: 0,
+      b: 0,
+      c: 0,
+      d: 0,
+      e: 0
+    };
+
+    for (let item of voluntaryList) {
+      gatherNum[item.gather]++;
+    }
+    for (let key in gatherNum) {
+      if (gatherNum[key] === 5) {
+        let schoolName = [];
+        for (let item of voluntaryList) {
+          schoolName.push(item.name);
+        }
+        gradeDetailArr.push(
+          `${schoolName}输入筛选集合${GATHER_NAME[key]},如按此方式填报会造成浪费志愿情况，考生请谨慎选择!`
+        );
+      }
+    }
+
+    // 第二步判断合理性
+    for (let item of voluntaryList) {
+      let detailMsg = _verifyGradeStrategy[item.fk_five_volunteer_id](item);
+      if (detailMsg) {
+        gradeDetailArr.push(detailMsg);
+      }
+    }
+
+    return gradeDetailArr;
+  },
+  // 一批B
+  3: voluntaryList => {
+    return [];
+  },
+  // 二批A
+  4: voluntaryList => {
+    // 判断不能志愿都一样
+    let gradeDetailArr = [];
+
+    // 第一步判断一下是不是从一个集合里选出来的
+    // 记录集合个数
+    let gatherNum = {
+      a: 0,
+      b: 0,
+      c: 0,
+      d: 0,
+      e: 0
+    };
+
+    for (let item of voluntaryList) {
+      gatherNum[item.gather]++;
+    }
+    for (let key in gatherNum) {
+      if (gatherNum[key] === 5) {
+        let schoolName = [];
+        for (let item of voluntaryList) {
+          schoolName.push(item.name);
+        }
+        gradeDetailArr.push(
+          `${schoolName}输入筛选集合${GATHER_NAME[key]},如按此方式填报会造成浪费志愿情况，考生请谨慎选择!`
+        );
+      }
+    }
+
+    // 第二步判断合理性
+    for (let item of voluntaryList) {
+      let detailMsg = _verifyGradeStrategy[item.fk_five_volunteer_id](item);
+      if (detailMsg) {
+        gradeDetailArr.push(detailMsg);
+      }
+    }
+
+    return gradeDetailArr;
+  },
+  // 二批B
+  5: voluntaryList => {
+    return [];
+  },
+  // 三批
+  6: voluntaryList => {
+    // 判断不能志愿都一样
+    let gradeDetailArr = [];
+
+    // 第一步判断一下是不是从一个集合里选出来的
+    // 记录集合个数
+    let gatherNum = {
+      a: 0,
+      b: 0,
+      c: 0,
+      d: 0,
+      e: 0
+    };
+
+    for (let item of voluntaryList) {
+      gatherNum[item.gather]++;
+    }
+    for (let key in gatherNum) {
+      if (gatherNum[key] === 5) {
+        let schoolName = [];
+        for (let item of voluntaryList) {
+          schoolName.push(item.name);
+        }
+        gradeDetailArr.push(
+          `${schoolName}输入筛选集合${GATHER_NAME[key]},如按此方式填报会造成浪费志愿情况，考生请谨慎选择!`
+        );
+      }
+    }
+
+    // 第二步判断合理性
+    for (let item of voluntaryList) {
+      let detailMsg = _verifyGradeStrategy[item.fk_five_volunteer_id](item);
+      if (detailMsg) {
+        gradeDetailArr.push(detailMsg);
+      }
+    }
+
+    return gradeDetailArr;
+  },
+  // 专科
+  7: voluntaryList => {
+    // 判断不能志愿都一样
+    let gradeDetailArr = [];
+
+    // 第一步判断一下是不是从一个集合里选出来的
+    // 记录集合个数
+    let gatherNum = {
+      a: 0,
+      b: 0,
+      c: 0,
+      d: 0,
+      e: 0
+    };
+
+    for (let item of voluntaryList) {
+      gatherNum[item.gather]++;
+    }
+    for (let key in gatherNum) {
+      if (gatherNum[key] === 5) {
+        let schoolName = [];
+        for (let item of voluntaryList) {
+          schoolName.push(item.name);
+        }
+        gradeDetailArr.push(
+          `${schoolName}输入筛选集合${GATHER_NAME[key]},如按此方式填报会造成浪费志愿情况，考生请谨慎选择!`
+        );
+      }
+    }
+
+    // 第二步判断合理性
+    for (let item of voluntaryList) {
+      let detailMsg = _verifyGradeStrategy[item.fk_five_volunteer_id](item);
+      if (detailMsg) {
+        gradeDetailArr.push(detailMsg);
+      }
+    }
+
+    return gradeDetailArr;
+  }
+};
