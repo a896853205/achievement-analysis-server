@@ -83,7 +83,130 @@ export default {
     return {
       schoolList: resultSchoolList
     };
-  },
+	},
+	
+	getSchoolListByMajorName: async ({ lotId, majorName, score, accountCategory, examYear }) => {
+		let [resultSchoolList, originalSchoolList,
+			{ currentRank, oldRank }, scoreRange] = await Promise.all([
+        schoolDao.querySchoolByLotId(lotId),
+      schoolDao.querySchoolWithMajorByLotId(lotId),
+			schoolDao.queryScoreRankByCategoryAndYear(accountCategory, examYear),
+			controlScoreRangeDao.queryScoreRangeByLotsId(lotId)
+    ]);
+
+    // 将新的成绩转化为去年的成绩
+    score = proxyParseToOldScore(score, currentRank, oldRank);
+
+		resultSchoolList = splitSchoolByRange(score, scoreRange, resultSchoolList);
+    
+    // [ { lot_id: 1,    
+    //   score: 590,   
+    //   year: 2019,   
+    //   gender: 0,    
+    //   poverty: null,
+    //   lot_name: '提前批',
+    //   school_id: 1,
+    //   school_code: '10214',
+    //   school_name: '哈理工',
+    //   province_id: 10,
+    //   province_name: '黑龙江',
+    //   school_nature_id: [ 1 ],
+    //   school_nature_name: [ '公办' ],
+    //   area_feature_id: [ 1, 7 ],
+    //   area_feature_name: [ '沿海城市', '东北' ],
+    //   school_property_id: [ 1, 2 ],
+    //   school_property_name: [ '985', '211' ],
+    //   school_type_id: [ 12, 13 ],
+    //   school_type_name: [ '理工类', '综合类' ],
+    //   gather: 'a' },
+    // { lot_id: 1,
+    //   score: 600,
+    //   year: 2019,
+    //   gender: 0,
+    //   poverty: null,
+    //   lot_name: '提前批',
+    //   school_id: 2,
+    //   school_code: '10215',
+    //   school_name: '工大',
+    //   province_id: 10,
+    //   province_name: '黑龙江',
+    //   school_nature_id: [ 2 ],
+    //   school_nature_name: [ '合作办学' ],
+    //   area_feature_id: [ 4 ],
+    //   area_feature_name: [ '华南' ],
+    //   school_property_id: [ 1, 2 ],
+    //   school_property_name: [ '985', '211' ],
+    //   school_type_id: [ 16 ],
+    //   school_type_name: [ '财经类' ],
+    //   gather: 'd' } ]
+    
+    
+    // 专业的表
+    // [ RowDataPacket {
+    //   lot_id: 1,
+    //   score: 590,
+    //   year: 2019,
+    //   gender: 0,
+    //   poverty: null,
+    //   lot_name: '提前批',
+    //   school_id: 1,
+    //   school_code: '10214',
+    //   school_name: '哈理工',
+    //   province_id: 10,
+    //   province_name: '黑龙江',
+    //   school_nature_id: 1,
+    //   school_nature_name: '公办',
+    //   area_feature_id: 1,
+    //   area_feature_name: '沿海城市',
+    //   school_property_id: 1,
+    //   school_property_name: '985',
+    //   school_type_id: 12,
+    //   school_type_name: '理工类',
+    //   major_id: 1,
+    //   major_name: '农学' },
+    // RowDataPacket {
+    //   lot_id: 1,
+    //   score: 590,
+    //   year: 2019,
+    //   gender: 0,
+    //   poverty: null,
+    //   lot_name: '提前批',
+    //   school_id: 1,
+    //   school_code: '10214',
+    //   school_name: '哈理工',
+    //   province_id: 10,
+    //   province_name: '黑龙江',
+    //   school_nature_id: 1,
+    //   school_nature_name: '公办',
+    //   area_feature_id: 1,
+    //   area_feature_name: '沿海城市',
+    //   school_property_id: 1,
+    //   school_property_name: '985',
+    //   school_type_id: 13,
+    //   school_type_name: '综合类',
+    //   major_id: 1,
+    //   major_name: '农学' },
+
+    // originalSchoolList
+    let correctSchoolIdArr = [];
+    for (let item of originalSchoolList) {
+      if(item.major_name.indexOf(majorName) !== -1) {
+        correctSchoolIdArr.push(item.school_id);
+      }
+    }
+    correctSchoolIdArr = new Set(correctSchoolIdArr);
+
+    let schoolList = [];
+    for (let item of resultSchoolList) {
+      if (correctSchoolIdArr.has(item.school_id)) {
+        schoolList.push(item);
+      }
+    }
+
+		return {
+			schoolList
+		}
+	},
 
   // 获取所有学校的详细信息
   getSchoolList: async ({

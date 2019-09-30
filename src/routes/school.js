@@ -21,7 +21,8 @@ router.post('/getSchool', async ctx => {
       typeValues,
       areaFeatureValues,
       gatherValue,
-      schoolName
+      schoolName,
+      majorName
     } = ctx.request.body,
     user = ctx.state.data,
     schoolList = [];
@@ -52,6 +53,13 @@ router.post('/getSchool', async ctx => {
     }
   } else if (type === 2) {
     // 专业优先
+    schoolList = await schoolService.getSchoolListByMajorName({
+      lotId,
+      majorName,
+      score: user.score,
+      accountCategory: user.accountCategory,
+      examYear: user.examYear
+    });
   } else if (type === 3) {
     // 指定院校
     schoolList = await schoolService.getSchoolListBySchoolName({
