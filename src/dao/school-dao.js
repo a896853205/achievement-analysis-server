@@ -15,6 +15,13 @@ export default {
 		return initSchool(schoolList);
 	},
 
+	// 通过批次id和学校名查询学校
+	querySchoolByLotIdAndName: async (lotId, schoolName) => {
+		let schoolList = await db.query(new SqlObject(schoolMapper.querySchoolByLotIdAndName, [ lotId, `%${schoolName}%` ]));
+
+		return initSchool(schoolList);
+	},
+
 	// 查询所有学校
 	querySchool: async () => {
 		let schoolList = await db.query(new SqlObject(schoolMapper.querySchool, []))

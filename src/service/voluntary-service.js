@@ -30,7 +30,6 @@ export default {
               new Date(),
               lotId,
               user.uuid,
-              // user.gender,
               schoolOption.gender,
               schoolOption.year,
               // user.poverty,

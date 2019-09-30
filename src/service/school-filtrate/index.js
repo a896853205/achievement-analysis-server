@@ -150,6 +150,6 @@ export const splitSchoolByRange = (score, scoreRange, schoolList, gatherValue) =
 		case 'e':
 			return schoolListE;
 		default:
-			return schoolListA;
+			return schoolListA.concat(schoolListB, schoolListC, schoolListD, schoolListE);
 	}
 };
