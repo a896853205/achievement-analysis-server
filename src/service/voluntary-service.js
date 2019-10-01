@@ -1,4 +1,5 @@
 import voluntaryDao from '../dao/voluntary-dao';
+import systemDao from '../dao/system-dao';
 
 // uuid
 import uuid from 'uuid/v1';
@@ -69,11 +70,28 @@ export default {
       gradedResult: {
         reasonable: false,
         describe: '',
-        gradedDetailArr: []
+        gradedDetailArr: [],
+        schoolScoreArr: [],
       }
     };
     // 这里计算结果
-    let voluntaryList = await voluntaryDao.queryVoluntaryResult(voluntaryUuid);
+    let [voluntaryList, gatherOptionList] = await Promise.all([
+      voluntaryDao.queryVoluntaryResult(voluntaryUuid),
+      systemDao.queryGatherOption()
+    ])
+
+    // 对gather进行一下适配处理
+    let gatherOption = gatherOptionList.map(item => {
+      return { [item.value]: item.name };
+    });
+    // 把各个志愿的分数进行筛选
+    let schoolScoreArr = [];
+
+    for (let item of voluntaryList) {
+      schoolScoreArr[item.fk_five_volunteer_id] = item.score;
+    }
+    // 将第0位没有数据的去除
+    schoolScoreArr.shift();
 
     /**
 		 * [ RowDataPacket {
@@ -108,8 +126,6 @@ export default {
           score: 590 } ]
 		 * 
 		 */
-    console.dir(voluntaryList);
-
     if (voluntaryList.length) {
       // 如果有志愿
       // 将志愿的基本信息保存到返回对象中
@@ -135,7 +151,15 @@ export default {
       // 第二项判断梯度性
       let gradedDetailArr = voluntaryGradedStrategy[
         voluntaryList[0].fk_lots_id
-      ](voluntaryList);
+      ](voluntaryList, gatherOption);
+
+      result.gradedResult.schoolScoreArr = schoolScoreArr;
+      // 判断分数降序
+      for (let i = 0; schoolScoreArr < schoolScoreArr.length - 2;i++) {
+        if (schoolScoreArr[i] < schoolScoreArr[i + 1]) {
+          result.gradedResult.reasonable = false;
+        }
+      }
 
       if (gradedDetailArr.length) {
         result.gradedResult.gradedDetailArr = gradedDetailArr;

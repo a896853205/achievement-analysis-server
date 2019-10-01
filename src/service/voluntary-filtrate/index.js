@@ -1,11 +1,4 @@
 const VOLUNTARY_NAME = ['志愿A', '志愿B', '志愿C', '志愿D', '志愿E'];
-const GATHER_NAME = {
-  a: '高风险型',
-  b: '中风险型',
-  c: '低风险型',
-  d: '微风险型',
-  e: '稳妥型'
-};
 
 // 判断6个志愿是不是完整了
 let verifyMajor = voluntaryList => {
@@ -142,43 +135,43 @@ export const voluntaryCompleteStrategy = {
  * E志愿不能从(A,B,C,D)集合选
  */
 const _verifyGradeStrategy = {
-  1: voluntaryObj => {
+  1: (voluntaryObj, gatherOption) => {
     if (voluntaryObj.gather === 'd' || voluntaryObj.gather === 'e') {
       return `${VOLUNTARY_NAME[0]}应选择“冲”类高校，${
         voluntaryObj.name
       }不属于“冲”类高校，推荐考生在${
-        GATHER_NAME.a
+        gatherOption.a
       }中选择。`;
     }
   },
-  2: voluntaryObj => {
+  2: (voluntaryObj, gatherOption) => {
     if (voluntaryObj.gather === 'e') {
       return `${VOLUNTARY_NAME[1]}应选择“冲”和“稳”类高校，${
         voluntaryObj.name
       }不属于“冲”和“稳”类高校，推荐考生在${
-        GATHER_NAME.b
-      }和${GATHER_NAME.c}中选择。`;
+        gatherOption.b
+      }和${gatherOption.c}中选择。`;
     }
   },
-  3: voluntaryObj => {
+  3: (voluntaryObj, gatherOption) => {
     if (voluntaryObj.gather === 'a' || voluntaryObj.gather === 'e') {
       return `${VOLUNTARY_NAME[2]}应选择“稳”类高校，${
         voluntaryObj.name
       }不属于“稳”类高校，推荐考生在${
-        GATHER_NAME.c
+        gatherOption.c
       }中选择。`;
     }
   },
-  4: voluntaryObj => {
+  4: (voluntaryObj, gatherOption) => {
     if (voluntaryObj.gather === 'a' || voluntaryObj.gather === 'b') {
       return `${VOLUNTARY_NAME[3]}应选择“保”类高校，${
         voluntaryObj.name
       }不属于“保”类高校，推荐考生在${
-        GATHER_NAME.d
-      }和${GATHER_NAME.e}中选择。`;
+        gatherOption.d
+      }和${gatherOption.e}中选择。`;
     }
   },
-  5: voluntaryObj => {
+  5: (voluntaryObj, gatherOption) => {
     if (
       voluntaryObj.gather === 'a' ||
       voluntaryObj.gather === 'b' ||
@@ -188,7 +181,7 @@ const _verifyGradeStrategy = {
       return `${VOLUNTARY_NAME[4]}应选择“保”类高校中最为保底的，${
         voluntaryObj.name
       }不属于“保”类高校，推荐考生在${
-        GATHER_NAME.e
+        gatherOption.e
       }中选择。`;
     }
   }
@@ -196,11 +189,11 @@ const _verifyGradeStrategy = {
 
 export const voluntaryGradedStrategy = {
   // 提前批
-  1: voluntaryList => {
+  1: (voluntaryList, gatherOption) => {
     return [];
   },
   // 一批A
-  2: voluntaryList => {
+  2: (voluntaryList, gatherOption) => {
     // 判断不能志愿都一样
     let gradeDetailArr = [];
 
@@ -224,14 +217,14 @@ export const voluntaryGradedStrategy = {
           schoolName.push(item.name);
         }
         gradeDetailArr.push(
-          `${schoolName}输入筛选集合${GATHER_NAME[key]},如按此方式填报会造成浪费志愿情况，考生请谨慎选择!`
+          `${schoolName}输入筛选集合${gatherOption[key]},如按此方式填报会造成浪费志愿情况，考生请谨慎选择!`
         );
       }
     }
 
     // 第二步判断合理性
     for (let item of voluntaryList) {
-      let detailMsg = _verifyGradeStrategy[item.fk_five_volunteer_id](item);
+      let detailMsg = _verifyGradeStrategy[item.fk_five_volunteer_id](item, gatherOption);
       if (detailMsg) {
         gradeDetailArr.push(detailMsg);
       }
@@ -240,11 +233,11 @@ export const voluntaryGradedStrategy = {
     return gradeDetailArr;
   },
   // 一批B
-  3: voluntaryList => {
+  3: (voluntaryList, gatherOption) => {
     return [];
   },
   // 二批A
-  4: voluntaryList => {
+  4: (voluntaryList, gatherOption) => {
     // 判断不能志愿都一样
     let gradeDetailArr = [];
 
@@ -268,14 +261,14 @@ export const voluntaryGradedStrategy = {
           schoolName.push(item.name);
         }
         gradeDetailArr.push(
-          `${schoolName}输入筛选集合${GATHER_NAME[key]},如按此方式填报会造成浪费志愿情况，考生请谨慎选择!`
+          `${schoolName}输入筛选集合${gatherOption[key]},如按此方式填报会造成浪费志愿情况，考生请谨慎选择!`
         );
       }
     }
 
     // 第二步判断合理性
     for (let item of voluntaryList) {
-      let detailMsg = _verifyGradeStrategy[item.fk_five_volunteer_id](item);
+      let detailMsg = _verifyGradeStrategy[item.fk_five_volunteer_id](item, gatherOption);
       if (detailMsg) {
         gradeDetailArr.push(detailMsg);
       }
@@ -284,11 +277,11 @@ export const voluntaryGradedStrategy = {
     return gradeDetailArr;
   },
   // 二批B
-  5: voluntaryList => {
+  5: (voluntaryList, gatherOption) => {
     return [];
   },
   // 三批
-  6: voluntaryList => {
+  6: (voluntaryList, gatherOption) => {
     // 判断不能志愿都一样
     let gradeDetailArr = [];
 
@@ -312,14 +305,14 @@ export const voluntaryGradedStrategy = {
           schoolName.push(item.name);
         }
         gradeDetailArr.push(
-          `${schoolName}输入筛选集合${GATHER_NAME[key]},如按此方式填报会造成浪费志愿情况，考生请谨慎选择!`
+          `${schoolName}输入筛选集合${gatherOption[key]},如按此方式填报会造成浪费志愿情况，考生请谨慎选择!`
         );
       }
     }
 
     // 第二步判断合理性
     for (let item of voluntaryList) {
-      let detailMsg = _verifyGradeStrategy[item.fk_five_volunteer_id](item);
+      let detailMsg = _verifyGradeStrategy[item.fk_five_volunteer_id](item, gatherOption);
       if (detailMsg) {
         gradeDetailArr.push(detailMsg);
       }
@@ -328,7 +321,7 @@ export const voluntaryGradedStrategy = {
     return gradeDetailArr;
   },
   // 专科
-  7: voluntaryList => {
+  7: (voluntaryList, gatherOption) => {
     // 判断不能志愿都一样
     let gradeDetailArr = [];
 
@@ -352,14 +345,14 @@ export const voluntaryGradedStrategy = {
           schoolName.push(item.name);
         }
         gradeDetailArr.push(
-          `${schoolName}输入筛选集合${GATHER_NAME[key]},如按此方式填报会造成浪费志愿情况，考生请谨慎选择!`
+          `${schoolName}输入筛选集合${gatherOption[key]},如按此方式填报会造成浪费志愿情况，考生请谨慎选择!`
         );
       }
     }
 
     // 第二步判断合理性
     for (let item of voluntaryList) {
-      let detailMsg = _verifyGradeStrategy[item.fk_five_volunteer_id](item);
+      let detailMsg = _verifyGradeStrategy[item.fk_five_volunteer_id](item, gatherOption);
       if (detailMsg) {
         gradeDetailArr.push(detailMsg);
       }
