@@ -6,8 +6,11 @@ import uuid from 'uuid/v1';
 
 import {
   voluntaryCompleteStrategy,
-  voluntaryGradedStrategy
+  voluntaryGradedStrategy,
+  voluntaryScoreStrategy,
+  voluntaryPlanStrategy
 } from './voluntary-filtrate';
+import { isArray } from 'util';
 
 export default {
   // 保存志愿信息
@@ -71,27 +74,24 @@ export default {
         reasonable: false,
         describe: '',
         gradedDetailArr: [],
-        schoolScoreArr: [],
+        schoolScoreArr: []
+      },
+      planResult: {
+        reasonable: false,
+        describe: '',
+        planDetailArr: []
       }
     };
     // 这里计算结果
     let [voluntaryList, gatherOptionList] = await Promise.all([
       voluntaryDao.queryVoluntaryResult(voluntaryUuid),
       systemDao.queryGatherOption()
-    ])
+    ]);
 
     // 对gather进行一下适配处理
     let gatherOption = gatherOptionList.map(item => {
       return { [item.value]: item.name };
     });
-    // 把各个志愿的分数进行筛选
-    let schoolScoreArr = [];
-
-    for (let item of voluntaryList) {
-      schoolScoreArr[item.fk_five_volunteer_id] = item.score;
-    }
-    // 将第0位没有数据的去除
-    schoolScoreArr.shift();
 
     /**
 		 * [ RowDataPacket {
@@ -108,7 +108,9 @@ export default {
           year: 2019,
           lots_name: '提前批',
           gather: 'a',
-          score: 590 },
+          score: 590,
+          enrollment: 12
+        },
         RowDataPacket {
           uuid: '9a07e380-e29a-11e9-9298-0160416baceb',
           fk_five_volunteer_id: 1,
@@ -123,7 +125,9 @@ export default {
           year: 2019,
           lots_name: '提前批',
           gather: 'a',
-          score: 590 } ]
+          score: 590,
+          enrollment: 10
+        } ]
 		 * 
 		 */
     if (voluntaryList.length) {
@@ -153,10 +157,15 @@ export default {
         voluntaryList[0].fk_lots_id
       ](voluntaryList, gatherOption);
 
-      result.gradedResult.schoolScoreArr = schoolScoreArr;
+      result.gradedResult.schoolScoreArr = voluntaryScoreStrategy[
+        voluntaryList[0].fk_lots_id
+      ](voluntaryList);
       // 判断分数降序
-      for (let i = 0; schoolScoreArr < schoolScoreArr.length - 2;i++) {
-        if (schoolScoreArr[i] < schoolScoreArr[i + 1]) {
+      for (let i = 0; i < result.gradedResult.schoolScoreArr.length - 2; i++) {
+        if (
+          result.gradedResult.schoolScoreArr[i] <
+          result.gradedResult.schoolScoreArr[i + 1]
+        ) {
           result.gradedResult.reasonable = false;
         }
       }
@@ -171,6 +180,16 @@ export default {
           '志愿梯度性合理,如果您另外的条件均合理,则恭喜您可以按照该志愿填报了,祝您金榜题名!';
         result.gradedResult.reasonable = true;
       }
+    }
+
+    // 第三项判断大计划性
+
+    result.planResult.planDetailArr = voluntaryPlanStrategy[
+      voluntaryList[0].fk_lots_id
+    ](voluntaryList);
+    if (result.planResult.planDetailArr) {
+      result.planResult.reasonable = false;
+      result.planResult.describe = `请考生谨慎选择，以免造成退档或滑档情况！`;
     }
 
     return result;

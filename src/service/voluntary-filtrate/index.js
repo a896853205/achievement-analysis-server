@@ -361,3 +361,275 @@ export const voluntaryGradedStrategy = {
     return gradeDetailArr;
   }
 };
+
+export const voluntaryScoreStrategy = {
+  // 提前批
+  1: (voluntaryList) => {
+    let schoolScoreArr = [];
+    schoolScoreArr.length = 2;
+
+    for (let item of voluntaryList) {
+      schoolScoreArr[item.fk_five_volunteer_id - 1] = item.score;
+    }
+
+    return schoolScoreArr;
+  },
+  2: (voluntaryList) => {
+    let schoolScoreArr = [];
+    schoolScoreArr.length = 5;
+
+    for (let item of voluntaryList) {
+      schoolScoreArr[item.fk_five_volunteer_id - 1] = item.score;
+    }
+
+    return schoolScoreArr;
+  },
+  3: (voluntaryList) => {
+    let schoolScoreArr = [];
+    schoolScoreArr.length = 1;
+
+    for (let item of voluntaryList) {
+      schoolScoreArr[item.fk_five_volunteer_id - 1] = item.score;
+    }
+
+    return schoolScoreArr;
+  },
+  4: (voluntaryList) => {
+    let schoolScoreArr = [];
+    schoolScoreArr.length = 5;
+
+    for (let item of voluntaryList) {
+      schoolScoreArr[item.fk_five_volunteer_id - 1] = item.score;
+    }
+
+    return schoolScoreArr;
+  },
+  5: (voluntaryList) => {
+    let schoolScoreArr = [];
+    schoolScoreArr.length = 1;
+
+    for (let item of voluntaryList) {
+      schoolScoreArr[item.fk_five_volunteer_id - 1] = item.score;
+    }
+
+    return schoolScoreArr;
+  },
+  6: (voluntaryList) => {
+    let schoolScoreArr = [];
+    schoolScoreArr.length = 5;
+
+    for (let item of voluntaryList) {
+      schoolScoreArr[item.fk_five_volunteer_id - 1] = item.score;
+    }
+
+    return schoolScoreArr;
+  },
+  7: (voluntaryList) => {
+    let schoolScoreArr = [];
+    schoolScoreArr.length = 5;
+
+    for (let item of voluntaryList) {
+      schoolScoreArr[item.fk_five_volunteer_id - 1] = item.score;
+    }
+
+    return schoolScoreArr;
+  },
+}
+
+export const voluntaryPlanStrategy = {
+  1: (voluntaryList) => {
+    let planDetailArr = [];
+    // 开始弄专业入学人数
+    let majorEnrollmentArr = Array(2).fill([]);
+    let schoolEnrollmentArr = [];
+
+    for (let item of voluntaryList) {
+      majorEnrollmentArr[item.fk_five_volunteer_id - 1].push(item);
+    }
+
+    for (let school of majorEnrollmentArr) {
+      let majorArr = unique(school)
+      let schoolEnrollment = 0;
+      for (let major of majorArr) {
+        schoolEnrollment += major.enrollment
+      }
+      schoolEnrollmentArr[school[0].fk_five_volunteer_id - 1] = schoolEnrollment;
+    }
+    
+    schoolEnrollmentArr.forEach((item, index) => {
+      if ( item < 30 ) {
+        planDetailArr.push(`${majorEnrollmentArr[index][0].name}计划招生人数较少`)
+      }
+    })
+
+    return planDetailArr;
+  },
+  2: (voluntaryList) => {
+    let planDetailArr = [];
+    // 开始弄专业入学人数
+    let majorEnrollmentArr = Array(5).fill([]);
+    let schoolEnrollmentArr = [];
+
+    for (let item of voluntaryList) {
+      majorEnrollmentArr[item.fk_five_volunteer_id - 1].push(item);
+    }
+
+    for (let school of majorEnrollmentArr) {
+      let majorArr = unique(school)
+      let schoolEnrollment = 0;
+      for (let major of majorArr) {
+        schoolEnrollment += major.enrollment
+      }
+      schoolEnrollmentArr = schoolEnrollment[school[0].fk_five_volunteer_id - 1];
+    }
+    
+    schoolEnrollmentArr.forEach((item, index) => {
+      if ( item < 30 ) {
+        planDetailArr.push(`${majorEnrollmentArr[index][0].name}计划招生人数较少`)
+      }
+    })
+
+    return planDetailArr;
+  },
+  3: (voluntaryList) => {
+    let planDetailArr = [];
+    // 开始弄专业入学人数
+    let majorEnrollmentArr = Array(1).fill([]);
+    let schoolEnrollmentArr = [];
+
+    for (let item of voluntaryList) {
+      majorEnrollmentArr[item.fk_five_volunteer_id - 1].push(item);
+    }
+
+    for (let school of majorEnrollmentArr) {
+      let majorArr = unique(school)
+      let schoolEnrollment = 0;
+      for (let major of majorArr) {
+        schoolEnrollment += major.enrollment
+      }
+      schoolEnrollmentArr = schoolEnrollment[school[0].fk_five_volunteer_id - 1];
+    }
+    
+    schoolEnrollmentArr.forEach((item, index) => {
+      if ( item < 30 ) {
+        planDetailArr.push(`${majorEnrollmentArr[index][0].name}计划招生人数较少`)
+      }
+    })
+
+    return planDetailArr;
+  },
+  4: (voluntaryList) => {
+    let planDetailArr = [];
+    // 开始弄专业入学人数
+    let majorEnrollmentArr = Array(5).fill([]);
+    let schoolEnrollmentArr = [];
+
+    for (let item of voluntaryList) {
+      majorEnrollmentArr[item.fk_five_volunteer_id - 1].push(item);
+    }
+
+    for (let school of majorEnrollmentArr) {
+      let majorArr = unique(school)
+      let schoolEnrollment = 0;
+      for (let major of majorArr) {
+        schoolEnrollment += major.enrollment
+      }
+      schoolEnrollmentArr = schoolEnrollment[school[0].fk_five_volunteer_id - 1];
+    }
+    
+    schoolEnrollmentArr.forEach((item, index) => {
+      if ( item < 30 ) {
+        planDetailArr.push(`${majorEnrollmentArr[index][0].name}计划招生人数较少`)
+      }
+    })
+
+    return planDetailArr;
+  },
+  5: (voluntaryList) => {
+    let planDetailArr = [];
+    // 开始弄专业入学人数
+    let majorEnrollmentArr = Array(1).fill([]);
+    let schoolEnrollmentArr = [];
+
+    for (let item of voluntaryList) {
+      majorEnrollmentArr[item.fk_five_volunteer_id - 1].push(item);
+    }
+
+    for (let school of majorEnrollmentArr) {
+      let majorArr = unique(school)
+      let schoolEnrollment = 0;
+      for (let major of majorArr) {
+        schoolEnrollment += major.enrollment
+      }
+      schoolEnrollmentArr = schoolEnrollment[school[0].fk_five_volunteer_id - 1];
+    }
+    
+    schoolEnrollmentArr.forEach((item, index) => {
+      if ( item < 30 ) {
+        planDetailArr.push(`${majorEnrollmentArr[index][0].name}计划招生人数较少`)
+      }
+    })
+
+    return planDetailArr;
+  },
+  6: (voluntaryList) => {
+    let planDetailArr = [];
+    // 开始弄专业入学人数
+    let majorEnrollmentArr = Array(5).fill([]);
+    let schoolEnrollmentArr = [];
+
+    for (let item of voluntaryList) {
+      majorEnrollmentArr[item.fk_five_volunteer_id - 1].push(item);
+    }
+
+    for (let school of majorEnrollmentArr) {
+      let majorArr = unique(school)
+      let schoolEnrollment = 0;
+      for (let major of majorArr) {
+        schoolEnrollment += major.enrollment
+      }
+      schoolEnrollmentArr = schoolEnrollment[school[0].fk_five_volunteer_id - 1];
+    }
+    
+    schoolEnrollmentArr.forEach((item, index) => {
+      if ( item < 30 ) {
+        planDetailArr.push(`${majorEnrollmentArr[index][0].name}计划招生人数较少`)
+      }
+    })
+
+    return planDetailArr;
+  },
+  7: (voluntaryList) => {
+    let planDetailArr = [];
+    // 开始弄专业入学人数
+    let majorEnrollmentArr = Array(5).fill([]);
+    let schoolEnrollmentArr = [];
+
+    for (let item of voluntaryList) {
+      majorEnrollmentArr[item.fk_five_volunteer_id - 1].push(item);
+    }
+
+    for (let school of majorEnrollmentArr) {
+      let majorArr = unique(school)
+      let schoolEnrollment = 0;
+      for (let major of majorArr) {
+        schoolEnrollment += major.enrollment
+      }
+      schoolEnrollmentArr = schoolEnrollment[school[0].fk_five_volunteer_id - 1];
+    }
+    
+    schoolEnrollmentArr.forEach((item, index) => {
+      if ( item < 30 ) {
+        planDetailArr.push(`${majorEnrollmentArr[index][0].name}计划招生人数较少`)
+      }
+    })
+
+    return planDetailArr;
+  },
+}
+
+function unique(arr) {
+
+  const res = new Map();
+  return arr.filter((a) => !res.has(a.fk_major_id) && res.set(a.fk_major_id, 1))
+}
