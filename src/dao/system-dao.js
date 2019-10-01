@@ -52,5 +52,12 @@ export default {
     let voluntaryOption = await db.query(new SqlObject(systemMapper.queryVoluntaryOption, [lotsId]));
 
     return voluntaryOption;
+  },
+
+  // 获取集合选项
+  queryGatherOption: async () => {
+    let gatherOption = await db.query(new SqlObject(systemMapper.queryGatherOption))
+
+    return gatherOption;
   }
 }

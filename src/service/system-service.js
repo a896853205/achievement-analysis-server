@@ -50,6 +50,13 @@ export default {
     let voluntaryOptionList = await systemDao.queryVoluntaryOption(lotId);
 
     return voluntaryOptionList;
+  },
+
+  // 获取集合选项
+  getGatherOption: async () => {
+    let gatherOptionList = await systemDao.queryGatherOption();
+
+    return gatherOptionList;
   }
   
 }

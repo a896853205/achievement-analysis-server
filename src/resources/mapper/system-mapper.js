@@ -42,5 +42,11 @@ export default {
   join
   sys_t_five_volunteer c
   on a.fk_five_volunteer_id = c.id
-  where a.fk_lot_id = ?;`
+  where a.fk_lot_id = ?;`,
+  queryGatherOption: `
+  SELECT
+  *
+  FROM
+  sys_t_gather
+  `
 };
