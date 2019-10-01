@@ -427,7 +427,15 @@ where a.fk_lots_id = ? AND school_name LIKE ?
 		from
 		sys_t_lots_score
 		where
-		year = ?
+		(
+			year = ?
+			OR
+			year = ?
+			OR
+			year = ?
+			OR
+			year = ?
+		)
 		AND
 		accountCategory = ?
 	`

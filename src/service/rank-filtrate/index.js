@@ -123,3 +123,84 @@ let lotsStrategy = {
     }
   }
 };
+
+// 计算线差
+export const culLineDifferStrategies = {
+  1: (oldOneLotsScore, oldTwoLotsScore, oldThreeLotsScore, score) => {
+    let oldOneScore = oldOneLotsScore.filter(item => item.fk_lots_id === 2);
+    let oldTwoScore = oldTwoLotsScore.filter(item => item.fk_lots_id === 2);
+    let oldThreeScore = oldThreeLotsScore.filter(item => item.fk_lots_id === 2);
+
+    return [
+      score - oldOneScore[0].score,
+      score - oldTwoScore[0].score,
+      score - oldThreeScore[0].score
+    ];
+  },
+  2: (oldOneLotsScore, oldTwoLotsScore, oldThreeLotsScore, score) => {
+    let oldOneScore = oldOneLotsScore.filter(item => item.fk_lots_id === 2);
+    let oldTwoScore = oldTwoLotsScore.filter(item => item.fk_lots_id === 2);
+    let oldThreeScore = oldThreeLotsScore.filter(item => item.fk_lots_id === 2);
+
+    return [
+      score - oldOneScore[0].score,
+      score - oldTwoScore[0].score,
+      score - oldThreeScore[0].score
+    ];
+  },
+  3: (oldOneLotsScore, oldTwoLotsScore, oldThreeLotsScore, score) => {
+    let oldOneScore = oldOneLotsScore.filter(item => item.fk_lots_id === 3);
+    let oldTwoScore = oldTwoLotsScore.filter(item => item.fk_lots_id === 3);
+    let oldThreeScore = oldThreeLotsScore.filter(item => item.fk_lots_id === 3);
+
+    return [
+      score - oldOneScore[0].score,
+      score - oldTwoScore[0].score,
+      score - oldThreeScore[0].score
+    ];
+  },
+  4: (oldOneLotsScore, oldTwoLotsScore, oldThreeLotsScore, score) => {
+    let oldOneScore = oldOneLotsScore.filter(item => item.fk_lots_id === 4);
+    let oldTwoScore = oldTwoLotsScore.filter(item => item.fk_lots_id === 4);
+    let oldThreeScore = oldThreeLotsScore.filter(item => item.fk_lots_id === 4);
+
+    return [
+      score - oldOneScore[0].score,
+      score - oldTwoScore[0].score,
+      score - oldThreeScore[0].score
+    ];
+  },
+  5: (oldOneLotsScore, oldTwoLotsScore, oldThreeLotsScore, score) => {
+    let oldOneScore = oldOneLotsScore.filter(item => item.fk_lots_id === 5);
+    let oldTwoScore = oldTwoLotsScore.filter(item => item.fk_lots_id === 5);
+    let oldThreeScore = oldThreeLotsScore.filter(item => item.fk_lots_id === 5);
+
+    return [
+      score - oldOneScore[0].score,
+      score - oldTwoScore[0].score,
+      score - oldThreeScore[0].score
+    ];
+  },
+  6: (oldOneLotsScore, oldTwoLotsScore, oldThreeLotsScore, score) => {
+    let oldOneScore = oldOneLotsScore.filter(item => item.fk_lots_id === 6);
+    let oldTwoScore = oldTwoLotsScore.filter(item => item.fk_lots_id === 6);
+    let oldThreeScore = oldThreeLotsScore.filter(item => item.fk_lots_id === 6);
+
+    return [
+      score - oldOneScore[0].score,
+      score - oldTwoScore[0].score,
+      score - oldThreeScore[0].score
+    ];
+  },
+  7: (oldOneLotsScore, oldTwoLotsScore, oldThreeLotsScore, score) => {
+    let oldOneScore = oldOneLotsScore.filter(item => item.fk_lots_id === 7);
+    let oldTwoScore = oldTwoLotsScore.filter(item => item.fk_lots_id === 7);
+    let oldThreeScore = oldThreeLotsScore.filter(item => item.fk_lots_id === 7);
+
+    return [
+      score - oldOneScore[0].score,
+      score - oldTwoScore[0].score,
+      score - oldThreeScore[0].score
+    ];
+  }
+};

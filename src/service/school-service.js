@@ -9,10 +9,14 @@ import {
   filtrateTypeSchool,
   filtrateAreaFeatureSchool,
   splitSchoolByRange,
-  culEnrollRateStrategies,
+  culEnrollRateStrategies
 } from './school-filtrate';
 
-import { proxyParseToOldScore, parseCurrentScore } from './rank-filtrate';
+import {
+  proxyParseToOldScore,
+  parseCurrentScore,
+  culLineDifferStrategies
+} from './rank-filtrate';
 
 export default {
   // 获取所有学校通过批次id
@@ -30,13 +34,15 @@ export default {
     let [
       resultSchoolList,
       { currentRank, oldRank, oldTwoRank, oldThreeRank },
-      scoreRange
+      scoreRange,
+      { currentLotsScore, oldOneLotsScore, oldTwoLotsScore, oldThreeLotsScore }
     ] = await Promise.all([
       schoolDao.querySchoolByLotIdAndAccountCategory(lotId, accountCategory),
       schoolDao.queryScoreRankByCategoryAndYear(accountCategory, examYear),
-      controlScoreRangeDao.queryScoreRangeByLotsId(lotId)
+      controlScoreRangeDao.queryScoreRangeByLotsId(lotId),
+      schoolDao.queryLotsScore(examYear, accountCategory)
     ]);
-
+    
     // 对办学性质进行筛选
     resultSchoolList = filtrateNatureSchool(natureValues, resultSchoolList);
 
@@ -53,9 +59,7 @@ export default {
     );
 
     // 将新的成绩转化为去年的成绩
-    let [
-      oldOneScoreAndRank,
-    ] = proxyParseToOldScore(
+    let [oldOneScoreAndRank] = proxyParseToOldScore(
       score,
       currentRank,
       oldRank,
@@ -72,7 +76,7 @@ export default {
       examYear - 1
     );
 
-    // 把学校的位次也加上
+    // 把学校的位次和线差也加上
     for (let i = 0; i < resultSchoolList.length; i++) {
       for (let j = 0; j < resultSchoolList[i].school_score.length; j++) {
         if (resultSchoolList[i].school_score[j].year === examYear) {
@@ -96,15 +100,34 @@ export default {
             oldThreeRank
           ).fitCurrent.rank;
         }
+        resultSchoolList[i].lineDiffir = culLineDifferStrategies[lotId](
+          oldOneLotsScore,
+          oldTwoLotsScore,
+          oldThreeLotsScore,
+          resultSchoolList[i].school_score[j].score
+        );
       }
     }
 
+    let stuLineDiffer = NaN;
+    
+    if (lotId === 1) {
+      stuLineDiffer = score - oldOneLotsScore.filter(item => (
+        item.fk_lots_id === 2
+      ))[0].score;
+    } else {
+      stuLineDiffer = score - oldOneLotsScore.filter(item => (
+        item.fk_lots_id === lotId
+      ))[0].score;
+    }
+
     // 计算提档概率
-    resultSchoolList = culEnrollRateStrategies[lotId](
-      oldOneScoreAndRank,
-      resultSchoolList,
-      examYear
-    );
+    resultSchoolList = culEnrollRateStrategies[lotId]({
+      stuOldOneScoreAndRank: oldOneScoreAndRank,
+      schoolList: resultSchoolList,
+      examYear,
+      stuLineDiffer
+    });
 
     return {
       schoolList: resultSchoolList

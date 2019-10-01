@@ -86,8 +86,30 @@ export default {
 
 	queryLotsScore: async (examYear, accountCategory) => {
 		// 查询去年的lots
-		let lotsScoreList = await db.query(new SqlObject(schoolMapper.queryLotsScore, [examYear - 1, accountCategory]));
+		let lotsScoreList = await db.query(new SqlObject(schoolMapper.queryLotsScore, [examYear, examYear - 1, examYear - 2, examYear - 3, accountCategory])),
+			currentLotsScore = [],
+			oldOneLotsScore = [],
+			oldTwoLotsScore = [],
+			oldThreeLotsScore = [];
+
+			// 对lotsScoreList进行处理,处理成四个年份的数组
+		for (let lotsScoreItem of lotsScoreList) {
+			if (lotsScoreItem.year === examYear) {
+				currentLotsScore.push(lotsScoreItem);
+			} else if (lotsScoreItem.year === examYear - 1) {
+				oldOneLotsScore.push(lotsScoreItem);
+			} else if (lotsScoreItem.year === examYear - 2) {
+				oldTwoLotsScore.push(lotsScoreItem);
+			} else if (lotsScoreItem.year === examYear - 3) {
+				oldThreeLotsScore.push(lotsScoreItem);
+			}
+		}
 		
-		return lotsScoreList;
+		return {
+			currentLotsScore,
+			oldOneLotsScore,
+			oldTwoLotsScore,
+			oldThreeLotsScore
+		};
 	}
 };

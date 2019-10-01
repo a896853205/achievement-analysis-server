@@ -99,7 +99,7 @@ export default {
   // 根据年份和分数计算两年内的位次和线差
   getScoreRank: async ({ score, examYear, accountCategory }) => {
     // 获取两个位次的数组 根据年份和文科理科
-    let [{ currentRank, oldRank }, lotsScoreList] = await Promise.all([
+    let [{ currentRank, oldRank }, { oldOneLotsScore }] = await Promise.all([
       schoolDao.queryScoreRankByCategoryAndYear(accountCategory, examYear),
       schoolDao.queryLotsScore(examYear, accountCategory)
     ]);
@@ -110,7 +110,7 @@ export default {
 
     let lotsScoreDifferMsg = computeLotsScoreDifferMsg(
       fitOld.score,
-      lotsScoreList
+      oldOneLotsScore
     );
 
     return { fitCurrent, fitOld, lotsScoreDifferMsg };
