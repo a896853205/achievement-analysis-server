@@ -8,10 +8,11 @@ import {
   filtratePropertySchool,
   filtrateTypeSchool,
   filtrateAreaFeatureSchool,
-  splitSchoolByRange
+  splitSchoolByRange,
+  culEnrollRateStrategies,
 } from './school-filtrate';
 
-import { proxyParseToOldScore } from './rank-filtrate';
+import { proxyParseToOldScore, parseCurrentScore } from './rank-filtrate';
 
 export default {
   // 获取所有学校通过批次id
@@ -28,10 +29,10 @@ export default {
   }) => {
     let [
       resultSchoolList,
-      { currentRank, oldRank },
+      { currentRank, oldRank, oldTwoRank, oldThreeRank },
       scoreRange
     ] = await Promise.all([
-      schoolDao.querySchoolByLotId(lotId),
+      schoolDao.querySchoolByLotIdAndAccountCategory(lotId, accountCategory),
       schoolDao.queryScoreRankByCategoryAndYear(accountCategory, examYear),
       controlScoreRangeDao.queryScoreRangeByLotsId(lotId)
     ]);
@@ -52,13 +53,57 @@ export default {
     );
 
     // 将新的成绩转化为去年的成绩
-    score = proxyParseToOldScore(score, currentRank, oldRank);
-
-    resultSchoolList = splitSchoolByRange(
+    let [
+      oldOneScoreAndRank,
+    ] = proxyParseToOldScore(
       score,
+      currentRank,
+      oldRank,
+      oldTwoRank,
+      oldThreeRank
+    );
+
+    // 用去年的数据去筛选学校
+    resultSchoolList = splitSchoolByRange(
+      oldOneScoreAndRank.score,
       scoreRange,
       resultSchoolList,
-      gatherValue
+      gatherValue,
+      examYear - 1
+    );
+
+    // 把学校的位次也加上
+    for (let i = 0; i < resultSchoolList.length; i++) {
+      for (let j = 0; j < resultSchoolList[i].school_score.length; j++) {
+        if (resultSchoolList[i].school_score[j].year === examYear) {
+          resultSchoolList[i].school_score[j].rank = parseCurrentScore(
+            resultSchoolList[i].school_score[j].score,
+            currentRank
+          ).fitCurrent.rank;
+        } else if (resultSchoolList[i].school_score[j].year === examYear - 1) {
+          resultSchoolList[i].school_score[j].rank = parseCurrentScore(
+            resultSchoolList[i].school_score[j].score,
+            oldRank
+          ).fitCurrent.rank;
+        } else if (resultSchoolList[i].school_score[j].year === examYear - 2) {
+          resultSchoolList[i].school_score[j].rank = parseCurrentScore(
+            resultSchoolList[i].school_score[j].score,
+            oldTwoRank
+          ).fitCurrent.rank;
+        } else if (resultSchoolList[i].school_score[j].year === examYear - 3) {
+          resultSchoolList[i].school_score[j].rank = parseCurrentScore(
+            resultSchoolList[i].school_score[j].score,
+            oldThreeRank
+          ).fitCurrent.rank;
+        }
+      }
+    }
+
+    // 计算提档概率
+    resultSchoolList = culEnrollRateStrategies[lotId](
+      oldOneScoreAndRank,
+      resultSchoolList,
+      examYear
     );
 
     return {
@@ -67,12 +112,21 @@ export default {
   },
 
   // 获取所有学校通过学校名
-  getSchoolListBySchoolName: async ({ lotId, schoolName, score, accountCategory, examYear }) => {
-		let [resultSchoolList,
-			{ currentRank, oldRank }, scoreRange] = await Promise.all([
+  getSchoolListBySchoolName: async ({
+    lotId,
+    schoolName,
+    score,
+    accountCategory,
+    examYear
+  }) => {
+    let [
+      resultSchoolList,
+      { currentRank, oldRank },
+      scoreRange
+    ] = await Promise.all([
       schoolDao.querySchoolByLotIdAndName(lotId, schoolName),
-			schoolDao.queryScoreRankByCategoryAndYear(accountCategory, examYear),
-			controlScoreRangeDao.queryScoreRangeByLotsId(lotId)
+      schoolDao.queryScoreRankByCategoryAndYear(accountCategory, examYear),
+      controlScoreRangeDao.queryScoreRangeByLotsId(lotId)
     ]);
 
     // 将新的成绩转化为去年的成绩
@@ -83,26 +137,36 @@ export default {
     return {
       schoolList: resultSchoolList
     };
-	},
-	
-	getSchoolListByMajorName: async ({ lotId, majorName, score, accountCategory, examYear }) => {
-		let [resultSchoolList, originalSchoolList,
-			{ currentRank, oldRank }, scoreRange] = await Promise.all([
-        schoolDao.querySchoolByLotId(lotId),
+  },
+
+  getSchoolListByMajorName: async ({
+    lotId,
+    majorName,
+    score,
+    accountCategory,
+    examYear
+  }) => {
+    let [
+      resultSchoolList,
+      originalSchoolList,
+      { currentRank, oldRank },
+      scoreRange
+    ] = await Promise.all([
+      schoolDao.querySchoolByLotIdAndAccountCategory(lotId),
       schoolDao.querySchoolWithMajorByLotId(lotId),
-			schoolDao.queryScoreRankByCategoryAndYear(accountCategory, examYear),
-			controlScoreRangeDao.queryScoreRangeByLotsId(lotId)
+      schoolDao.queryScoreRankByCategoryAndYear(accountCategory, examYear),
+      controlScoreRangeDao.queryScoreRangeByLotsId(lotId)
     ]);
 
     // 将新的成绩转化为去年的成绩
     score = proxyParseToOldScore(score, currentRank, oldRank);
 
-		resultSchoolList = splitSchoolByRange(score, scoreRange, resultSchoolList);
-    
-    // [ { lot_id: 1,    
-    //   score: 590,   
-    //   year: 2019,   
-    //   gender: 0,    
+    resultSchoolList = splitSchoolByRange(score, scoreRange, resultSchoolList);
+
+    // [ { lot_id: 1,
+    //   score: 590,
+    //   year: 2019,
+    //   gender: 0,
     //   poverty: null,
     //   lot_name: '提前批',
     //   school_id: 1,
@@ -139,8 +203,7 @@ export default {
     //   school_type_id: [ 16 ],
     //   school_type_name: [ '财经类' ],
     //   gather: 'd' } ]
-    
-    
+
     // 专业的表
     // [ RowDataPacket {
     //   lot_id: 1,
@@ -190,7 +253,7 @@ export default {
     // originalSchoolList
     let correctSchoolIdArr = [];
     for (let item of originalSchoolList) {
-      if(item.major_name.indexOf(majorName) !== -1) {
+      if (item.major_name && item.major_name.indexOf(majorName) !== -1) {
         correctSchoolIdArr.push(item.school_id);
       }
     }
@@ -203,10 +266,10 @@ export default {
       }
     }
 
-		return {
-			schoolList
-		}
-	},
+    return {
+      schoolList
+    };
+  },
 
   // 获取所有学校的详细信息
   getSchoolList: async ({

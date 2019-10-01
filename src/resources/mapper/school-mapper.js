@@ -59,7 +59,7 @@ export default {
 		on a.fk_school_type_id = b.id
 	) as f
 	on a.id = f.school_id`,
-  querySchoolByLotId: `
+  querySchoolByLotIdAndAccountCategory: `
 	-- 根据批次id 查学校
 	select 
 	a.fk_lots_id as lot_id,
@@ -136,7 +136,10 @@ export default {
 		on a.id = f.school_id
 	) as c
 	on a.fk_school_id = c.school_id
-	where a.fk_lots_id = ?;
+	where 
+	a.fk_lots_id = ?
+	AND
+	a.accountCategory = ?;
 `,
 querySchoolByLotIdAndName:`
 select 
@@ -344,7 +347,7 @@ where a.fk_lots_id = ? AND school_name LIKE ?
 		where
 		(accountCategory=?)
 		AND
-		(year=? OR year=?)
+		(year=? OR year=? OR year=? OR year=?)
 	`,
   querySchoolDetail: `select 
 	a.id as school_id,

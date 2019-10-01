@@ -9,8 +9,8 @@ import { initSchool } from './school-filtrate';
 
 export default {
 	// 通过批次id查询学校
-	querySchoolByLotId: async (lotId) => {
-		let schoolList = await db.query(new SqlObject(schoolMapper.querySchoolByLotId, [ lotId ]));
+	querySchoolByLotIdAndAccountCategory: async (lotId, accountCategory) => {
+		let schoolList = await db.query(new SqlObject(schoolMapper.querySchoolByLotIdAndAccountCategory, [ lotId, accountCategory ]));
 
 		return initSchool(schoolList);
 	},
@@ -47,23 +47,32 @@ export default {
 	// 通过考试年份和文科理科来获取分数段
 	queryScoreRankByCategoryAndYear: async (accountCategory, year) => {
 		let scoreRankList = await db.query(
-				new SqlObject(schoolMapper.queryScoreRankByCategoryAndYear, [ accountCategory, year, year - 1 ])
+				new SqlObject(schoolMapper.queryScoreRankByCategoryAndYear, [ accountCategory, year, year - 1, year - 2, year - 3 ])
 			),
 			currentRank = [],
-			oldRank = [];
+			oldOneRank = [],
+			oldTwoRank = [],
+			oldThreeRank = [];
 
-		// 对scoreRankList进行处理,处理成两个年份的数组
+
+		// 对scoreRankList进行处理,处理成四个年份的数组
 		for (let scoreRankItem of scoreRankList) {
 			if (scoreRankItem.year === year) {
 				currentRank.push(scoreRankItem);
-			} else {
-				oldRank.push(scoreRankItem);
+			} else if (scoreRankItem.year === year - 1) {
+				oldOneRank.push(scoreRankItem);
+			} else if (scoreRankItem.year === year - 2) {
+				oldTwoRank.push(scoreRankItem);
+			} else if (scoreRankItem.year === year - 3) {
+				oldThreeRank.push(scoreRankItem);
 			}
 		}
 
 		return {
 			currentRank,
-			oldRank
+			oldRank: oldOneRank,
+			oldTwoRank,
+			oldThreeRank
 		};
 	},
 
