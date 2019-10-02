@@ -2,8 +2,8 @@
 import { objectHelper } from '../../../util/object-helper';
 
 // 将筛选出来的学校进行去重
-export const initSchool = (schoolList) => {
-	// {
+export const initSchool = schoolList => {
+  // {
   //   lot_id: 1,
   //   score: 605,
   //   year: 2018,
@@ -23,76 +23,81 @@ export const initSchool = (schoolList) => {
   //   school_property_name: null,
   //   school_type_id: null,
   //   school_type_name: null }
-	let resultSchoolList = [];
+  let resultSchoolList = [];
 
-	for (let i = 0; i < schoolList.length; i++) {
-		if (
-			resultSchoolList.findIndex((resultItem) => {
-				return schoolList[i].school_id === resultItem.school_id;
-			}) !== -1
-		) {
-			continue;
-		}
+  for (let i = 0; i < schoolList.length; i++) {
+    if (
+      resultSchoolList.findIndex(resultItem => {
+        return schoolList[i].school_id === resultItem.school_id;
+      }) !== -1
+    ) {
+      continue;
+    }
 
-		let oneSchoolArr = [ schoolList[i] ];
+    let oneSchoolArr = [schoolList[i]];
 
-		for (let j = i + 1; j < schoolList.length; j++) {
-			if (schoolList[i].school_id === schoolList[j].school_id) {
-				oneSchoolArr.push(schoolList[j]);
-			}
-		}
+    for (let j = i + 1; j < schoolList.length; j++) {
+      if (schoolList[i].school_id === schoolList[j].school_id) {
+        oneSchoolArr.push(schoolList[j]);
+      }
+    }
 
-		let oneSchoolObj = objectHelper.deepCopy(schoolList[i]);
+    let oneSchoolObj = objectHelper.deepCopy(schoolList[i]);
 
-		oneSchoolObj.school_score = [];
-		oneSchoolObj.school_nature_id = [];
-		oneSchoolObj.school_nature_name = [];
-		oneSchoolObj.school_property_id = [];
-		oneSchoolObj.school_property_name = [];
-		oneSchoolObj.school_type_id = [];
-		oneSchoolObj.school_type_name = [];
-		oneSchoolObj.school_type_id = [];
-		oneSchoolObj.school_type_name = [];
-		oneSchoolObj.area_feature_id = [];
-		oneSchoolObj.area_feature_name = [];
+    oneSchoolObj.school_score = [];
+    oneSchoolObj.school_nature_id = [];
+    oneSchoolObj.school_nature_name = [];
+    oneSchoolObj.school_property_id = [];
+    oneSchoolObj.school_property_name = [];
+    oneSchoolObj.school_type_id = [];
+    oneSchoolObj.school_type_name = [];
+    oneSchoolObj.school_type_id = [];
+    oneSchoolObj.school_type_name = [];
+    oneSchoolObj.area_feature_id = [];
+    oneSchoolObj.area_feature_name = [];
 
-		for (let school of oneSchoolArr) {
-			// 判断性质id有没有
-			if (!oneSchoolObj.school_nature_id.includes(school.school_nature_id)) {
-				oneSchoolObj.school_nature_id.push(school.school_nature_id);
-				oneSchoolObj.school_nature_name.push(school.school_nature_name);
-			}
+    for (let school of oneSchoolArr) {
+      // 判断性质id有没有
+      if (!oneSchoolObj.school_nature_id.includes(school.school_nature_id)) {
+        oneSchoolObj.school_nature_id.push(school.school_nature_id);
+        oneSchoolObj.school_nature_name.push(school.school_nature_name);
+      }
 
-			// 判断属性id有没有
-			if (!oneSchoolObj.school_property_id.includes(school.school_property_id)) {
-				oneSchoolObj.school_property_id.push(school.school_property_id);
-				oneSchoolObj.school_property_name.push(school.school_property_name);
-			}
+      // 判断属性id有没有
+      if (
+        !oneSchoolObj.school_property_id.includes(school.school_property_id)
+      ) {
+        oneSchoolObj.school_property_id.push(school.school_property_id);
+        oneSchoolObj.school_property_name.push(school.school_property_name);
+      }
 
-			// 判断类型id有没有
-			if (!oneSchoolObj.school_type_id.includes(school.school_type_id)) {
-				oneSchoolObj.school_type_id.push(school.school_type_id);
-				oneSchoolObj.school_type_name.push(school.school_type_name);
-			}
+      // 判断类型id有没有
+      if (!oneSchoolObj.school_type_id.includes(school.school_type_id)) {
+        oneSchoolObj.school_type_id.push(school.school_type_id);
+        oneSchoolObj.school_type_name.push(school.school_type_name);
+      }
 
-			// 判断地域id有没有
-			if (!oneSchoolObj.area_feature_id.includes(school.area_feature_id)) {
-				oneSchoolObj.area_feature_id.push(school.area_feature_id);
-				oneSchoolObj.area_feature_name.push(school.area_feature_name);
-			}
+      // 判断地域id有没有
+      if (!oneSchoolObj.area_feature_id.includes(school.area_feature_id)) {
+        oneSchoolObj.area_feature_id.push(school.area_feature_id);
+        oneSchoolObj.area_feature_name.push(school.area_feature_name);
+      }
 
-			// 分数存入数组里
-			oneSchoolObj.school_score.push({
-				year: school.year,
-				score: school.score
-			})
-		}
+      // 分数年份和招生人数存入数组里
+      if (!oneSchoolObj.school_score.find(item => item.year === school.year)) {
+        oneSchoolObj.school_score.push({
+          year: school.year,
+          score: school.score,
+          enrollment: school.enrollment
+        });
+      }
+    }
 
-		delete oneSchoolObj.year;
-		delete oneSchoolObj.score;
+    delete oneSchoolObj.year;
+    delete oneSchoolObj.score;
 
-		resultSchoolList.push(oneSchoolObj);
-	}
+    resultSchoolList.push(oneSchoolObj);
+  }
 
-	return resultSchoolList;
+  return resultSchoolList;
 };

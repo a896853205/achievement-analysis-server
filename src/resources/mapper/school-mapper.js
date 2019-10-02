@@ -67,6 +67,7 @@ export default {
 	a.year,
 	a.gender,
 	a.poverty,
+	a.enrollment,
 	b.lots_name as lot_name,
 	c.*
 	from 
@@ -148,6 +149,7 @@ a.score,
 a.year,
 a.gender,
 a.poverty,
+a.enrollment,
 b.lots_name as lot_name,
 c.*
 from 
@@ -266,6 +268,7 @@ a.accountCategory = ?;
 	a.year,
 	a.gender,
 	a.poverty,
+	a.enrollment,
 	b.lots_name as lot_name,
 	c.*,
 	sys_t_major.id as major_id,

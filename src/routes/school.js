@@ -29,28 +29,17 @@ router.post('/getSchool', async ctx => {
 
   if (type === 1) {
     // 院校优先
-    // 如果有lotsid说明是有成绩和批次的判断出五种类型
-    if (lotId) {
-      schoolList = await schoolService.getSchoolListByLotsScore({
-        lotId,
-        natureValues,
-        propertyValues,
-        typeValues,
-        areaFeatureValues,
-        gatherValue,
-        accountCategory: user.accountCategory,
-        examYear: user.examYear,
-        score: user.score
-      });
-    } else {
-      // 直接进行四种选项的筛选,没有分数和批次的分类.
-      schoolList = await schoolService.getSchoolList({
-        natureValues,
-        propertyValues,
-        typeValues,
-        areaFeatureValues
-      });
-    }
+    schoolList = await schoolService.getSchoolListByLotsScore({
+      lotId,
+      natureValues,
+      propertyValues,
+      typeValues,
+      areaFeatureValues,
+      gatherValue,
+      accountCategory: user.accountCategory,
+      examYear: user.examYear,
+      score: user.score
+    });
   } else if (type === 2) {
     // 专业优先
     schoolList = await schoolService.getSchoolListByMajorName({
@@ -100,6 +89,24 @@ router.post('/getSchoolDetail', async ctx => {
   });
 });
 
-// 获取批次
+router.post('/searchSchool', async ctx => {
+  let {
+    natureValues,
+    propertyValues,
+    typeValues,
+    areaFeatureValues
+  } = ctx.request.body;
+
+  schoolList = await schoolService.getSchoolList({
+    natureValues,
+    propertyValues,
+    typeValues,
+    areaFeatureValues
+  });
+
+  ctx.body = new Result({
+    data: schoolDetail
+  });
+});
 
 export default router;

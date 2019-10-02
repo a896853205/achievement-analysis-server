@@ -113,7 +113,7 @@ export const filtrateMajorName = ({
   resultSchoolList
 }) => {
   let correctSchoolIdArr = [];
-  
+
   for (let item of originalSchoolList) {
     if (item.major_name && item.major_name.indexOf(majorName) !== -1) {
       correctSchoolIdArr.push(item.school_id);
@@ -280,11 +280,11 @@ export const culEnrollRateStrategies = {
             })
           )
         ) {
-          schoolList[i].enrollRate = 1;
+          schoolList[i].enrollRate = 3;
         } else if (stuOldOneScoreAndRank.rank <= avgRank) {
           schoolList[i].enrollRate = 2;
         } else {
-          schoolList[i].enrollRate = 3;
+          schoolList[i].enrollRate = 1;
         }
       } else {
         schoolList[i].enrollRate = 4;
@@ -322,11 +322,11 @@ export const culEnrollRateStrategies = {
             })
           )
         ) {
-          schoolList[i].enrollRate = 1;
+          schoolList[i].enrollRate = 3;
         } else if (stuOldOneScoreAndRank.rank <= avgRank) {
           schoolList[i].enrollRate = 2;
         } else {
-          schoolList[i].enrollRate = 3;
+          schoolList[i].enrollRate = 1;
         }
       } else {
         schoolList[i].enrollRate = 4;
@@ -427,6 +427,407 @@ export const culEnrollRateStrategies = {
       }
     }
 
+    return schoolList;
+  }
+};
+
+// 阈值
+const WAVE_THRESHOLD = 20;
+const PLAN_THRESHOLD = 0.1;
+
+// 计算风险系数
+// 1低 2中 3高 4未知
+export const culRiskRateStrategies = {
+  1: ({ schoolList, examYear }) => {
+    for (let i = 0; i < schoolList.length; i++) {
+      let currentScoreAndRank = schoolList[i].school_score.find(
+        item => item.year === examYear
+      );
+      let oldOneScoreAndRank = schoolList[i].school_score.find(
+        item => item.year === examYear - 1
+      );
+      let oldTwoScoreAndRank = schoolList[i].school_score.find(
+        item => item.year === examYear - 2
+      );
+      let oldThreeScoreAndRank = schoolList[i].school_score.find(
+        item => item.year === examYear - 3
+      );
+      if (
+        oldOneScoreAndRank.rank &&
+        oldTwoScoreAndRank.rank &&
+        oldThreeScoreAndRank.rank &&
+        currentScoreAndRank.enrollment &&
+        oldOneScoreAndRank.enrollment
+      ) {
+        // 三年数值都有
+        let wave1,
+          wave2,
+          influenceFactor1,
+          influenceFactor2,
+          influenceFactor3,
+          changeEnrollment,
+          trueNum = 0;
+        wave1 = Math.abs(oldOneScoreAndRank.rank - oldTwoScoreAndRank.rank);
+        wave2 = Math.abs(oldTwoScoreAndRank.rank - oldThreeScoreAndRank.rank);
+        influenceFactor1 = wave1 + wave2 >= WAVE_THRESHOLD;
+        influenceFactor2 =
+          oldOneScoreAndRank.rank > oldTwoScoreAndRank.rank &&
+          oldTwoScoreAndRank.rank > oldThreeScoreAndRank.rank;
+        changeEnrollment =
+          oldOneScoreAndRank.enrollment - currentScoreAndRank.enrollment;
+        influenceFactor3 =
+          changeEnrollment > 0 &&
+          changeEnrollment / oldOneScoreAndRank.enrollment > PLAN_THRESHOLD;
+        if (influenceFactor1) trueNum++;
+        if (influenceFactor2) trueNum++;
+        if (influenceFactor3) trueNum++;
+        if (trueNum >= 2) {
+          schoolList[i].riskRate = 3;
+        } else if (trueNum >= 1 && trueNum < 2) {
+          schoolList[i].riskRate = 2;
+        } else {
+          schoolList[i].riskRate = 1;
+        }
+      } else {
+        schoolList[i].riskRate = 4;
+      }
+    }
+    return schoolList;
+  },
+  2: ({ schoolList, examYear }) => {
+    for (let i = 0; i < schoolList.length; i++) {
+      let currentScoreAndRank = schoolList[i].school_score.find(
+        item => item.year === examYear
+      );
+      let oldOneScoreAndRank = schoolList[i].school_score.find(
+        item => item.year === examYear - 1
+      );
+      let oldTwoScoreAndRank = schoolList[i].school_score.find(
+        item => item.year === examYear - 2
+      );
+      let oldThreeScoreAndRank = schoolList[i].school_score.find(
+        item => item.year === examYear - 3
+      );
+      if (
+        oldOneScoreAndRank.rank &&
+        oldTwoScoreAndRank.rank &&
+        oldThreeScoreAndRank.rank &&
+        currentScoreAndRank.enrollment &&
+        oldOneScoreAndRank.enrollment
+      ) {
+        // 三年数值都有
+        let wave1,
+          wave2,
+          influenceFactor1,
+          influenceFactor2,
+          influenceFactor3,
+          changeEnrollment,
+          trueNum = 0;
+        wave1 = Math.abs(oldOneScoreAndRank.rank - oldTwoScoreAndRank.rank);
+        wave2 = Math.abs(oldTwoScoreAndRank.rank - oldThreeScoreAndRank.rank);
+        influenceFactor1 = wave1 + wave2 >= WAVE_THRESHOLD;
+        influenceFactor2 =
+          oldOneScoreAndRank.rank > oldTwoScoreAndRank.rank &&
+          oldTwoScoreAndRank.rank > oldThreeScoreAndRank.rank;
+        changeEnrollment =
+          oldOneScoreAndRank.enrollment - currentScoreAndRank.enrollment;
+        influenceFactor3 =
+          changeEnrollment > 0 &&
+          changeEnrollment / oldOneScoreAndRank.enrollment > PLAN_THRESHOLD;
+        if (influenceFactor1) trueNum++;
+        if (influenceFactor2) trueNum++;
+        if (influenceFactor3) trueNum++;
+        if (trueNum >= 2) {
+          schoolList[i].riskRate = 3;
+        } else if (trueNum >= 1 && trueNum < 2) {
+          schoolList[i].riskRate = 2;
+        } else {
+          schoolList[i].riskRate = 1;
+        }
+      } else {
+        schoolList[i].riskRate = 4;
+      }
+    }
+    return schoolList;
+  },
+  3: ({ schoolList, examYear }) => {
+    for (let i = 0; i < schoolList.length; i++) {
+      let currentScoreAndRank = schoolList[i].school_score.find(
+        item => item.year === examYear
+      );
+      let oldOneScoreAndRank = schoolList[i].school_score.find(
+        item => item.year === examYear - 1
+      );
+      let oldTwoScoreAndRank = schoolList[i].school_score.find(
+        item => item.year === examYear - 2
+      );
+      let oldThreeScoreAndRank = schoolList[i].school_score.find(
+        item => item.year === examYear - 3
+      );
+      if (
+        oldOneScoreAndRank.rank &&
+        oldTwoScoreAndRank.rank &&
+        oldThreeScoreAndRank.rank &&
+        currentScoreAndRank.enrollment &&
+        oldOneScoreAndRank.enrollment
+      ) {
+        // 三年数值都有
+        let wave1,
+          wave2,
+          influenceFactor1,
+          influenceFactor2,
+          influenceFactor3,
+          changeEnrollment,
+          trueNum = 0;
+        wave1 = Math.abs(oldOneScoreAndRank.rank - oldTwoScoreAndRank.rank);
+        wave2 = Math.abs(oldTwoScoreAndRank.rank - oldThreeScoreAndRank.rank);
+        influenceFactor1 = wave1 + wave2 >= WAVE_THRESHOLD;
+        influenceFactor2 =
+          oldOneScoreAndRank.rank > oldTwoScoreAndRank.rank &&
+          oldTwoScoreAndRank.rank > oldThreeScoreAndRank.rank;
+        changeEnrollment =
+          oldOneScoreAndRank.enrollment - currentScoreAndRank.enrollment;
+        influenceFactor3 =
+          changeEnrollment > 0 &&
+          changeEnrollment / oldOneScoreAndRank.enrollment > PLAN_THRESHOLD;
+        if (influenceFactor1) trueNum++;
+        if (influenceFactor2) trueNum++;
+        if (influenceFactor3) trueNum++;
+        if (trueNum >= 2) {
+          schoolList[i].riskRate = 3;
+        } else if (trueNum >= 1 && trueNum < 2) {
+          schoolList[i].riskRate = 2;
+        } else {
+          schoolList[i].riskRate = 1;
+        }
+      } else {
+        schoolList[i].riskRate = 4;
+      }
+    }
+    return schoolList;
+  },
+  4: ({ schoolList, examYear }) => {
+    for (let i = 0; i < schoolList.length; i++) {
+      let currentScoreAndRank = schoolList[i].school_score.find(
+        item => item.year === examYear
+      );
+      let oldOneScoreAndRank = schoolList[i].school_score.find(
+        item => item.year === examYear - 1
+      );
+      let oldTwoScoreAndRank = schoolList[i].school_score.find(
+        item => item.year === examYear - 2
+      );
+      let oldThreeScoreAndRank = schoolList[i].school_score.find(
+        item => item.year === examYear - 3
+      );
+      if (
+        oldOneScoreAndRank.rank &&
+        oldTwoScoreAndRank.rank &&
+        oldThreeScoreAndRank.rank &&
+        currentScoreAndRank.enrollment &&
+        oldOneScoreAndRank.enrollment
+      ) {
+        // 三年数值都有
+        let wave1,
+          wave2,
+          influenceFactor1,
+          influenceFactor2,
+          influenceFactor3,
+          changeEnrollment,
+          trueNum = 0;
+        wave1 = Math.abs(oldOneScoreAndRank.rank - oldTwoScoreAndRank.rank);
+        wave2 = Math.abs(oldTwoScoreAndRank.rank - oldThreeScoreAndRank.rank);
+        influenceFactor1 = wave1 + wave2 >= WAVE_THRESHOLD;
+        influenceFactor2 =
+          oldOneScoreAndRank.rank > oldTwoScoreAndRank.rank &&
+          oldTwoScoreAndRank.rank > oldThreeScoreAndRank.rank;
+        changeEnrollment =
+          oldOneScoreAndRank.enrollment - currentScoreAndRank.enrollment;
+        influenceFactor3 =
+          changeEnrollment > 0 &&
+          changeEnrollment / oldOneScoreAndRank.enrollment > PLAN_THRESHOLD;
+        if (influenceFactor1) trueNum++;
+        if (influenceFactor2) trueNum++;
+        if (influenceFactor3) trueNum++;
+        if (trueNum >= 2) {
+          schoolList[i].riskRate = 3;
+        } else if (trueNum >= 1 && trueNum < 2) {
+          schoolList[i].riskRate = 2;
+        } else {
+          schoolList[i].riskRate = 1;
+        }
+      } else {
+        schoolList[i].riskRate = 4;
+      }
+    }
+    return schoolList;
+  },
+  5: ({ schoolList, examYear }) => {
+    for (let i = 0; i < schoolList.length; i++) {
+      let currentScoreAndRank = schoolList[i].school_score.find(
+        item => item.year === examYear
+      );
+      let oldOneScoreAndRank = schoolList[i].school_score.find(
+        item => item.year === examYear - 1
+      );
+      let oldTwoScoreAndRank = schoolList[i].school_score.find(
+        item => item.year === examYear - 2
+      );
+      let oldThreeScoreAndRank = schoolList[i].school_score.find(
+        item => item.year === examYear - 3
+      );
+      if (
+        oldOneScoreAndRank.rank &&
+        oldTwoScoreAndRank.rank &&
+        oldThreeScoreAndRank.rank &&
+        currentScoreAndRank.enrollment &&
+        oldOneScoreAndRank.enrollment
+      ) {
+        // 三年数值都有
+        let wave1,
+          wave2,
+          influenceFactor1,
+          influenceFactor2,
+          influenceFactor3,
+          changeEnrollment,
+          trueNum = 0;
+        wave1 = Math.abs(oldOneScoreAndRank.rank - oldTwoScoreAndRank.rank);
+        wave2 = Math.abs(oldTwoScoreAndRank.rank - oldThreeScoreAndRank.rank);
+        influenceFactor1 = wave1 + wave2 >= WAVE_THRESHOLD;
+        influenceFactor2 =
+          oldOneScoreAndRank.rank > oldTwoScoreAndRank.rank &&
+          oldTwoScoreAndRank.rank > oldThreeScoreAndRank.rank;
+        changeEnrollment =
+          oldOneScoreAndRank.enrollment - currentScoreAndRank.enrollment;
+        influenceFactor3 =
+          changeEnrollment > 0 &&
+          changeEnrollment / oldOneScoreAndRank.enrollment > PLAN_THRESHOLD;
+        if (influenceFactor1) trueNum++;
+        if (influenceFactor2) trueNum++;
+        if (influenceFactor3) trueNum++;
+        if (trueNum >= 2) {
+          schoolList[i].riskRate = 3;
+        } else if (trueNum >= 1 && trueNum < 2) {
+          schoolList[i].riskRate = 2;
+        } else {
+          schoolList[i].riskRate = 1;
+        }
+      } else {
+        schoolList[i].riskRate = 4;
+      }
+    }
+    return schoolList;
+  },
+  6: ({ schoolList, examYear }) => {
+    for (let i = 0; i < schoolList.length; i++) {
+      let currentScoreAndRank = schoolList[i].school_score.find(
+        item => item.year === examYear
+      );
+      let oldOneScoreAndRank = schoolList[i].school_score.find(
+        item => item.year === examYear - 1
+      );
+      let oldTwoScoreAndRank = schoolList[i].school_score.find(
+        item => item.year === examYear - 2
+      );
+      let oldThreeScoreAndRank = schoolList[i].school_score.find(
+        item => item.year === examYear - 3
+      );
+      if (
+        oldOneScoreAndRank.rank &&
+        oldTwoScoreAndRank.rank &&
+        oldThreeScoreAndRank.rank &&
+        currentScoreAndRank.enrollment &&
+        oldOneScoreAndRank.enrollment
+      ) {
+        // 三年数值都有
+        let wave1,
+          wave2,
+          influenceFactor1,
+          influenceFactor2,
+          influenceFactor3,
+          changeEnrollment,
+          trueNum = 0;
+        wave1 = Math.abs(oldOneScoreAndRank.rank - oldTwoScoreAndRank.rank);
+        wave2 = Math.abs(oldTwoScoreAndRank.rank - oldThreeScoreAndRank.rank);
+        influenceFactor1 = wave1 + wave2 >= WAVE_THRESHOLD;
+        influenceFactor2 =
+          oldOneScoreAndRank.rank > oldTwoScoreAndRank.rank &&
+          oldTwoScoreAndRank.rank > oldThreeScoreAndRank.rank;
+        changeEnrollment =
+          oldOneScoreAndRank.enrollment - currentScoreAndRank.enrollment;
+        influenceFactor3 =
+          changeEnrollment > 0 &&
+          changeEnrollment / oldOneScoreAndRank.enrollment > PLAN_THRESHOLD;
+        if (influenceFactor1) trueNum++;
+        if (influenceFactor2) trueNum++;
+        if (influenceFactor3) trueNum++;
+        if (trueNum >= 2) {
+          schoolList[i].riskRate = 3;
+        } else if (trueNum >= 1 && trueNum < 2) {
+          schoolList[i].riskRate = 2;
+        } else {
+          schoolList[i].riskRate = 1;
+        }
+      } else {
+        schoolList[i].riskRate = 4;
+      }
+    }
+    return schoolList;
+  },
+  7: ({ schoolList, examYear }) => {
+    for (let i = 0; i < schoolList.length; i++) {
+      let currentScoreAndRank = schoolList[i].school_score.find(
+        item => item.year === examYear
+      );
+      let oldOneScoreAndRank = schoolList[i].school_score.find(
+        item => item.year === examYear - 1
+      );
+      let oldTwoScoreAndRank = schoolList[i].school_score.find(
+        item => item.year === examYear - 2
+      );
+      let oldThreeScoreAndRank = schoolList[i].school_score.find(
+        item => item.year === examYear - 3
+      );
+      if (
+        oldOneScoreAndRank.rank &&
+        oldTwoScoreAndRank.rank &&
+        oldThreeScoreAndRank.rank &&
+        currentScoreAndRank.enrollment &&
+        oldOneScoreAndRank.enrollment
+      ) {
+        // 三年数值都有
+        let wave1,
+          wave2,
+          influenceFactor1,
+          influenceFactor2,
+          influenceFactor3,
+          changeEnrollment,
+          trueNum = 0;
+        wave1 = Math.abs(oldOneScoreAndRank.rank - oldTwoScoreAndRank.rank);
+        wave2 = Math.abs(oldTwoScoreAndRank.rank - oldThreeScoreAndRank.rank);
+        influenceFactor1 = wave1 + wave2 >= WAVE_THRESHOLD;
+        influenceFactor2 =
+          oldOneScoreAndRank.rank > oldTwoScoreAndRank.rank &&
+          oldTwoScoreAndRank.rank > oldThreeScoreAndRank.rank;
+        changeEnrollment =
+          oldOneScoreAndRank.enrollment - currentScoreAndRank.enrollment;
+        influenceFactor3 =
+          changeEnrollment > 0 &&
+          changeEnrollment / oldOneScoreAndRank.enrollment > PLAN_THRESHOLD;
+        if (influenceFactor1) trueNum++;
+        if (influenceFactor2) trueNum++;
+        if (influenceFactor3) trueNum++;
+        if (trueNum >= 2) {
+          schoolList[i].riskRate = 3;
+        } else if (trueNum >= 1 && trueNum < 2) {
+          schoolList[i].riskRate = 2;
+        } else {
+          schoolList[i].riskRate = 1;
+        }
+      } else {
+        schoolList[i].riskRate = 4;
+      }
+    }
     return schoolList;
   }
 };

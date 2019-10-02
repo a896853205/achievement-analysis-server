@@ -10,7 +10,8 @@ import {
   filtrateAreaFeatureSchool,
   filtrateMajorName,
   splitSchoolByRange,
-  culEnrollRateStrategies
+  culEnrollRateStrategies,
+  culRiskRateStrategies
 } from './school-filtrate';
 
 import {
@@ -157,7 +158,7 @@ export default {
       oldTwoLotsScore,
       oldThreeLotsScore
     });
-
+    
     // 计算提档概率
     resultSchoolList = culEnrollRateStrategies[lotId]({
       stuOldOneScoreAndRank: oldOneScoreAndRank,
@@ -165,6 +166,12 @@ export default {
       examYear,
       stuLineDiffer: culLineDifferStrategies[lotId](score, oldOneLotsScore)
     });
+
+    // 计算风险系数
+    resultSchoolList = culRiskRateStrategies[lotId]({
+      schoolList: resultSchoolList,
+      examYear
+    })
 
     return {
       schoolList: resultSchoolList
@@ -232,6 +239,12 @@ export default {
       examYear,
       stuLineDiffer: culLineDifferStrategies[lotId](score, oldOneLotsScore)
     });
+
+    // 计算风险系数
+    resultSchoolList = culRiskRateStrategies[lotId]({
+      schoolList: resultSchoolList,
+      examYear
+    })
 
     return {
       schoolList: resultSchoolList
@@ -307,6 +320,12 @@ export default {
       examYear,
       stuLineDiffer: culLineDifferStrategies[lotId](score, oldOneLotsScore)
     });
+
+    // 计算风险系数
+    resultSchoolList = culRiskRateStrategies[lotId]({
+      schoolList: resultSchoolList,
+      examYear
+    })
 
     return {
       schoolList
