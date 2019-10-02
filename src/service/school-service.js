@@ -263,7 +263,8 @@ export default {
       resultSchoolList,
       originalSchoolList,
       { currentRank, oldRank, oldTwoRank, oldThreeRank },
-      scoreRange
+      scoreRange,
+      { currentLotsScore, oldOneLotsScore, oldTwoLotsScore, oldThreeLotsScore }
     ] = await Promise.all([
       schoolDao.querySchoolByLotIdAndAccountCategory(lotId, accountCategory),
       schoolDao.querySchoolWithMajorByLotIdAndAccountCategory(
@@ -271,7 +272,8 @@ export default {
         accountCategory
       ),
       schoolDao.queryScoreRankByCategoryAndYear(accountCategory, examYear),
-      controlScoreRangeDao.queryScoreRangeByLotsId(lotId)
+      controlScoreRangeDao.queryScoreRangeByLotsId(lotId),
+      schoolDao.queryLotsScore(examYear, accountCategory)
     ]);
 
     // 通过专业名字筛学校
@@ -328,7 +330,7 @@ export default {
     })
 
     return {
-      schoolList
+      schoolList: resultSchoolList
     };
   },
 

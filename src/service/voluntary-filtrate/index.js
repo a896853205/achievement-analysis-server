@@ -31,7 +31,12 @@ export const voluntaryCompleteStrategy = {
         let unWriteMajorArr = verifyMajor(
           voluntaryList.filter(item => item.fk_five_volunteer_id === i + 1)
         );
-        unWriteSchoolArr.push(`${VOLUNTARY_NAME[i]}的${unWriteMajorArr}未填写`);
+
+        if (unWriteMajorArr.length) {
+          unWriteSchoolArr.push(
+            `${VOLUNTARY_NAME[i]}的${unWriteMajorArr}未填写`
+          );
+        }
       }
     }
 
@@ -41,7 +46,7 @@ export const voluntaryCompleteStrategy = {
   2: voluntaryList => {
     let unWriteSchoolArr = [];
     // 判断五个志愿全不全
-    for (let i = 0; i < 4; i++) {
+    for (let i = 0; i <= 4; i++) {
       if (
         voluntaryList.findIndex(item => item.fk_five_volunteer_id === i + 1) ===
         -1
@@ -52,7 +57,12 @@ export const voluntaryCompleteStrategy = {
         let unWriteMajorArr = verifyMajor(
           voluntaryList.filter(item => item.fk_five_volunteer_id === i + 1)
         );
-        unWriteSchoolArr.push(`${VOLUNTARY_NAME[i]}的${unWriteMajorArr}未填写`);
+
+        if (unWriteMajorArr.length) {
+          unWriteSchoolArr.push(
+            `${VOLUNTARY_NAME[i]}的${unWriteMajorArr}未填写`
+          );
+        }
       }
     }
 
@@ -64,7 +74,7 @@ export const voluntaryCompleteStrategy = {
   4: voluntaryList => {
     let unWriteSchoolArr = [];
     // 判断五个志愿全不全
-    for (let i = 0; i < 4; i++) {
+    for (let i = 0; i <= 4; i++) {
       if (
         voluntaryList.findIndex(item => item.fk_five_volunteer_id === i + 1) ===
         -1
@@ -75,7 +85,12 @@ export const voluntaryCompleteStrategy = {
         let unWriteMajorArr = verifyMajor(
           voluntaryList.filter(item => item.fk_five_volunteer_id === i + 1)
         );
-        unWriteSchoolArr.push(`${VOLUNTARY_NAME[i]}的${unWriteMajorArr}未填写`);
+
+        if (unWriteMajorArr.length) {
+          unWriteSchoolArr.push(
+            `${VOLUNTARY_NAME[i]}的${unWriteMajorArr}未填写`
+          );
+        }
       }
     }
 
@@ -87,7 +102,7 @@ export const voluntaryCompleteStrategy = {
   6: voluntaryList => {
     let unWriteSchoolArr = [];
     // 判断五个志愿全不全
-    for (let i = 0; i < 4; i++) {
+    for (let i = 0; i <= 4; i++) {
       if (
         voluntaryList.findIndex(item => item.fk_five_volunteer_id === i + 1) ===
         -1
@@ -98,7 +113,12 @@ export const voluntaryCompleteStrategy = {
         let unWriteMajorArr = verifyMajor(
           voluntaryList.filter(item => item.fk_five_volunteer_id === i + 1)
         );
-        unWriteSchoolArr.push(`${VOLUNTARY_NAME[i]}的${unWriteMajorArr}未填写`);
+
+        if (unWriteMajorArr.length) {
+          unWriteSchoolArr.push(
+            `${VOLUNTARY_NAME[i]}的${unWriteMajorArr}未填写`
+          );
+        }
       }
     }
 
@@ -108,7 +128,7 @@ export const voluntaryCompleteStrategy = {
   7: voluntaryList => {
     let unWriteSchoolArr = [];
     // 判断五个志愿全不全
-    for (let i = 0; i < 4; i++) {
+    for (let i = 0; i <= 4; i++) {
       if (
         voluntaryList.findIndex(item => item.fk_five_volunteer_id === i + 1) ===
         -1
@@ -119,7 +139,12 @@ export const voluntaryCompleteStrategy = {
         let unWriteMajorArr = verifyMajor(
           voluntaryList.filter(item => item.fk_five_volunteer_id === i + 1)
         );
-        unWriteSchoolArr.push(`${VOLUNTARY_NAME[i]}的${unWriteMajorArr}未填写`);
+
+        if (unWriteMajorArr.length) {
+          unWriteSchoolArr.push(
+            `${VOLUNTARY_NAME[i]}的${unWriteMajorArr}未填写`
+          );
+        }
       }
     }
 
@@ -139,36 +164,32 @@ const _verifyGradeStrategy = {
     if (voluntaryObj.gather === 'd' || voluntaryObj.gather === 'e') {
       return `${VOLUNTARY_NAME[0]}应选择“冲”类高校，${
         voluntaryObj.name
-      }不属于“冲”类高校，推荐考生在${
-        gatherOption.a
-      }中选择。`;
+      }不属于“冲”类高校，推荐考生在${gatherOption.a}中选择。`;
     }
   },
   2: (voluntaryObj, gatherOption) => {
     if (voluntaryObj.gather === 'e') {
       return `${VOLUNTARY_NAME[1]}应选择“冲”和“稳”类高校，${
         voluntaryObj.name
-      }不属于“冲”和“稳”类高校，推荐考生在${
-        gatherOption.b
-      }和${gatherOption.c}中选择。`;
+      }不属于“冲”和“稳”类高校，推荐考生在${gatherOption.b}和${
+        gatherOption.c
+      }中选择。`;
     }
   },
   3: (voluntaryObj, gatherOption) => {
     if (voluntaryObj.gather === 'a' || voluntaryObj.gather === 'e') {
       return `${VOLUNTARY_NAME[2]}应选择“稳”类高校，${
         voluntaryObj.name
-      }不属于“稳”类高校，推荐考生在${
-        gatherOption.c
-      }中选择。`;
+      }不属于“稳”类高校，推荐考生在${gatherOption.c}中选择。`;
     }
   },
   4: (voluntaryObj, gatherOption) => {
     if (voluntaryObj.gather === 'a' || voluntaryObj.gather === 'b') {
       return `${VOLUNTARY_NAME[3]}应选择“保”类高校，${
         voluntaryObj.name
-      }不属于“保”类高校，推荐考生在${
-        gatherOption.d
-      }和${gatherOption.e}中选择。`;
+      }不属于“保”类高校，推荐考生在${gatherOption.d}和${
+        gatherOption.e
+      }中选择。`;
     }
   },
   5: (voluntaryObj, gatherOption) => {
@@ -180,9 +201,7 @@ const _verifyGradeStrategy = {
     ) {
       return `${VOLUNTARY_NAME[4]}应选择“保”类高校中最为保底的，${
         voluntaryObj.name
-      }不属于“保”类高校，推荐考生在${
-        gatherOption.e
-      }中选择。`;
+      }不属于“保”类高校，推荐考生在${gatherOption.e}中选择。`;
     }
   }
 };
@@ -223,10 +242,20 @@ export const voluntaryGradedStrategy = {
     }
 
     // 第二步判断合理性
+    // 将学校去重
+    let schoolArr = [];
     for (let item of voluntaryList) {
-      let detailMsg = _verifyGradeStrategy[item.fk_five_volunteer_id](item, gatherOption);
-      if (detailMsg) {
-        gradeDetailArr.push(detailMsg);
+      schoolArr[item.fk_five_volunteer_id - 1] = item;
+    }
+    for (let item of schoolArr) {
+      if (item) {
+        let detailMsg = _verifyGradeStrategy[item.fk_five_volunteer_id](
+          item,
+          gatherOption
+        );
+        if (detailMsg) {
+          gradeDetailArr.push(detailMsg);
+        }
       }
     }
 
@@ -267,10 +296,21 @@ export const voluntaryGradedStrategy = {
     }
 
     // 第二步判断合理性
+    // 学校去重
+    let schoolArr = [];
     for (let item of voluntaryList) {
-      let detailMsg = _verifyGradeStrategy[item.fk_five_volunteer_id](item, gatherOption);
-      if (detailMsg) {
-        gradeDetailArr.push(detailMsg);
+      schoolArr[item.fk_five_volunteer_id - 1] = item;
+    }
+
+    for (let item of schoolArr) {
+      if (item) {
+        let detailMsg = _verifyGradeStrategy[item.fk_five_volunteer_id](
+          item,
+          gatherOption
+        );
+        if (detailMsg) {
+          gradeDetailArr.push(detailMsg);
+        }
       }
     }
 
@@ -299,20 +339,30 @@ export const voluntaryGradedStrategy = {
       gatherNum[item.gather]++;
     }
     for (let key in gatherNum) {
-      if (gatherNum[key] === 5) {
-        let schoolName = [];
-        for (let item of voluntaryList) {
-          schoolName.push(item.name);
+      if (item) {
+        if (gatherNum[key] === 5) {
+          let schoolName = [];
+          for (let item of voluntaryList) {
+            schoolName.push(item.name);
+          }
+          gradeDetailArr.push(
+            `${schoolName}输入筛选集合${gatherOption[key]},如按此方式填报会造成浪费志愿情况，考生请谨慎选择!`
+          );
         }
-        gradeDetailArr.push(
-          `${schoolName}输入筛选集合${gatherOption[key]},如按此方式填报会造成浪费志愿情况，考生请谨慎选择!`
-        );
       }
     }
 
     // 第二步判断合理性
+    // 学校去重
+    let schoolArr = [];
     for (let item of voluntaryList) {
-      let detailMsg = _verifyGradeStrategy[item.fk_five_volunteer_id](item, gatherOption);
+      schoolArr[item.fk_five_volunteer_id - 1] = item;
+    }
+    for (let item of schoolArr) {
+      let detailMsg = _verifyGradeStrategy[item.fk_five_volunteer_id](
+        item,
+        gatherOption
+      );
       if (detailMsg) {
         gradeDetailArr.push(detailMsg);
       }
@@ -339,20 +389,30 @@ export const voluntaryGradedStrategy = {
       gatherNum[item.gather]++;
     }
     for (let key in gatherNum) {
-      if (gatherNum[key] === 5) {
-        let schoolName = [];
-        for (let item of voluntaryList) {
-          schoolName.push(item.name);
+      if (item) {
+        if (gatherNum[key] === 5) {
+          let schoolName = [];
+          for (let item of voluntaryList) {
+            schoolName.push(item.name);
+          }
+          gradeDetailArr.push(
+            `${schoolName}输入筛选集合${gatherOption[key]},如按此方式填报会造成浪费志愿情况，考生请谨慎选择!`
+          );
         }
-        gradeDetailArr.push(
-          `${schoolName}输入筛选集合${gatherOption[key]},如按此方式填报会造成浪费志愿情况，考生请谨慎选择!`
-        );
       }
     }
 
     // 第二步判断合理性
+    // 学校去重
+    let schoolArr = [];
     for (let item of voluntaryList) {
-      let detailMsg = _verifyGradeStrategy[item.fk_five_volunteer_id](item, gatherOption);
+      schoolArr[item.fk_five_volunteer_id - 1] = item;
+    }
+    for (let item of schoolArr) {
+      let detailMsg = _verifyGradeStrategy[item.fk_five_volunteer_id](
+        item,
+        gatherOption
+      );
       if (detailMsg) {
         gradeDetailArr.push(detailMsg);
       }
@@ -364,7 +424,7 @@ export const voluntaryGradedStrategy = {
 
 export const voluntaryScoreStrategy = {
   // 提前批
-  1: (voluntaryList) => {
+  1: voluntaryList => {
     let schoolScoreArr = [];
     schoolScoreArr.length = 2;
 
@@ -374,7 +434,7 @@ export const voluntaryScoreStrategy = {
 
     return schoolScoreArr;
   },
-  2: (voluntaryList) => {
+  2: voluntaryList => {
     let schoolScoreArr = [];
     schoolScoreArr.length = 5;
 
@@ -384,7 +444,7 @@ export const voluntaryScoreStrategy = {
 
     return schoolScoreArr;
   },
-  3: (voluntaryList) => {
+  3: voluntaryList => {
     let schoolScoreArr = [];
     schoolScoreArr.length = 1;
 
@@ -394,7 +454,7 @@ export const voluntaryScoreStrategy = {
 
     return schoolScoreArr;
   },
-  4: (voluntaryList) => {
+  4: voluntaryList => {
     let schoolScoreArr = [];
     schoolScoreArr.length = 5;
 
@@ -404,7 +464,7 @@ export const voluntaryScoreStrategy = {
 
     return schoolScoreArr;
   },
-  5: (voluntaryList) => {
+  5: voluntaryList => {
     let schoolScoreArr = [];
     schoolScoreArr.length = 1;
 
@@ -414,7 +474,7 @@ export const voluntaryScoreStrategy = {
 
     return schoolScoreArr;
   },
-  6: (voluntaryList) => {
+  6: voluntaryList => {
     let schoolScoreArr = [];
     schoolScoreArr.length = 5;
 
@@ -424,7 +484,7 @@ export const voluntaryScoreStrategy = {
 
     return schoolScoreArr;
   },
-  7: (voluntaryList) => {
+  7: voluntaryList => {
     let schoolScoreArr = [];
     schoolScoreArr.length = 5;
 
@@ -433,203 +493,127 @@ export const voluntaryScoreStrategy = {
     }
 
     return schoolScoreArr;
-  },
-}
+  }
+};
 
 export const voluntaryPlanStrategy = {
-  1: (voluntaryList) => {
+  1: voluntaryList => {
     let planDetailArr = [];
     // 开始弄专业入学人数
-    let majorEnrollmentArr = Array(2).fill([]);
-    let schoolEnrollmentArr = [];
+    let schoolArr = [];
 
     for (let item of voluntaryList) {
-      majorEnrollmentArr[item.fk_five_volunteer_id - 1].push(item);
+      schoolArr[item.fk_five_volunteer_id - 1] = item;
     }
 
-    for (let school of majorEnrollmentArr) {
-      let majorArr = unique(school)
-      let schoolEnrollment = 0;
-      for (let major of majorArr) {
-        schoolEnrollment += major.enrollment
+    schoolArr.forEach(item => {
+      if (item.enrollment && item.enrollment < 30) {
+        planDetailArr.push(`${item.name}计划招生人数较少`);
       }
-      schoolEnrollmentArr[school[0].fk_five_volunteer_id - 1] = schoolEnrollment;
-    }
-    
-    schoolEnrollmentArr.forEach((item, index) => {
-      if ( item < 30 ) {
-        planDetailArr.push(`${majorEnrollmentArr[index][0].name}计划招生人数较少`)
-      }
-    })
+    });
 
     return planDetailArr;
   },
-  2: (voluntaryList) => {
+  2: voluntaryList => {
     let planDetailArr = [];
     // 开始弄专业入学人数
-    let majorEnrollmentArr = Array(5).fill([]);
-    let schoolEnrollmentArr = [];
+    let schoolArr = [];
 
     for (let item of voluntaryList) {
-      majorEnrollmentArr[item.fk_five_volunteer_id - 1].push(item);
+      schoolArr[item.fk_five_volunteer_id - 1] = item;
     }
 
-    for (let school of majorEnrollmentArr) {
-      let majorArr = unique(school)
-      let schoolEnrollment = 0;
-      for (let major of majorArr) {
-        schoolEnrollment += major.enrollment
+    schoolArr.forEach(item => {
+      if (item.enrollment && item.enrollment < 30) {
+        planDetailArr.push(`${item.name}计划招生人数较少`);
       }
-      schoolEnrollmentArr = schoolEnrollment[school[0].fk_five_volunteer_id - 1];
-    }
-    
-    schoolEnrollmentArr.forEach((item, index) => {
-      if ( item < 30 ) {
-        planDetailArr.push(`${majorEnrollmentArr[index][0].name}计划招生人数较少`)
-      }
-    })
+    });
 
     return planDetailArr;
   },
-  3: (voluntaryList) => {
+  3: voluntaryList => {
     let planDetailArr = [];
     // 开始弄专业入学人数
-    let majorEnrollmentArr = Array(1).fill([]);
-    let schoolEnrollmentArr = [];
+    let schoolArr = [];
 
     for (let item of voluntaryList) {
-      majorEnrollmentArr[item.fk_five_volunteer_id - 1].push(item);
+      schoolArr[item.fk_five_volunteer_id - 1] = item;
     }
 
-    for (let school of majorEnrollmentArr) {
-      let majorArr = unique(school)
-      let schoolEnrollment = 0;
-      for (let major of majorArr) {
-        schoolEnrollment += major.enrollment
+    schoolArr.forEach(item => {
+      if (item.enrollment && item.enrollment < 30) {
+        planDetailArr.push(`${item.name}计划招生人数较少`);
       }
-      schoolEnrollmentArr = schoolEnrollment[school[0].fk_five_volunteer_id - 1];
-    }
-    
-    schoolEnrollmentArr.forEach((item, index) => {
-      if ( item < 30 ) {
-        planDetailArr.push(`${majorEnrollmentArr[index][0].name}计划招生人数较少`)
-      }
-    })
+    });
 
     return planDetailArr;
   },
-  4: (voluntaryList) => {
+  4: voluntaryList => {
     let planDetailArr = [];
     // 开始弄专业入学人数
-    let majorEnrollmentArr = Array(5).fill([]);
-    let schoolEnrollmentArr = [];
+    let schoolArr = [];
 
     for (let item of voluntaryList) {
-      majorEnrollmentArr[item.fk_five_volunteer_id - 1].push(item);
+      schoolArr[item.fk_five_volunteer_id - 1] = item;
     }
 
-    for (let school of majorEnrollmentArr) {
-      let majorArr = unique(school)
-      let schoolEnrollment = 0;
-      for (let major of majorArr) {
-        schoolEnrollment += major.enrollment
+    schoolArr.forEach(item => {
+      if (item.enrollment && item.enrollment < 30) {
+        planDetailArr.push(`${item.name}计划招生人数较少`);
       }
-      schoolEnrollmentArr = schoolEnrollment[school[0].fk_five_volunteer_id - 1];
-    }
-    
-    schoolEnrollmentArr.forEach((item, index) => {
-      if ( item < 30 ) {
-        planDetailArr.push(`${majorEnrollmentArr[index][0].name}计划招生人数较少`)
-      }
-    })
+    });
 
     return planDetailArr;
   },
-  5: (voluntaryList) => {
+  5: voluntaryList => {
     let planDetailArr = [];
     // 开始弄专业入学人数
-    let majorEnrollmentArr = Array(1).fill([]);
-    let schoolEnrollmentArr = [];
+    let schoolArr = [];
 
     for (let item of voluntaryList) {
-      majorEnrollmentArr[item.fk_five_volunteer_id - 1].push(item);
+      schoolArr[item.fk_five_volunteer_id - 1] = item;
     }
 
-    for (let school of majorEnrollmentArr) {
-      let majorArr = unique(school)
-      let schoolEnrollment = 0;
-      for (let major of majorArr) {
-        schoolEnrollment += major.enrollment
+    schoolArr.forEach(item => {
+      if (item.enrollment && item.enrollment < 30) {
+        planDetailArr.push(`${item.name}计划招生人数较少`);
       }
-      schoolEnrollmentArr = schoolEnrollment[school[0].fk_five_volunteer_id - 1];
-    }
-    
-    schoolEnrollmentArr.forEach((item, index) => {
-      if ( item < 30 ) {
-        planDetailArr.push(`${majorEnrollmentArr[index][0].name}计划招生人数较少`)
-      }
-    })
+    });
 
     return planDetailArr;
   },
-  6: (voluntaryList) => {
+  6: voluntaryList => {
     let planDetailArr = [];
     // 开始弄专业入学人数
-    let majorEnrollmentArr = Array(5).fill([]);
-    let schoolEnrollmentArr = [];
+    let schoolArr = [];
 
     for (let item of voluntaryList) {
-      majorEnrollmentArr[item.fk_five_volunteer_id - 1].push(item);
+      schoolArr[item.fk_five_volunteer_id - 1] = item;
     }
 
-    for (let school of majorEnrollmentArr) {
-      let majorArr = unique(school)
-      let schoolEnrollment = 0;
-      for (let major of majorArr) {
-        schoolEnrollment += major.enrollment
+    schoolArr.forEach(item => {
+      if (item.enrollment && item.enrollment < 30) {
+        planDetailArr.push(`${item.name}计划招生人数较少`);
       }
-      schoolEnrollmentArr = schoolEnrollment[school[0].fk_five_volunteer_id - 1];
-    }
-    
-    schoolEnrollmentArr.forEach((item, index) => {
-      if ( item < 30 ) {
-        planDetailArr.push(`${majorEnrollmentArr[index][0].name}计划招生人数较少`)
-      }
-    })
+    });
 
     return planDetailArr;
   },
-  7: (voluntaryList) => {
+  7: voluntaryList => {
     let planDetailArr = [];
     // 开始弄专业入学人数
-    let majorEnrollmentArr = Array(5).fill([]);
-    let schoolEnrollmentArr = [];
+    let schoolArr = [];
 
     for (let item of voluntaryList) {
-      majorEnrollmentArr[item.fk_five_volunteer_id - 1].push(item);
+      schoolArr[item.fk_five_volunteer_id - 1] = item;
     }
 
-    for (let school of majorEnrollmentArr) {
-      let majorArr = unique(school)
-      let schoolEnrollment = 0;
-      for (let major of majorArr) {
-        schoolEnrollment += major.enrollment
+    schoolArr.forEach(item => {
+      if (item.enrollment && item.enrollment < 30) {
+        planDetailArr.push(`${item.name}计划招生人数较少`);
       }
-      schoolEnrollmentArr = schoolEnrollment[school[0].fk_five_volunteer_id - 1];
-    }
-    
-    schoolEnrollmentArr.forEach((item, index) => {
-      if ( item < 30 ) {
-        planDetailArr.push(`${majorEnrollmentArr[index][0].name}计划招生人数较少`)
-      }
-    })
+    });
 
     return planDetailArr;
-  },
-}
-
-function unique(arr) {
-
-  const res = new Map();
-  return arr.filter((a) => !res.has(a.fk_major_id) && res.set(a.fk_major_id, 1))
-}
+  }
+};

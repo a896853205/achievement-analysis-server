@@ -3,7 +3,7 @@ export default {
     insert
     into
     t_user_voluntary_result
-    (uuid, fk_five_volunteer_id, fk_school_id, fk_major_id, major_index, submit_time, fk_lots_id, fk_user_uuid, gender, year, gather)
+    (uuid, fk_five_volunteer_id, fk_school_id, fk_enrollment_id, major_index, submit_time, fk_lots_id, fk_user_uuid, gender, year, gather)
     values
     ?`,
   queryVoluntaryByVoluntaryUuid: `
@@ -22,7 +22,8 @@ export default {
     sys_t_lots.lots_name,
     gather,
     t_major_enrollment_info.enrollment,
-    merge_school_lots.score
+    merge_school_lots.score,
+    merge_school_lots.enrollment
 FROM
   t_user_voluntary_result,sys_t_lots,sys_t_five_volunteer,t_school,sys_t_major,merge_school_lots,t_major_enrollment_info
 WHERE
@@ -45,9 +46,9 @@ WHERE
   merge_school_lots.fk_school_id = t_major_enrollment_info.fk_school_id
   AND
   -- 350,520
-  sys_t_major.id = t_user_voluntary_result.fk_major_id
+  t_major_enrollment_info.id = t_user_voluntary_result.fk_enrollment_id
   AND
-  t_user_voluntary_result.fk_major_id = t_major_enrollment_info.fk_major_id
+  sys_t_major.id = t_major_enrollment_info.fk_major_id
   AND
   t_user_voluntary_result.year = t_major_enrollment_info.year
   AND

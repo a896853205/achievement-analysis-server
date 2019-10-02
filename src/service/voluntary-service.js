@@ -35,7 +35,8 @@ export default {
               lotId,
               user.uuid,
               schoolOption.gender,
-              schoolOption.year,
+              // 因为查询的是去年年份的year
+              user.examYear - 1,
               // user.poverty,
               schoolOption.gather
             );
@@ -89,9 +90,10 @@ export default {
     ]);
 
     // 对gather进行一下适配处理
-    let gatherOption = gatherOptionList.map(item => {
-      return { [item.value]: item.name };
-    });
+    let gatherOption = {};
+    gatherOptionList.forEach(item => {
+      gatherOption[item.value] = item.name;
+    })
 
     /**
 		 * [ RowDataPacket {

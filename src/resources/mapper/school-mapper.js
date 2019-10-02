@@ -226,9 +226,10 @@ school_name LIKE ?
 AND
 a.accountCategory = ?;
 `,
-  getMajorBySchoolIdAndYear: `
+	getMajorBySchoolIdAndYear: `
 	-- 批次id和学校id和年 查询专业
 	select
+	a.id as enrollment_id,
 	a.fk_school_id as school_id,
 	c.*,
 	a.tuition,
@@ -249,18 +250,48 @@ a.accountCategory = ?;
 		a.id as major_id,
 		a.major_name,
 		a.major_code,
-		a.fk_major_category_id as major_category_id,
-		b.major_category as major_category_name,
-		b.major_category_code
+		a.fk_major_category_id as major_category_id
 		from
 		sys_t_major a
-		join
-		sys_t_major_category b
-		on a.fk_major_category_id = b.id
 	) as c
 	on a.fk_major_id = c.major_id
 	where a.fk_school_id =? and a.fk_lot_id =? and a.year =?;
 	`,
+	// `
+	// -- 批次id和学校id和年 查询专业
+	// select
+	// a.fk_school_id as school_id,
+	// c.*,
+	// a.tuition,
+	// a.education_system,
+	// a.enrollment,
+	// a.enrollment_score,
+	// a.year,
+	// a.fk_lot_id as lot_id,
+	// b.lots_name as lot_name
+	// from 
+	// t_major_enrollment_info a
+	// left join
+	// sys_t_lots b
+	// on a.fk_lot_id = b.id
+	// left join
+	// (
+	// 	select 
+	// 	a.id as major_id,
+	// 	a.major_name,
+	// 	a.major_code,
+	// 	a.fk_major_category_id as major_category_id,
+	// 	b.major_category as major_category_name,
+	// 	b.major_category_code
+	// 	from
+	// 	sys_t_major a
+	// 	join
+	// 	sys_t_major_category b
+	// 	on a.fk_major_category_id = b.id
+	// ) as c
+	// on a.fk_major_id = c.major_id
+	// where a.fk_school_id =? and a.fk_lot_id =? and a.year =?;
+	// `,
   querySchoolWithMajorByLotIdAndAccountCategory: `
 	select 
 	a.fk_lots_id as lot_id,
