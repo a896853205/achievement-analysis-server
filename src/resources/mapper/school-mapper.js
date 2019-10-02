@@ -141,7 +141,7 @@ export default {
 	AND
 	a.accountCategory = ?;
 `,
-querySchoolByLotIdAndName:`
+  querySchoolByLotIdAndNameAndAccountCategory: `
 select 
 a.fk_lots_id as lot_id,
 a.score,
@@ -217,7 +217,12 @@ left join
 	on a.id = f.school_id
 ) as c
 on a.fk_school_id = c.school_id
-where a.fk_lots_id = ? AND school_name LIKE ?
+where
+a.fk_lots_id = ?
+AND
+school_name LIKE ?
+AND
+a.accountCategory = ?;
 `,
   getMajorBySchoolIdAndYear: `
 	-- 批次id和学校id和年 查询专业
@@ -254,7 +259,7 @@ where a.fk_lots_id = ? AND school_name LIKE ?
 	on a.fk_major_id = c.major_id
 	where a.fk_school_id =? and a.fk_lot_id =? and a.year =?;
 	`,
-	querySchoolWithMajorByLotId:`
+  querySchoolWithMajorByLotIdAndAccountCategory: `
 	select 
 	a.fk_lots_id as lot_id,
 	a.score,
@@ -338,7 +343,9 @@ where a.fk_lots_id = ? AND school_name LIKE ?
 	left join
 	sys_t_major
 	on sys_t_major.id =t_major_enrollment_info.fk_major_id
-	where a.fk_lots_id =?;`,
+	where a.fk_lots_id =?
+	AND
+a.accountCategory = ?;`,
   queryScoreRankByCategoryAndYear: `
 		select
 		*

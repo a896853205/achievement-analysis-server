@@ -106,6 +106,31 @@ export const filtrateAreaFeatureSchool = (areaFeatureValues, schoolList) => {
   }
 };
 
+// 对专业名进行筛选
+export const filtrateMajorName = ({
+  originalSchoolList,
+  majorName,
+  resultSchoolList
+}) => {
+  let correctSchoolIdArr = [];
+  
+  for (let item of originalSchoolList) {
+    if (item.major_name && item.major_name.indexOf(majorName) !== -1) {
+      correctSchoolIdArr.push(item.school_id);
+    }
+  }
+  correctSchoolIdArr = new Set(correctSchoolIdArr);
+
+  let schoolList = [];
+  for (let item of resultSchoolList) {
+    if (correctSchoolIdArr.has(item.school_id)) {
+      schoolList.push(item);
+    }
+  }
+
+  return schoolList;
+};
+
 export const splitSchoolByRange = (
   score,
   scoreRange,

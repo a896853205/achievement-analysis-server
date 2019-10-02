@@ -124,83 +124,93 @@ let lotsStrategy = {
   }
 };
 
+// 计算三年的线差
+export const culThreeYearLineDiffer = ({
+  oldOneLotsScore,
+  oldTwoLotsScore,
+  oldThreeLotsScore,
+  score,
+  lotId
+}) => [
+  culLineDifferStrategies[lotId](score, oldOneLotsScore),
+  culLineDifferStrategies[lotId](score, oldTwoLotsScore),
+  culLineDifferStrategies[lotId](score, oldThreeLotsScore)
+];
+
+// 学校添加近三年的分数和位次和线差
+export const bindScoreAndRank = ({
+  resultSchoolList,
+  lotId,
+  examYear,
+  // 计算三年分数和位次
+  currentRank,
+  oldRank,
+  oldTwoRank,
+  oldThreeRank,
+  // 计算三年线差
+  oldOneLotsScore,
+  oldTwoLotsScore,
+  oldThreeLotsScore
+}) => {
+  for (let i = 0; i < resultSchoolList.length; i++) {
+    for (let j = 0; j < resultSchoolList[i].school_score.length; j++) {
+      // 判断是哪年,计算出当年的成绩换算成位次
+      if (resultSchoolList[i].school_score[j].year === examYear) {
+        resultSchoolList[i].school_score[j].rank = parseCurrentScore(
+          resultSchoolList[i].school_score[j].score,
+          currentRank
+        ).fitCurrent.rank;
+      } else if (resultSchoolList[i].school_score[j].year === examYear - 1) {
+        resultSchoolList[i].school_score[j].rank = parseCurrentScore(
+          resultSchoolList[i].school_score[j].score,
+          oldRank
+        ).fitCurrent.rank;
+      } else if (resultSchoolList[i].school_score[j].year === examYear - 2) {
+        resultSchoolList[i].school_score[j].rank = parseCurrentScore(
+          resultSchoolList[i].school_score[j].score,
+          oldTwoRank
+        ).fitCurrent.rank;
+      } else if (resultSchoolList[i].school_score[j].year === examYear - 3) {
+        resultSchoolList[i].school_score[j].rank = parseCurrentScore(
+          resultSchoolList[i].school_score[j].score,
+          oldThreeRank
+        ).fitCurrent.rank;
+      }
+      // 添加近三年的线差
+      resultSchoolList[i].lineDiffir = culThreeYearLineDiffer({
+        oldOneLotsScore,
+        oldTwoLotsScore,
+        oldThreeLotsScore,
+        score: resultSchoolList[i].school_score[j].score,
+        lotId
+      });
+    }
+  }
+
+  return resultSchoolList;
+};
+
 // 计算线差
 export const culLineDifferStrategies = {
-  1: (oldOneLotsScore, oldTwoLotsScore, oldThreeLotsScore, score) => {
-    let oldOneScore = oldOneLotsScore.filter(item => item.fk_lots_id === 2);
-    let oldTwoScore = oldTwoLotsScore.filter(item => item.fk_lots_id === 2);
-    let oldThreeScore = oldThreeLotsScore.filter(item => item.fk_lots_id === 2);
-
-    return [
-      score - oldOneScore[0].score,
-      score - oldTwoScore[0].score,
-      score - oldThreeScore[0].score
-    ];
+  1: (score, lotsScore) => {
+    return score - lotsScore.filter(item => item.fk_lots_id === 2)[0].score;
   },
-  2: (oldOneLotsScore, oldTwoLotsScore, oldThreeLotsScore, score) => {
-    let oldOneScore = oldOneLotsScore.filter(item => item.fk_lots_id === 2);
-    let oldTwoScore = oldTwoLotsScore.filter(item => item.fk_lots_id === 2);
-    let oldThreeScore = oldThreeLotsScore.filter(item => item.fk_lots_id === 2);
-
-    return [
-      score - oldOneScore[0].score,
-      score - oldTwoScore[0].score,
-      score - oldThreeScore[0].score
-    ];
+  2: (score, lotsScore) => {
+    return score - lotsScore.filter(item => item.fk_lots_id === 2)[0].score;
   },
-  3: (oldOneLotsScore, oldTwoLotsScore, oldThreeLotsScore, score) => {
-    let oldOneScore = oldOneLotsScore.filter(item => item.fk_lots_id === 3);
-    let oldTwoScore = oldTwoLotsScore.filter(item => item.fk_lots_id === 3);
-    let oldThreeScore = oldThreeLotsScore.filter(item => item.fk_lots_id === 3);
-
-    return [
-      score - oldOneScore[0].score,
-      score - oldTwoScore[0].score,
-      score - oldThreeScore[0].score
-    ];
+  3: (score, lotsScore) => {
+    return score - lotsScore.filter(item => item.fk_lots_id === 3)[0].score;
   },
-  4: (oldOneLotsScore, oldTwoLotsScore, oldThreeLotsScore, score) => {
-    let oldOneScore = oldOneLotsScore.filter(item => item.fk_lots_id === 4);
-    let oldTwoScore = oldTwoLotsScore.filter(item => item.fk_lots_id === 4);
-    let oldThreeScore = oldThreeLotsScore.filter(item => item.fk_lots_id === 4);
-
-    return [
-      score - oldOneScore[0].score,
-      score - oldTwoScore[0].score,
-      score - oldThreeScore[0].score
-    ];
+  4: (score, lotsScore) => {
+    return score - lotsScore.filter(item => item.fk_lots_id === 4)[0].score;
   },
-  5: (oldOneLotsScore, oldTwoLotsScore, oldThreeLotsScore, score) => {
-    let oldOneScore = oldOneLotsScore.filter(item => item.fk_lots_id === 5);
-    let oldTwoScore = oldTwoLotsScore.filter(item => item.fk_lots_id === 5);
-    let oldThreeScore = oldThreeLotsScore.filter(item => item.fk_lots_id === 5);
-
-    return [
-      score - oldOneScore[0].score,
-      score - oldTwoScore[0].score,
-      score - oldThreeScore[0].score
-    ];
+  5: (score, lotsScore) => {
+    return score - lotsScore.filter(item => item.fk_lots_id === 5)[0].score;
   },
-  6: (oldOneLotsScore, oldTwoLotsScore, oldThreeLotsScore, score) => {
-    let oldOneScore = oldOneLotsScore.filter(item => item.fk_lots_id === 6);
-    let oldTwoScore = oldTwoLotsScore.filter(item => item.fk_lots_id === 6);
-    let oldThreeScore = oldThreeLotsScore.filter(item => item.fk_lots_id === 6);
-
-    return [
-      score - oldOneScore[0].score,
-      score - oldTwoScore[0].score,
-      score - oldThreeScore[0].score
-    ];
+  6: (score, lotsScore) => {
+    return score - lotsScore.filter(item => item.fk_lots_id === 6)[0].score;
   },
-  7: (oldOneLotsScore, oldTwoLotsScore, oldThreeLotsScore, score) => {
-    let oldOneScore = oldOneLotsScore.filter(item => item.fk_lots_id === 7);
-    let oldTwoScore = oldTwoLotsScore.filter(item => item.fk_lots_id === 7);
-    let oldThreeScore = oldThreeLotsScore.filter(item => item.fk_lots_id === 7);
-
-    return [
-      score - oldOneScore[0].score,
-      score - oldTwoScore[0].score,
-      score - oldThreeScore[0].score
-    ];
+  7: (score, lotsScore) => {
+    return score - lotsScore.filter(item => item.fk_lots_id === 7)[0].score;
   }
 };
