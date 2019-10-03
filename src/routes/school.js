@@ -71,8 +71,14 @@ router.post('/getMajor', async ctx => {
     user = ctx.state.data,
     majorList = [];
 
-  user = await userService.getUserInfo(user.uuid);
-  majorList = await schoolService.getMajorList(schoolId, user.examYear, lotId);
+  // user = await userService.getUserInfo(user.uuid);
+  majorList = await schoolService.getMajorList(
+    schoolId,
+    user.examYear,
+    lotId,
+    user.accountCategory,
+    user.score
+  );
 
   ctx.body = new Result({
     data: majorList

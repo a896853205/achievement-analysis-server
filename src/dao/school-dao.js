@@ -6,6 +6,7 @@ import schoolMapper from '../resources/mapper/school-mapper';
 
 // 处理数据函数
 import { initSchool } from './school-filtrate';
+import { initMajor } from './major-filrate';
 
 export default {
   // 通过批次id查询学校
@@ -61,16 +62,15 @@ export default {
   },
 
   // 通过学校id和当前年份获取学校
-  queryMajorBySchoolIdAndYear: async (schoolId, year, lotId) => {
+  queryMajorBySchoolId: async (schoolId, lotId) => {
     let majorList = await db.query(
-      new SqlObject(schoolMapper.getMajorBySchoolIdAndYear, [
+      new SqlObject(schoolMapper.getMajorBySchoolId, [
         schoolId,
-        lotId,
-        year
+        lotId
       ])
     );
 
-    return majorList;
+    return initMajor(majorList);
   },
 
   // 通过考试年份和文科理科来获取分数段

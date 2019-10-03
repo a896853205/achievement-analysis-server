@@ -34,6 +34,7 @@ export const initSchool = schoolList => {
       continue;
     }
 
+    // 把一样的学校放在一起
     let oneSchoolArr = [schoolList[i]];
 
     for (let j = i + 1; j < schoolList.length; j++) {
@@ -44,7 +45,7 @@ export const initSchool = schoolList => {
 
     let oneSchoolObj = objectHelper.deepCopy(schoolList[i]);
 
-    oneSchoolObj.school_score = [];
+    oneSchoolObj.scoreAndRank = [];
     oneSchoolObj.school_nature_id = [];
     oneSchoolObj.school_nature_name = [];
     oneSchoolObj.school_property_id = [];
@@ -84,8 +85,8 @@ export const initSchool = schoolList => {
       }
 
       // 分数年份和招生人数存入数组里
-      if (!oneSchoolObj.school_score.find(item => item.year === school.year)) {
-        oneSchoolObj.school_score.push({
+      if (!oneSchoolObj.scoreAndRank.find(item => item.year === school.year)) {
+        oneSchoolObj.scoreAndRank.push({
           year: school.year,
           score: school.score,
           enrollment: school.enrollment

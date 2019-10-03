@@ -151,7 +151,7 @@ export const splitSchoolByRange = (
     schoolListE = [];
 
   for (let schoolItem of schoolList) {
-    let currentSchool = schoolItem.school_score.find(item => {
+    let currentSchool = schoolItem.scoreAndRank.find(item => {
       return item.year === oldYear;
     });
     if (currentSchool) {
@@ -210,19 +210,20 @@ export const splitSchoolByRange = (
 // 计算提档概率
 // 1低 2中 3高 4未知
 export const culEnrollRateStrategies = {
-  1: ({ stuOldOneScoreAndRank, schoolList, examYear }) => {
-    for (let i = 0; i < schoolList.length; i++) {
-      let oldOneScoreAndRank = schoolList[i].school_score.find(item => {
+  1: ({ stuOldOneScoreAndRank, culList, examYear }) => {
+    for (let i = 0; i < culList.length; i++) {
+      let oldOneScoreAndRank = culList[i].scoreAndRank.find(item => {
         return item.year === examYear - 1;
       });
-      let oldTwoScoreAndRank = schoolList[i].school_score.find(item => {
+      let oldTwoScoreAndRank = culList[i].scoreAndRank.find(item => {
         return item.year === examYear - 2;
       });
-      let oldThreeScoreAndRank = schoolList[i].school_score.find(item => {
+      let oldThreeScoreAndRank = culList[i].scoreAndRank.find(item => {
         return item.year === examYear - 3;
       });
 
-      if (oldOneScoreAndRank && oldTwoScoreAndRank && oldThreeScoreAndRank) {
+      if (oldOneScoreAndRank && oldTwoScoreAndRank && oldThreeScoreAndRank
+        && oldOneScoreAndRank.rank && oldTwoScoreAndRank.rank && oldThreeScoreAndRank.rank) {
         // 看看是不是比最小的小
         let avgRank = parseInt(
           (oldOneScoreAndRank.rank +
@@ -234,36 +235,37 @@ export const culEnrollRateStrategies = {
           stuOldOneScoreAndRank.rank <=
           Math.min.apply(
             Math,
-            schoolList[i].school_score.map(o => {
+            culList[i].scoreAndRank.map(o => {
               return o.rank;
             })
           )
         ) {
-          schoolList[i].enrollRate = 3;
+          culList[i].enrollRate = 3;
         } else if (stuOldOneScoreAndRank.rank <= avgRank) {
-          schoolList[i].enrollRate = 2;
+          culList[i].enrollRate = 2;
         } else {
-          schoolList[i].enrollRate = 1;
+          culList[i].enrollRate = 1;
         }
       } else {
-        schoolList[i].enrollRate = 4;
+        culList[i].enrollRate = 4;
       }
     }
 
-    return schoolList;
+    return culList;
   },
-  2: ({ stuOldOneScoreAndRank, schoolList, examYear }) => {
-    for (let i = 0; i < schoolList.length; i++) {
-      let oldOneScoreAndRank = schoolList[i].school_score.find(item => {
+  2: ({ stuOldOneScoreAndRank, culList, examYear }) => {
+    for (let i = 0; i < culList.length; i++) {
+      let oldOneScoreAndRank = culList[i].scoreAndRank.find(item => {
         return item.year === examYear - 3;
       });
-      let oldTwoScoreAndRank = schoolList[i].school_score.find(item => {
+      let oldTwoScoreAndRank = culList[i].scoreAndRank.find(item => {
         return item.year === examYear - 2;
       });
-      let oldThreeScoreAndRank = schoolList[i].school_score.find(item => {
+      let oldThreeScoreAndRank = culList[i].scoreAndRank.find(item => {
         return item.year === examYear - 1;
       });
-      if (oldOneScoreAndRank && oldTwoScoreAndRank && oldThreeScoreAndRank) {
+      if (oldOneScoreAndRank && oldTwoScoreAndRank && oldThreeScoreAndRank
+        && oldOneScoreAndRank.rank && oldTwoScoreAndRank.rank && oldThreeScoreAndRank.rank) {
         // 看看是不是比最小的小
         let avgRank = parseInt(
           (oldOneScoreAndRank.rank +
@@ -275,36 +277,37 @@ export const culEnrollRateStrategies = {
           stuOldOneScoreAndRank.rank <=
           Math.min.apply(
             Math,
-            schoolList[i].school_score.map(o => {
+            culList[i].scoreAndRank.map(o => {
               return o.rank;
             })
           )
         ) {
-          schoolList[i].enrollRate = 3;
+          culList[i].enrollRate = 3;
         } else if (stuOldOneScoreAndRank.rank <= avgRank) {
-          schoolList[i].enrollRate = 2;
+          culList[i].enrollRate = 2;
         } else {
-          schoolList[i].enrollRate = 1;
+          culList[i].enrollRate = 1;
         }
       } else {
-        schoolList[i].enrollRate = 4;
+        culList[i].enrollRate = 4;
       }
     }
 
-    return schoolList;
+    return culList;
   },
-  3: ({ stuOldOneScoreAndRank, schoolList, examYear }) => {
-    for (let i = 0; i < schoolList.length; i++) {
-      let oldOneScoreAndRank = schoolList[i].school_score.find(item => {
+  3: ({ stuOldOneScoreAndRank, culList, examYear }) => {
+    for (let i = 0; i < culList.length; i++) {
+      let oldOneScoreAndRank = culList[i].scoreAndRank.find(item => {
         return item.year === examYear - 3;
       });
-      let oldTwoScoreAndRank = schoolList[i].school_score.find(item => {
+      let oldTwoScoreAndRank = culList[i].scoreAndRank.find(item => {
         return item.year === examYear - 2;
       });
-      let oldThreeScoreAndRank = schoolList[i].school_score.find(item => {
+      let oldThreeScoreAndRank = culList[i].scoreAndRank.find(item => {
         return item.year === examYear - 1;
       });
-      if (oldOneScoreAndRank && oldTwoScoreAndRank && oldThreeScoreAndRank) {
+      if (oldOneScoreAndRank && oldTwoScoreAndRank && oldThreeScoreAndRank
+        && oldOneScoreAndRank.rank && oldTwoScoreAndRank.rank && oldThreeScoreAndRank.rank) {
         // 看看是不是比最小的小
         let avgRank = parseInt(
           (oldOneScoreAndRank.rank +
@@ -317,27 +320,27 @@ export const culEnrollRateStrategies = {
           stuOldOneScoreAndRank.rank <=
           Math.min.apply(
             Math,
-            schoolList[i].school_score.map(o => {
+            culList[i].scoreAndRank.map(o => {
               return o.rank;
             })
           )
         ) {
-          schoolList[i].enrollRate = 3;
+          culList[i].enrollRate = 3;
         } else if (stuOldOneScoreAndRank.rank <= avgRank) {
-          schoolList[i].enrollRate = 2;
+          culList[i].enrollRate = 2;
         } else {
-          schoolList[i].enrollRate = 1;
+          culList[i].enrollRate = 1;
         }
       } else {
-        schoolList[i].enrollRate = 4;
+        culList[i].enrollRate = 4;
       }
     }
 
-    return schoolList;
+    return culList;
   },
-  4: ({ schoolList, stuLineDiffer }) => {
-    for (let i = 0; i < schoolList.length; i++) {
-      let [oldOneDiffer, oldTwoDiffer, oldThreeDiffer] = schoolList[
+  4: ({ culList, stuLineDiffer }) => {
+    for (let i = 0; i < culList.length; i++) {
+      let [oldOneDiffer, oldTwoDiffer, oldThreeDiffer] = culList[
         i
       ].lineDiffir;
       if (oldOneDiffer && oldTwoDiffer && oldThreeDiffer) {
@@ -345,69 +348,69 @@ export const culEnrollRateStrategies = {
           (oldOneDiffer + oldTwoDiffer + oldThreeDiffer) / 3
         );
 
-        if (stuLineDiffer >= Math.max.apply(Math, schoolList[i].lineDiffir)) {
-          schoolList[i].enrollRate = 3;
+        if (stuLineDiffer >= Math.max.apply(Math, culList[i].lineDiffir)) {
+          culList[i].enrollRate = 3;
         } else if (stuLineDiffer >= avgDiffer) {
-          schoolList[i].enrollRate = 2;
+          culList[i].enrollRate = 2;
         } else {
-          schoolList[i].enrollRate = 1;
+          culList[i].enrollRate = 1;
         }
       } else {
-        schoolList[i].enrollRate = 4;
+        culList[i].enrollRate = 4;
       }
     }
 
-    return schoolList;
+    return culList;
   },
-  5: ({ schoolList, stuLineDiffer }) => {
-    for (let i = 0; i < schoolList.length; i++) {
-      let [oldOneDiffer, oldTwoDiffer, oldThreeDiffer] = schoolList[
+  5: ({ culList, stuLineDiffer }) => {
+    for (let i = 0; i < culList.length; i++) {
+      let [oldOneDiffer, oldTwoDiffer, oldThreeDiffer] = culList[
         i
       ].lineDiffir;
       if (oldOneDiffer && oldTwoDiffer && oldThreeDiffer) {
         let avgDiffer = parseInt(
           (oldOneDiffer + oldTwoDiffer + oldThreeDiffer) / 3
         );
-        if (stuLineDiffer >= Math.max.apply(Math, schoolList[i].lineDiffir)) {
-          schoolList[i].enrollRate = 3;
+        if (stuLineDiffer >= Math.max.apply(Math, culList[i].lineDiffir)) {
+          culList[i].enrollRate = 3;
         } else if (stuLineDiffer >= avgDiffer) {
-          schoolList[i].enrollRate = 2;
+          culList[i].enrollRate = 2;
         } else {
-          schoolList[i].enrollRate = 1;
+          culList[i].enrollRate = 1;
         }
       } else {
-        schoolList[i].enrollRate = 4;
+        culList[i].enrollRate = 4;
       }
     }
 
-    return schoolList;
+    return culList;
   },
-  6: ({ schoolList, stuLineDiffer }) => {
-    for (let i = 0; i < schoolList.length; i++) {
-      let [oldOneDiffer, oldTwoDiffer, oldThreeDiffer] = schoolList[
+  6: ({ culList, stuLineDiffer }) => {
+    for (let i = 0; i < culList.length; i++) {
+      let [oldOneDiffer, oldTwoDiffer, oldThreeDiffer] = culList[
         i
       ].lineDiffir;
       if (oldOneDiffer && oldTwoDiffer && oldThreeDiffer) {
         let avgDiffer = parseInt(
           (oldOneDiffer + oldTwoDiffer + oldThreeDiffer) / 3
         );
-        if (stuLineDiffer >= Math.max.apply(Math, schoolList[i].lineDiffir)) {
-          schoolList[i].enrollRate = 3;
+        if (stuLineDiffer >= Math.max.apply(Math, culList[i].lineDiffir)) {
+          culList[i].enrollRate = 3;
         } else if (stuLineDiffer >= avgDiffer) {
-          schoolList[i].enrollRate = 2;
+          culList[i].enrollRate = 2;
         } else {
-          schoolList[i].enrollRate = 1;
+          culList[i].enrollRate = 1;
         }
       } else {
-        schoolList[i].enrollRate = 4;
+        culList[i].enrollRate = 4;
       }
     }
 
-    return schoolList;
+    return culList;
   },
-  7: ({ schoolList, stuLineDiffer }) => {
-    for (let i = 0; i < schoolList.length; i++) {
-      let [oldOneDiffer, oldTwoDiffer, oldThreeDiffer] = schoolList[
+  7: ({ culList, stuLineDiffer }) => {
+    for (let i = 0; i < culList.length; i++) {
+      let [oldOneDiffer, oldTwoDiffer, oldThreeDiffer] = culList[
         i
       ].lineDiffir;
       if (oldOneDiffer && oldTwoDiffer && oldThreeDiffer) {
@@ -415,19 +418,19 @@ export const culEnrollRateStrategies = {
           (oldOneDiffer + oldTwoDiffer + oldThreeDiffer) / 3
         );
 
-        if (stuLineDiffer >= Math.max.apply(Math, schoolList[i].lineDiffir)) {
-          schoolList[i].enrollRate = 3;
+        if (stuLineDiffer >= Math.max.apply(Math, culList[i].lineDiffir)) {
+          culList[i].enrollRate = 3;
         } else if (stuLineDiffer >= avgDiffer) {
-          schoolList[i].enrollRate = 2;
+          culList[i].enrollRate = 2;
         } else {
-          schoolList[i].enrollRate = 1;
+          culList[i].enrollRate = 1;
         }
       } else {
-        schoolList[i].enrollRate = 4;
+        culList[i].enrollRate = 4;
       }
     }
 
-    return schoolList;
+    return culList;
   }
 };
 
@@ -438,18 +441,18 @@ const PLAN_THRESHOLD = 0.1;
 // 计算风险系数
 // 1低 2中 3高 4未知
 export const culRiskRateStrategies = {
-  1: ({ schoolList, examYear }) => {
-    for (let i = 0; i < schoolList.length; i++) {
-      let currentScoreAndRank = schoolList[i].school_score.find(
+  1: ({ culList, examYear }) => {
+    for (let i = 0; i < culList.length; i++) {
+      let currentScoreAndRank = culList[i].scoreAndRank.find(
         item => item.year === examYear
       );
-      let oldOneScoreAndRank = schoolList[i].school_score.find(
+      let oldOneScoreAndRank = culList[i].scoreAndRank.find(
         item => item.year === examYear - 1
       );
-      let oldTwoScoreAndRank = schoolList[i].school_score.find(
+      let oldTwoScoreAndRank = culList[i].scoreAndRank.find(
         item => item.year === examYear - 2
       );
-      let oldThreeScoreAndRank = schoolList[i].school_score.find(
+      let oldThreeScoreAndRank = culList[i].scoreAndRank.find(
         item => item.year === examYear - 3
       );
       if (
@@ -482,30 +485,30 @@ export const culRiskRateStrategies = {
         if (influenceFactor2) trueNum++;
         if (influenceFactor3) trueNum++;
         if (trueNum >= 2) {
-          schoolList[i].riskRate = 3;
+          culList[i].riskRate = 3;
         } else if (trueNum >= 1 && trueNum < 2) {
-          schoolList[i].riskRate = 2;
+          culList[i].riskRate = 2;
         } else {
-          schoolList[i].riskRate = 1;
+          culList[i].riskRate = 1;
         }
       } else {
-        schoolList[i].riskRate = 4;
+        culList[i].riskRate = 4;
       }
     }
-    return schoolList;
+    return culList;
   },
-  2: ({ schoolList, examYear }) => {
-    for (let i = 0; i < schoolList.length; i++) {
-      let currentScoreAndRank = schoolList[i].school_score.find(
+  2: ({ culList, examYear }) => {
+    for (let i = 0; i < culList.length; i++) {
+      let currentScoreAndRank = culList[i].scoreAndRank.find(
         item => item.year === examYear
       );
-      let oldOneScoreAndRank = schoolList[i].school_score.find(
+      let oldOneScoreAndRank = culList[i].scoreAndRank.find(
         item => item.year === examYear - 1
       );
-      let oldTwoScoreAndRank = schoolList[i].school_score.find(
+      let oldTwoScoreAndRank = culList[i].scoreAndRank.find(
         item => item.year === examYear - 2
       );
-      let oldThreeScoreAndRank = schoolList[i].school_score.find(
+      let oldThreeScoreAndRank = culList[i].scoreAndRank.find(
         item => item.year === examYear - 3
       );
       if (
@@ -538,30 +541,30 @@ export const culRiskRateStrategies = {
         if (influenceFactor2) trueNum++;
         if (influenceFactor3) trueNum++;
         if (trueNum >= 2) {
-          schoolList[i].riskRate = 3;
+          culList[i].riskRate = 3;
         } else if (trueNum >= 1 && trueNum < 2) {
-          schoolList[i].riskRate = 2;
+          culList[i].riskRate = 2;
         } else {
-          schoolList[i].riskRate = 1;
+          culList[i].riskRate = 1;
         }
       } else {
-        schoolList[i].riskRate = 4;
+        culList[i].riskRate = 4;
       }
     }
-    return schoolList;
+    return culList;
   },
-  3: ({ schoolList, examYear }) => {
-    for (let i = 0; i < schoolList.length; i++) {
-      let currentScoreAndRank = schoolList[i].school_score.find(
+  3: ({ culList, examYear }) => {
+    for (let i = 0; i < culList.length; i++) {
+      let currentScoreAndRank = culList[i].scoreAndRank.find(
         item => item.year === examYear
       );
-      let oldOneScoreAndRank = schoolList[i].school_score.find(
+      let oldOneScoreAndRank = culList[i].scoreAndRank.find(
         item => item.year === examYear - 1
       );
-      let oldTwoScoreAndRank = schoolList[i].school_score.find(
+      let oldTwoScoreAndRank = culList[i].scoreAndRank.find(
         item => item.year === examYear - 2
       );
-      let oldThreeScoreAndRank = schoolList[i].school_score.find(
+      let oldThreeScoreAndRank = culList[i].scoreAndRank.find(
         item => item.year === examYear - 3
       );
       if (
@@ -594,30 +597,30 @@ export const culRiskRateStrategies = {
         if (influenceFactor2) trueNum++;
         if (influenceFactor3) trueNum++;
         if (trueNum >= 2) {
-          schoolList[i].riskRate = 3;
+          culList[i].riskRate = 3;
         } else if (trueNum >= 1 && trueNum < 2) {
-          schoolList[i].riskRate = 2;
+          culList[i].riskRate = 2;
         } else {
-          schoolList[i].riskRate = 1;
+          culList[i].riskRate = 1;
         }
       } else {
-        schoolList[i].riskRate = 4;
+        culList[i].riskRate = 4;
       }
     }
-    return schoolList;
+    return culList;
   },
-  4: ({ schoolList, examYear }) => {
-    for (let i = 0; i < schoolList.length; i++) {
-      let currentScoreAndRank = schoolList[i].school_score.find(
+  4: ({ culList, examYear }) => {
+    for (let i = 0; i < culList.length; i++) {
+      let currentScoreAndRank = culList[i].scoreAndRank.find(
         item => item.year === examYear
       );
-      let oldOneScoreAndRank = schoolList[i].school_score.find(
+      let oldOneScoreAndRank = culList[i].scoreAndRank.find(
         item => item.year === examYear - 1
       );
-      let oldTwoScoreAndRank = schoolList[i].school_score.find(
+      let oldTwoScoreAndRank = culList[i].scoreAndRank.find(
         item => item.year === examYear - 2
       );
-      let oldThreeScoreAndRank = schoolList[i].school_score.find(
+      let oldThreeScoreAndRank = culList[i].scoreAndRank.find(
         item => item.year === examYear - 3
       );
       if (
@@ -650,30 +653,30 @@ export const culRiskRateStrategies = {
         if (influenceFactor2) trueNum++;
         if (influenceFactor3) trueNum++;
         if (trueNum >= 2) {
-          schoolList[i].riskRate = 3;
+          culList[i].riskRate = 3;
         } else if (trueNum >= 1 && trueNum < 2) {
-          schoolList[i].riskRate = 2;
+          culList[i].riskRate = 2;
         } else {
-          schoolList[i].riskRate = 1;
+          culList[i].riskRate = 1;
         }
       } else {
-        schoolList[i].riskRate = 4;
+        culList[i].riskRate = 4;
       }
     }
-    return schoolList;
+    return culList;
   },
-  5: ({ schoolList, examYear }) => {
-    for (let i = 0; i < schoolList.length; i++) {
-      let currentScoreAndRank = schoolList[i].school_score.find(
+  5: ({ culList, examYear }) => {
+    for (let i = 0; i < culList.length; i++) {
+      let currentScoreAndRank = culList[i].scoreAndRank.find(
         item => item.year === examYear
       );
-      let oldOneScoreAndRank = schoolList[i].school_score.find(
+      let oldOneScoreAndRank = culList[i].scoreAndRank.find(
         item => item.year === examYear - 1
       );
-      let oldTwoScoreAndRank = schoolList[i].school_score.find(
+      let oldTwoScoreAndRank = culList[i].scoreAndRank.find(
         item => item.year === examYear - 2
       );
-      let oldThreeScoreAndRank = schoolList[i].school_score.find(
+      let oldThreeScoreAndRank = culList[i].scoreAndRank.find(
         item => item.year === examYear - 3
       );
       if (
@@ -706,30 +709,30 @@ export const culRiskRateStrategies = {
         if (influenceFactor2) trueNum++;
         if (influenceFactor3) trueNum++;
         if (trueNum >= 2) {
-          schoolList[i].riskRate = 3;
+          culList[i].riskRate = 3;
         } else if (trueNum >= 1 && trueNum < 2) {
-          schoolList[i].riskRate = 2;
+          culList[i].riskRate = 2;
         } else {
-          schoolList[i].riskRate = 1;
+          culList[i].riskRate = 1;
         }
       } else {
-        schoolList[i].riskRate = 4;
+        culList[i].riskRate = 4;
       }
     }
-    return schoolList;
+    return culList;
   },
-  6: ({ schoolList, examYear }) => {
-    for (let i = 0; i < schoolList.length; i++) {
-      let currentScoreAndRank = schoolList[i].school_score.find(
+  6: ({ culList, examYear }) => {
+    for (let i = 0; i < culList.length; i++) {
+      let currentScoreAndRank = culList[i].scoreAndRank.find(
         item => item.year === examYear
       );
-      let oldOneScoreAndRank = schoolList[i].school_score.find(
+      let oldOneScoreAndRank = culList[i].scoreAndRank.find(
         item => item.year === examYear - 1
       );
-      let oldTwoScoreAndRank = schoolList[i].school_score.find(
+      let oldTwoScoreAndRank = culList[i].scoreAndRank.find(
         item => item.year === examYear - 2
       );
-      let oldThreeScoreAndRank = schoolList[i].school_score.find(
+      let oldThreeScoreAndRank = culList[i].scoreAndRank.find(
         item => item.year === examYear - 3
       );
       if (
@@ -762,30 +765,30 @@ export const culRiskRateStrategies = {
         if (influenceFactor2) trueNum++;
         if (influenceFactor3) trueNum++;
         if (trueNum >= 2) {
-          schoolList[i].riskRate = 3;
+          culList[i].riskRate = 3;
         } else if (trueNum >= 1 && trueNum < 2) {
-          schoolList[i].riskRate = 2;
+          culList[i].riskRate = 2;
         } else {
-          schoolList[i].riskRate = 1;
+          culList[i].riskRate = 1;
         }
       } else {
-        schoolList[i].riskRate = 4;
+        culList[i].riskRate = 4;
       }
     }
-    return schoolList;
+    return culList;
   },
-  7: ({ schoolList, examYear }) => {
-    for (let i = 0; i < schoolList.length; i++) {
-      let currentScoreAndRank = schoolList[i].school_score.find(
+  7: ({ culList, examYear }) => {
+    for (let i = 0; i < culList.length; i++) {
+      let currentScoreAndRank = culList[i].scoreAndRank.find(
         item => item.year === examYear
       );
-      let oldOneScoreAndRank = schoolList[i].school_score.find(
+      let oldOneScoreAndRank = culList[i].scoreAndRank.find(
         item => item.year === examYear - 1
       );
-      let oldTwoScoreAndRank = schoolList[i].school_score.find(
+      let oldTwoScoreAndRank = culList[i].scoreAndRank.find(
         item => item.year === examYear - 2
       );
-      let oldThreeScoreAndRank = schoolList[i].school_score.find(
+      let oldThreeScoreAndRank = culList[i].scoreAndRank.find(
         item => item.year === examYear - 3
       );
       if (
@@ -818,16 +821,16 @@ export const culRiskRateStrategies = {
         if (influenceFactor2) trueNum++;
         if (influenceFactor3) trueNum++;
         if (trueNum >= 2) {
-          schoolList[i].riskRate = 3;
+          culList[i].riskRate = 3;
         } else if (trueNum >= 1 && trueNum < 2) {
-          schoolList[i].riskRate = 2;
+          culList[i].riskRate = 2;
         } else {
-          schoolList[i].riskRate = 1;
+          culList[i].riskRate = 1;
         }
       } else {
-        schoolList[i].riskRate = 4;
+        culList[i].riskRate = 4;
       }
     }
-    return schoolList;
+    return culList;
   }
 };

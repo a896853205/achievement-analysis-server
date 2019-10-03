@@ -41,27 +41,7 @@ import {
     //   school_property_name: [ '985', '211' ],
     //   school_type_id: [ 12, 13 ],
     //   school_type_name: [ '理工类', '综合类' ],
-    //   gather: 'a' },
-    // { lot_id: 1,
-    //   score: 600,
-    //   year: 2019,
-    //   gender: 0,
-    //   poverty: null,
-    //   lot_name: '提前批',
-    //   school_id: 2,
-    //   school_code: '10215',
-    //   school_name: '工大',
-    //   province_id: 10,
-    //   province_name: '黑龙江',
-    //   school_nature_id: [ 2 ],
-    //   school_nature_name: [ '合作办学' ],
-    //   area_feature_id: [ 4 ],
-    //   area_feature_name: [ '华南' ],
-    //   school_property_id: [ 1, 2 ],
-    //   school_property_name: [ '985', '211' ],
-    //   school_type_id: [ 16 ],
-    //   school_type_name: [ '财经类' ],
-    //   gather: 'd' } ]
+    //   gather: 'a' },]
 
     // 专业的表
     // [ RowDataPacket {
@@ -145,7 +125,7 @@ export default {
 
     // 把学校的位次和线差也加上
     resultSchoolList = bindScoreAndRank({
-      resultSchoolList,
+      resultList: resultSchoolList,
       lotId,
       examYear,
       // 计算三年分数和位次
@@ -158,20 +138,20 @@ export default {
       oldTwoLotsScore,
       oldThreeLotsScore
     });
-    
+
     // 计算提档概率
     resultSchoolList = culEnrollRateStrategies[lotId]({
       stuOldOneScoreAndRank: oldOneScoreAndRank,
-      schoolList: resultSchoolList,
+      culList: resultSchoolList,
       examYear,
       stuLineDiffer: culLineDifferStrategies[lotId](score, oldOneLotsScore)
     });
 
     // 计算风险系数
     resultSchoolList = culRiskRateStrategies[lotId]({
-      schoolList: resultSchoolList,
+      culList: resultSchoolList,
       examYear
-    })
+    });
 
     return {
       schoolList: resultSchoolList
@@ -218,7 +198,7 @@ export default {
 
     // 把学校的位次和线差也加上
     resultSchoolList = bindScoreAndRank({
-      resultSchoolList,
+      resultList: resultSchoolList,
       lotId,
       examYear,
       // 计算三年分数和位次
@@ -235,16 +215,16 @@ export default {
     // 计算提档概率
     resultSchoolList = culEnrollRateStrategies[lotId]({
       stuOldOneScoreAndRank: oldOneScoreAndRank,
-      schoolList: resultSchoolList,
+      culList: resultSchoolList,
       examYear,
       stuLineDiffer: culLineDifferStrategies[lotId](score, oldOneLotsScore)
     });
 
     // 计算风险系数
     resultSchoolList = culRiskRateStrategies[lotId]({
-      schoolList: resultSchoolList,
+      culList: resultSchoolList,
       examYear
-    })
+    });
 
     return {
       schoolList: resultSchoolList
@@ -281,7 +261,7 @@ export default {
       originalSchoolList,
       majorName,
       resultSchoolList
-    })
+    });
 
     // 将新的成绩转化为去年的成绩,加上集合tag
     let [oldOneScoreAndRank] = proxyParseToOldScore(
@@ -301,7 +281,7 @@ export default {
 
     // 把学校的位次和线差也加上
     resultSchoolList = bindScoreAndRank({
-      resultSchoolList,
+      resultList: resultSchoolList,
       lotId,
       examYear,
       // 计算三年分数和位次
@@ -318,16 +298,16 @@ export default {
     // 计算提档概率
     resultSchoolList = culEnrollRateStrategies[lotId]({
       stuOldOneScoreAndRank: oldOneScoreAndRank,
-      schoolList: resultSchoolList,
+      culList: resultSchoolList,
       examYear,
       stuLineDiffer: culLineDifferStrategies[lotId](score, oldOneLotsScore)
     });
 
     // 计算风险系数
     resultSchoolList = culRiskRateStrategies[lotId]({
-      schoolList: resultSchoolList,
+      culList: resultSchoolList,
       examYear
-    })
+    });
 
     return {
       schoolList: resultSchoolList
@@ -364,13 +344,55 @@ export default {
   },
 
   // 模拟获取专业
-  getMajorList: async (schoolId, examYear, lotId) => {
+  getMajorList: async (schoolId, examYear, lotId, accountCategory, score) => {
     // 通过schoolID 和 当前年份 获取专业
-    let majorList = await schoolDao.queryMajorBySchoolIdAndYear(
-      schoolId,
-      examYear - 1,
-      lotId
+    let [
+      majorList,
+      { currentRank, oldRank, oldTwoRank, oldThreeRank },
+      { currentLotsScore, oldOneLotsScore, oldTwoLotsScore, oldThreeLotsScore }
+    ] = await Promise.all([
+      schoolDao.queryMajorBySchoolId(schoolId, lotId),
+      schoolDao.queryScoreRankByCategoryAndYear(accountCategory, examYear),
+      schoolDao.queryLotsScore(examYear, accountCategory)
+    ]);
+
+    let [oldOneScoreAndRank] = proxyParseToOldScore(
+      score,
+      currentRank,
+      oldRank,
+      oldTwoRank,
+      oldThreeRank
     );
+
+    // 把专业的位次和线差也加上
+    majorList = bindScoreAndRank({
+      resultList: majorList,
+      lotId,
+      examYear,
+      // 计算三年分数和位次
+      currentRank,
+      oldRank,
+      oldTwoRank,
+      oldThreeRank,
+      // 计算三年线差
+      oldOneLotsScore,
+      oldTwoLotsScore,
+      oldThreeLotsScore
+    });
+
+    // 计算提档概率
+    majorList = culEnrollRateStrategies[lotId]({
+      stuOldOneScoreAndRank: oldOneScoreAndRank,
+      culList: majorList,
+      examYear,
+      stuLineDiffer: culLineDifferStrategies[lotId](score, oldOneLotsScore)
+    });
+
+    // 计算风险系数
+    majorList = culRiskRateStrategies[lotId]({
+      culList: majorList,
+      examYear
+    });
 
     return {
       majorList

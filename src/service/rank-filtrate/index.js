@@ -129,17 +129,54 @@ export const culThreeYearLineDiffer = ({
   oldOneLotsScore,
   oldTwoLotsScore,
   oldThreeLotsScore,
-  score,
-  lotId
-}) => [
-  culLineDifferStrategies[lotId](score, oldOneLotsScore),
-  culLineDifferStrategies[lotId](score, oldTwoLotsScore),
-  culLineDifferStrategies[lotId](score, oldThreeLotsScore)
-];
+  scoreAndRank,
+  lotId,
+  examYear
+}) => {
+  let resultThreeYearLineDiffer = [];
+  let oldOneScoreAndRank = scoreAndRank.find(
+    item => item.year === examYear - 1
+  );
+  let oldTwoScoreAndRank = scoreAndRank.find(
+    item => item.year === examYear - 2
+  );
+  let oldThreeScoreAndRank = scoreAndRank.find(
+    item => item.year === examYear - 3
+  );
+
+  if (oldOneScoreAndRank && oldOneScoreAndRank.score) {
+    resultThreeYearLineDiffer.push(
+      culLineDifferStrategies[lotId](oldOneScoreAndRank.score, oldOneLotsScore)
+    );
+  } else {
+    resultThreeYearLineDiffer.push(undefined);
+  }
+
+  if (oldTwoScoreAndRank && oldTwoScoreAndRank.score) {
+    resultThreeYearLineDiffer.push(
+      culLineDifferStrategies[lotId](oldTwoScoreAndRank.score, oldTwoLotsScore)
+    );
+  } else {
+    resultThreeYearLineDiffer.push(undefined);
+  }
+
+  if (oldThreeScoreAndRank && oldThreeScoreAndRank.score) {
+    resultThreeYearLineDiffer.push(
+      culLineDifferStrategies[lotId](
+        oldThreeScoreAndRank.score,
+        oldThreeLotsScore
+      )
+    );
+  } else {
+    resultThreeYearLineDiffer.push(undefined);
+  }
+
+  return resultThreeYearLineDiffer;
+};
 
 // 学校添加近三年的分数和位次和线差
 export const bindScoreAndRank = ({
-  resultSchoolList,
+  resultList,
   lotId,
   examYear,
   // 计算三年分数和位次
@@ -152,42 +189,60 @@ export const bindScoreAndRank = ({
   oldTwoLotsScore,
   oldThreeLotsScore
 }) => {
-  for (let i = 0; i < resultSchoolList.length; i++) {
-    for (let j = 0; j < resultSchoolList[i].school_score.length; j++) {
+  for (let i = 0; i < resultList.length; i++) {
+    for (let j = 0; j < resultList[i].scoreAndRank.length; j++) {
       // 判断是哪年,计算出当年的成绩换算成位次
-      if (resultSchoolList[i].school_score[j].year === examYear) {
-        resultSchoolList[i].school_score[j].rank = parseCurrentScore(
-          resultSchoolList[i].school_score[j].score,
-          currentRank
-        ).fitCurrent.rank;
-      } else if (resultSchoolList[i].school_score[j].year === examYear - 1) {
-        resultSchoolList[i].school_score[j].rank = parseCurrentScore(
-          resultSchoolList[i].school_score[j].score,
-          oldRank
-        ).fitCurrent.rank;
-      } else if (resultSchoolList[i].school_score[j].year === examYear - 2) {
-        resultSchoolList[i].school_score[j].rank = parseCurrentScore(
-          resultSchoolList[i].school_score[j].score,
-          oldTwoRank
-        ).fitCurrent.rank;
-      } else if (resultSchoolList[i].school_score[j].year === examYear - 3) {
-        resultSchoolList[i].school_score[j].rank = parseCurrentScore(
-          resultSchoolList[i].school_score[j].score,
-          oldThreeRank
-        ).fitCurrent.rank;
+      if (resultList[i].scoreAndRank[j].year === examYear) {
+        if (resultList[i].scoreAndRank[j].score) {
+          resultList[i].scoreAndRank[j].rank = parseCurrentScore(
+            resultList[i].scoreAndRank[j].score,
+            currentRank
+          ).fitCurrent.rank;
+        } else {
+          resultList[i].scoreAndRank[j].rank = undefined;
+        }
+      } else if (resultList[i].scoreAndRank[j].year === examYear - 1) {
+        if (resultList[i].scoreAndRank[j].score) {
+          resultList[i].scoreAndRank[j].rank = parseCurrentScore(
+            resultList[i].scoreAndRank[j].score,
+            oldRank
+          ).fitCurrent.rank;
+        } else {
+          resultList[i].scoreAndRank[j].rank = undefined;
+        }
+      } else if (resultList[i].scoreAndRank[j].year === examYear - 2) {
+        if (resultList[i].scoreAndRank[j].score) {
+          resultList[i].scoreAndRank[j].rank = parseCurrentScore(
+            resultList[i].scoreAndRank[j].score,
+            oldTwoRank
+          ).fitCurrent.rank;
+        } else {
+          resultList[i].scoreAndRank[j].rank = undefined;
+        }
+      } else if (resultList[i].scoreAndRank[j].year === examYear - 3) {
+        if (resultList[i].scoreAndRank[j].score) {
+          resultList[i].scoreAndRank[j].rank = parseCurrentScore(
+            resultList[i].scoreAndRank[j].score,
+            oldThreeRank
+          ).fitCurrent.rank;
+        } else {
+          resultList[i].scoreAndRank[j].rank = undefined;
+        }
       }
-      // 添加近三年的线差
-      resultSchoolList[i].lineDiffir = culThreeYearLineDiffer({
-        oldOneLotsScore,
-        oldTwoLotsScore,
-        oldThreeLotsScore,
-        score: resultSchoolList[i].school_score[j].score,
-        lotId
-      });
     }
+
+    // 添加近三年的线差
+    resultList[i].lineDiffir = culThreeYearLineDiffer({
+      oldOneLotsScore,
+      oldTwoLotsScore,
+      oldThreeLotsScore,
+      scoreAndRank: resultList[i].scoreAndRank,
+      lotId,
+      examYear
+    });
   }
 
-  return resultSchoolList;
+  return resultList;
 };
 
 // 计算线差

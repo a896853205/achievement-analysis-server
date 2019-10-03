@@ -226,37 +226,39 @@ school_name LIKE ?
 AND
 a.accountCategory = ?;
 `,
-	getMajorBySchoolIdAndYear: `
+	getMajorBySchoolId: `
 	-- 批次id和学校id和年 查询专业
-	select
-	a.id as enrollment_id,
-	a.fk_school_id as school_id,
-	c.*,
-	a.tuition,
-	a.education_system,
-	a.enrollment,
-	a.enrollment_score,
-	a.year,
-	a.fk_lot_id as lot_id,
-	b.lots_name as lot_name
-	from 
-	t_major_enrollment_info a
-	left join
-	sys_t_lots b
-	on a.fk_lot_id = b.id
-	left join
+	SELECT
+		a.id as enrollment_id,
+		a.fk_school_id as school_id,
+		c.*,
+		a.tuition,
+		a.education_system,
+		a.enrollment,
+		a.enrollment_score AS score,
+		a.year,
+		a.fk_lot_id as lot_id,
+		b.lots_name as lot_name
+	FROM
+		t_major_enrollment_info a
+	LEFT JOIN
+		sys_t_lots b
+	ON a.fk_lot_id = b.id
+	LEFT JOIN
 	(
 		select 
 		a.id as major_id,
 		a.major_name,
 		a.major_code,
+		a.comment,
 		a.fk_major_category_id as major_category_id
 		from
 		sys_t_major a
 	) as c
 	on a.fk_major_id = c.major_id
-	where a.fk_school_id =? and a.fk_lot_id =? and a.year =?;
+	where a.fk_school_id =? and a.fk_lot_id =?;
 	`,
+	// 带有major_category_id表
 	// `
 	// -- 批次id和学校id和年 查询专业
 	// select
