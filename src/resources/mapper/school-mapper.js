@@ -58,7 +58,9 @@ export default {
 		sys_t_school_type b
 		on a.fk_school_type_id = b.id
 	) as f
-	on a.id = f.school_id`,
+	on a.id = f.school_id
+	WHERE
+	a.name LIKE ?`,
   querySchoolByLotIdAndAccountCategory: `
 	-- 根据批次id 查学校
 	select 

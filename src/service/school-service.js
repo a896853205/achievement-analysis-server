@@ -319,9 +319,10 @@ export default {
     natureValues,
     propertyValues,
     typeValues,
-    areaFeatureValues
+    areaFeatureValues,
+    schoolName
   }) => {
-    let resultSchoolList = await schoolDao.querySchool();
+    let resultSchoolList = await schoolDao.querySchool(schoolName);
 
     // 对办学性质进行筛选
     resultSchoolList = filtrateNatureSchool(natureValues, resultSchoolList);

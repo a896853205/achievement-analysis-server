@@ -100,18 +100,20 @@ router.post('/searchSchool', async ctx => {
     natureValues,
     propertyValues,
     typeValues,
-    areaFeatureValues
+    areaFeatureValues,
+    schoolName
   } = ctx.request.body;
 
-  schoolList = await schoolService.getSchoolList({
+  let schoolList = await schoolService.getSchoolList({
     natureValues,
     propertyValues,
     typeValues,
-    areaFeatureValues
+    areaFeatureValues,
+    schoolName
   });
 
   ctx.body = new Result({
-    data: schoolDetail
+    data: schoolList
   });
 });
 

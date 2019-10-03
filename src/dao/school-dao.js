@@ -53,9 +53,9 @@ export default {
   },
 
   // 查询所有学校
-  querySchool: async () => {
+  querySchool: async (schoolName) => {
     let schoolList = await db.query(
-      new SqlObject(schoolMapper.querySchool, [])
+      new SqlObject(schoolMapper.querySchool, [`%${schoolName}%`])
     );
 
     return initSchool(schoolList);
