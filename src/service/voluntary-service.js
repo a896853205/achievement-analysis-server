@@ -36,7 +36,7 @@ export default {
               user.uuid,
               schoolOption.gender,
               // 因为查询的是去年年份的year
-              user.examYear - 1,
+              user.examYear,
               // user.poverty,
               schoolOption.gather
             );
@@ -93,7 +93,7 @@ export default {
     let gatherOption = {};
     gatherOptionList.forEach(item => {
       gatherOption[item.value] = item.name;
-    })
+    });
 
     /**
 		 * [ RowDataPacket {
@@ -182,16 +182,16 @@ export default {
           '志愿梯度性合理,如果您另外的条件均合理,则恭喜您可以按照该志愿填报了,祝您金榜题名!';
         result.gradedResult.reasonable = true;
       }
-    }
 
-    // 第三项判断大计划性
+      // 第三项判断大计划性
 
-    result.planResult.planDetailArr = voluntaryPlanStrategy[
-      voluntaryList[0].fk_lots_id
-    ](voluntaryList);
-    if (result.planResult.planDetailArr) {
-      result.planResult.reasonable = false;
-      result.planResult.describe = `请考生谨慎选择，以免造成退档或滑档情况！`;
+      result.planResult.planDetailArr = voluntaryPlanStrategy[
+        voluntaryList[0].fk_lots_id
+      ](voluntaryList);
+      if (result.planResult.planDetailArr) {
+        result.planResult.reasonable = false;
+        result.planResult.describe = `请考生谨慎选择，以免造成退档或滑档情况！`;
+      }
     }
 
     return result;
