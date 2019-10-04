@@ -198,12 +198,13 @@ export const splitSchoolByRange = (
     case 'e':
       return schoolListE;
     default:
-      return schoolListA.concat(
-        schoolListB,
-        schoolListC,
-        schoolListD,
-        schoolListE
-      );
+      return [
+        ...schoolListA,
+        ...schoolListB,
+        ...schoolListC,
+        ...schoolListD,
+        ...schoolListE
+      ];
   }
 };
 
@@ -222,8 +223,14 @@ export const culEnrollRateStrategies = {
         return item.year === examYear - 3;
       });
 
-      if (oldOneScoreAndRank && oldTwoScoreAndRank && oldThreeScoreAndRank
-        && oldOneScoreAndRank.rank && oldTwoScoreAndRank.rank && oldThreeScoreAndRank.rank) {
+      if (
+        oldOneScoreAndRank &&
+        oldTwoScoreAndRank &&
+        oldThreeScoreAndRank &&
+        oldOneScoreAndRank.rank &&
+        oldTwoScoreAndRank.rank &&
+        oldThreeScoreAndRank.rank
+      ) {
         // 看看是不是比最小的小
         let avgRank = parseInt(
           (oldOneScoreAndRank.rank +
@@ -264,8 +271,14 @@ export const culEnrollRateStrategies = {
       let oldThreeScoreAndRank = culList[i].scoreAndRank.find(item => {
         return item.year === examYear - 1;
       });
-      if (oldOneScoreAndRank && oldTwoScoreAndRank && oldThreeScoreAndRank
-        && oldOneScoreAndRank.rank && oldTwoScoreAndRank.rank && oldThreeScoreAndRank.rank) {
+      if (
+        oldOneScoreAndRank &&
+        oldTwoScoreAndRank &&
+        oldThreeScoreAndRank &&
+        oldOneScoreAndRank.rank &&
+        oldTwoScoreAndRank.rank &&
+        oldThreeScoreAndRank.rank
+      ) {
         // 看看是不是比最小的小
         let avgRank = parseInt(
           (oldOneScoreAndRank.rank +
@@ -306,8 +319,14 @@ export const culEnrollRateStrategies = {
       let oldThreeScoreAndRank = culList[i].scoreAndRank.find(item => {
         return item.year === examYear - 1;
       });
-      if (oldOneScoreAndRank && oldTwoScoreAndRank && oldThreeScoreAndRank
-        && oldOneScoreAndRank.rank && oldTwoScoreAndRank.rank && oldThreeScoreAndRank.rank) {
+      if (
+        oldOneScoreAndRank &&
+        oldTwoScoreAndRank &&
+        oldThreeScoreAndRank &&
+        oldOneScoreAndRank.rank &&
+        oldTwoScoreAndRank.rank &&
+        oldThreeScoreAndRank.rank
+      ) {
         // 看看是不是比最小的小
         let avgRank = parseInt(
           (oldOneScoreAndRank.rank +
@@ -340,9 +359,7 @@ export const culEnrollRateStrategies = {
   },
   4: ({ culList, stuLineDiffer }) => {
     for (let i = 0; i < culList.length; i++) {
-      let [oldOneDiffer, oldTwoDiffer, oldThreeDiffer] = culList[
-        i
-      ].lineDiffir;
+      let [oldOneDiffer, oldTwoDiffer, oldThreeDiffer] = culList[i].lineDiffir;
       if (oldOneDiffer && oldTwoDiffer && oldThreeDiffer) {
         let avgDiffer = parseInt(
           (oldOneDiffer + oldTwoDiffer + oldThreeDiffer) / 3
@@ -364,9 +381,7 @@ export const culEnrollRateStrategies = {
   },
   5: ({ culList, stuLineDiffer }) => {
     for (let i = 0; i < culList.length; i++) {
-      let [oldOneDiffer, oldTwoDiffer, oldThreeDiffer] = culList[
-        i
-      ].lineDiffir;
+      let [oldOneDiffer, oldTwoDiffer, oldThreeDiffer] = culList[i].lineDiffir;
       if (oldOneDiffer && oldTwoDiffer && oldThreeDiffer) {
         let avgDiffer = parseInt(
           (oldOneDiffer + oldTwoDiffer + oldThreeDiffer) / 3
@@ -387,9 +402,7 @@ export const culEnrollRateStrategies = {
   },
   6: ({ culList, stuLineDiffer }) => {
     for (let i = 0; i < culList.length; i++) {
-      let [oldOneDiffer, oldTwoDiffer, oldThreeDiffer] = culList[
-        i
-      ].lineDiffir;
+      let [oldOneDiffer, oldTwoDiffer, oldThreeDiffer] = culList[i].lineDiffir;
       if (oldOneDiffer && oldTwoDiffer && oldThreeDiffer) {
         let avgDiffer = parseInt(
           (oldOneDiffer + oldTwoDiffer + oldThreeDiffer) / 3
@@ -410,9 +423,7 @@ export const culEnrollRateStrategies = {
   },
   7: ({ culList, stuLineDiffer }) => {
     for (let i = 0; i < culList.length; i++) {
-      let [oldOneDiffer, oldTwoDiffer, oldThreeDiffer] = culList[
-        i
-      ].lineDiffir;
+      let [oldOneDiffer, oldTwoDiffer, oldThreeDiffer] = culList[i].lineDiffir;
       if (oldOneDiffer && oldTwoDiffer && oldThreeDiffer) {
         let avgDiffer = parseInt(
           (oldOneDiffer + oldTwoDiffer + oldThreeDiffer) / 3

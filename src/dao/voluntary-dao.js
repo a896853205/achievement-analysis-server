@@ -5,9 +5,6 @@ import { db, SqlObject } from '../resources/db-connect';
 import voluntaryMapper from '../resources/mapper/voluntary-mapper';
 import userMapper from '../resources/mapper/user-mapper';
 
-// 算法类
-import { initVoluntary } from './voluntary-filtrate';
-
 export default {
   saveVoluntary: async (allParam, user) => {
     // 在这里使用事件处理
@@ -30,10 +27,21 @@ export default {
       new SqlObject(voluntaryMapper.queryVoluntaryByVoluntaryUuid, [
         voluntaryUuid
       ])
-		);
-    
-    // 进行深层次处理
-    // return initVoluntary(voluntaryList);
+    );
+
     return voluntaryList;
+  },
+
+  /**
+   * 通过用户uuid查询志愿情况
+   */
+  queryVoluntaryByUserUuid: async userUuid => {
+    let voluntaryList = await db.query(
+      new SqlObject(voluntaryMapper.queryVoluntaryByUserUuid, [userUuid])
+    );
+
+    // 去重进行处理
+    let unique = new Map();
+    return voluntaryList.filter(o => !unique.has(o.uuid) && unique.set(o.uuid));
   }
 };

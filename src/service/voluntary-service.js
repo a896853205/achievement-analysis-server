@@ -10,7 +10,6 @@ import {
   voluntaryScoreStrategy,
   voluntaryPlanStrategy
 } from './voluntary-filtrate';
-import { isArray } from 'util';
 
 export default {
   // 保存志愿信息
@@ -35,7 +34,7 @@ export default {
               lotId,
               user.uuid,
               schoolOption.gender,
-              // 因为查询的是去年年份的year
+              // 因为查询的是年份的year
               user.examYear,
               // user.poverty,
               schoolOption.gather
@@ -195,5 +194,12 @@ export default {
     }
 
     return result;
+  },
+
+  /**
+   * 通过用户uuid查询志愿情况
+   */
+  queryVoluntaryList: async userUuid => {
+    return await voluntaryDao.queryVoluntaryByUserUuid(userUuid);
   }
 };
