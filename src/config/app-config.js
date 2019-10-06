@@ -14,4 +14,4 @@ export const kAppVersion = 'v1.0.0';
          99.99.99 版本为   999999000
          后三位为打包测试时使用 每打包一次+1
  */
-export const kAPPInfo_Appversion = '10000003';
+export const kAPPInfo_Appversion = '10000004';
