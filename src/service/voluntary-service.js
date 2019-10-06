@@ -163,6 +163,10 @@ export default {
       ](voluntaryList);
       // 判断分数降序
       for (let i = 0; i < result.gradedResult.schoolScoreArr.length - 2; i++) {
+        console.log(
+          result.gradedResult.schoolScoreArr[i],
+          result.gradedResult.schoolScoreArr[i + 1]
+        );
         if (
           result.gradedResult.schoolScoreArr[i] <
           result.gradedResult.schoolScoreArr[i + 1]
@@ -171,7 +175,7 @@ export default {
         }
       }
 
-      if (gradedDetailArr.length) {
+      if (gradedDetailArr.length || result.gradedResult.reasonable === false) {
         result.gradedResult.gradedDetailArr = gradedDetailArr;
         result.gradedResult.describe =
           '如按此方式填报会造成滑档情况,考生请谨慎选择!';
