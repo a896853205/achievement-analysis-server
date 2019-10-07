@@ -3,12 +3,24 @@ import systemDao from '../dao/system-dao';
 
 export default {
   // 获取系统地址
-  getAddressOption: async () => {
-    let provinceList = await systemDao.queryProvince();
+  getAddressOption: async ({ addressType, code }) => {
+    let provinceList = [],
+      cityList = [],
+      areaList = [];
+
+    if (addressType === 'province') {
+      provinceList = await systemDao.queryProvince();
+    } else if (addressType === 'city') {
+      cityList = await systemDao.queryCity({ provinceCode: code });
+    } else if (addressType === 'area') {
+      areaList = await systemDao.queryArea({ cityCode: code });
+    }
 
     return {
-      provinceList
-    }
+      provinceList,
+      cityList,
+      areaList
+    };
   },
 
   // 获取学校办学性质
@@ -16,7 +28,6 @@ export default {
     let schoolNatureList = await systemDao.querySchoolNature();
 
     return schoolNatureList;
-    
   },
 
   // 获取学校属性
@@ -46,7 +57,7 @@ export default {
     return lotsList;
   },
 
-  getVoluntaryOption: async (lotId) => {
+  getVoluntaryOption: async lotId => {
     let voluntaryOptionList = await systemDao.queryVoluntaryOption(lotId);
 
     return voluntaryOptionList;
@@ -58,5 +69,4 @@ export default {
 
     return gatherOptionList;
   }
-  
-}
+};

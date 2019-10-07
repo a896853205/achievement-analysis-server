@@ -10,7 +10,14 @@ const router = require('koa-router')();
 
 router.prefix('/users');
 
-// 登录路由
+/**
+ * 登录路由
+ * POST请求
+ * userName {String} 用户名
+ * passWord {String} 密码
+ *
+ * data {Object} 用户相信信息
+ */
 router.post('/login', async ctx => {
   let { userName, passWord } = ctx.request.body,
     data = await userService.login(userName, passWord);
@@ -46,11 +53,11 @@ router.post('/setUserInfo', async ctx => {
       email,
       score,
       accountCategory,
-      addressProvince,
+      address,
       examYear
     } = ctx.request.body,
     user = ctx.state.data;
-  
+
   let result = await userService.setUserInfo({
     nickname,
     gender,
@@ -58,7 +65,7 @@ router.post('/setUserInfo', async ctx => {
     email,
     score,
     accountCategory,
-    addressProvince,
+    address,
     examYear,
     uuid: user.uuid
   });
@@ -74,6 +81,53 @@ router.post('/setUserInfo', async ctx => {
       msg: '基本用户信息不完整,请填写完整'
     });
   }
+});
+
+router.post('/setUserBasicInfo', async ctx => {
+  let { nickname, phone, email, address } = ctx.request.body,
+    user = ctx.state.data;
+
+  let result = await userService.setUserBasicInfo({
+    nickname,
+    phone,
+    email,
+    address,
+    uuid: user.uuid
+  });
+
+  if (result) {
+    ctx.body = new Result({
+      msg: '已更新基本用户基本信息',
+      data: result
+    });
+  } else {
+    ctx.body = new Result({
+      status: 0,
+      msg: '基本用户信息不完整,请填写完整'
+    });
+  }
+});
+
+router.post('/setUserImportInfo', async ctx => {
+  let { examYear, gender, accountCategory, score } = ctx.request.body,
+    user = ctx.state.data;
+
+    let result = await userService.setUserImportInfo({
+      examYear, gender, accountCategory, score,
+      uuid: user.uuid
+    });
+  
+    if (result) {
+      ctx.body = new Result({
+        msg: '已更新基本用户重要信息',
+        data: result
+      });
+    } else {
+      ctx.body = new Result({
+        status: 0,
+        msg: '重要用户信息不完整,请填写完整'
+      });
+    }
 });
 
 // 修改密码
@@ -123,7 +177,11 @@ router.post('/register', async ctx => {
 // 获取当年的位次和对应去年的分数和位次
 router.post('/getScoreRank', async ctx => {
   let { score, examYear, accountCategory } = ctx.request.body,
-    scoreRankArr = await userService.getScoreRank({ score, examYear, accountCategory });
+    scoreRankArr = await userService.getScoreRank({
+      score,
+      examYear,
+      accountCategory
+    });
 
   ctx.body = new Result({
     data: scoreRankArr

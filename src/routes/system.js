@@ -10,7 +10,8 @@ router.prefix('/system');
 
 // 获得地址选项
 router.get('/getAddressOption', async ctx => {
-  let data = await systemService.getAddressOption();
+  let { addressType, code } = ctx.query,
+    data = await systemService.getAddressOption({ addressType, code });
 
   ctx.body = new Result({
     data
@@ -43,8 +44,8 @@ router.post('/getSchoolOption', async ctx => {
       schoolProperty,
       schoolType,
       areaFeature,
-			voluntaryOptionList,
-			gatherOptionList
+      voluntaryOptionList,
+      gatherOptionList
     }
   });
 });

@@ -32,7 +32,7 @@ export default {
     gender,
     score,
     accountCategory,
-    addressProvince,
+    address,
     examYear,
     uuid,
     phone,
@@ -47,8 +47,8 @@ export default {
       score === null ||
       accountCategory === undefined ||
       accountCategory === null ||
-      addressProvince === undefined ||
-      addressProvince === null ||
+      address === undefined ||
+      address === null ||
       phone === null ||
       phone === undefined
     ) {
@@ -60,7 +60,7 @@ export default {
         gender,
         score,
         accountCategory,
-        addressProvince,
+        address,
         examYear,
         uuid,
         phone,
@@ -69,6 +69,37 @@ export default {
 
       return result;
     }
+  },
+
+  setUserBasicInfo: async ({ nickname, phone, email, address, uuid }) => {
+    let result = await userDao.updateUserBasic({
+      nickname,
+      phone,
+      email,
+      address,
+      uuid
+    });
+
+    return result;
+  },
+
+  setUserImportInfo: async ({
+    examYear,
+    gender,
+    accountCategory,
+    score,
+    uuid
+  }) => {
+    // 这里判断次数,如果小于返回-1,如果还有次数就update
+    let result = await userDao.updateUserImport({
+      examYear,
+      gender,
+      accountCategory,
+      score,
+      uuid
+    });
+
+    return result;
   },
 
   getUserInfo: async uuid => {
@@ -99,7 +130,10 @@ export default {
   // 根据年份和分数计算两年内的位次和线差
   getScoreRank: async ({ score, examYear, accountCategory }) => {
     // 获取两个位次的数组 根据年份和文科理科
-    let [{ currentRank, oldRank }, { oldOneLotsScore, currentLotsScore }] = await Promise.all([
+    let [
+      { currentRank, oldRank },
+      { oldOneLotsScore, currentLotsScore }
+    ] = await Promise.all([
       schoolDao.queryScoreRankByCategoryAndYear(accountCategory, examYear),
       schoolDao.queryLotsScore(examYear, accountCategory)
     ]);
@@ -118,6 +152,11 @@ export default {
       currentLotsScore
     );
 
-    return { fitCurrent, fitOld, currentLotsScoreDifferMsg, lotsScoreDifferMsg };
+    return {
+      fitCurrent,
+      fitOld,
+      currentLotsScoreDifferMsg,
+      lotsScoreDifferMsg
+    };
   }
 };

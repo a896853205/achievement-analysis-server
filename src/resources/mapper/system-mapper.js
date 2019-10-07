@@ -3,6 +3,22 @@ export default {
   select
   *
   from sys_t_province`,
+  queryCity: `
+  SELECT
+  *
+  from
+  sys_t_city
+  where
+  provinceCode = ?
+  `,
+  queryArea: `
+  SELECT
+  *
+  FROM
+  sys_t_area
+  WHERE
+  cityCode = ?
+  `,
 	querySchoolNature: `
   select
   *

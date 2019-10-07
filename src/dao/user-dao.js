@@ -27,13 +27,14 @@ export default {
     gender,
     score,
     accountCategory,
-    addressProvince,
+    address,
     examYear,
     uuid,
     phone,
     email
   }) => {
     try {
+      let [provinceCode, cityCode, areaCode] = address;
       await db.query(
         new SqlObject(userMapper.update, [
           nickname,
@@ -42,7 +43,9 @@ export default {
           email,
           score,
           accountCategory,
-          addressProvince,
+          provinceCode,
+          cityCode,
+          areaCode,
           examYear,
           uuid
         ])
@@ -54,6 +57,47 @@ export default {
     } catch (error) {
       console.log(error);
     }
+  },
+
+  updateUserBasic: async ({ nickname, phone, email, address, uuid }) => {
+    let [provinceCode, cityCode, areaCode] = address;
+    await db.query(
+      new SqlObject(userMapper.updateBasicInfo, [
+        nickname,
+        phone,
+        email,
+        provinceCode,
+        cityCode,
+        areaCode,
+        uuid
+      ])
+    );
+
+    let user = await db.query(new SqlObject(userMapper.selectByUuid, [uuid]));
+
+    return user[0];
+  },
+
+  updateUserImport: async ({
+    examYear,
+    gender,
+    accountCategory,
+    score,
+    uuid
+  }) => {
+    await db.query(
+      new SqlObject(userMapper.updateImportInfo, [
+        examYear,
+        gender,
+        accountCategory,
+        score,
+        uuid
+      ])
+    );
+
+    let user = await db.query(new SqlObject(userMapper.selectByUuid, [uuid]));
+
+    return user[0];
   },
 
   // 修改密码
