@@ -56,6 +56,7 @@ export const initSchool = schoolList => {
     oneSchoolObj.school_type_name = [];
     oneSchoolObj.area_feature_id = [];
     oneSchoolObj.area_feature_name = [];
+    oneSchoolObj.major = [];
 
     for (let school of oneSchoolArr) {
       // 判断性质id有没有
@@ -90,6 +91,20 @@ export const initSchool = schoolList => {
           year: school.year,
           score: school.score,
           enrollment: school.enrollment
+        });
+      }
+
+      // 查看学校中有没有专业
+      if (
+        !oneSchoolObj.major.find(
+          item => item.major_id === school.major_id && item.year === school.year
+        )
+      ) {
+        oneSchoolObj.major.push({
+          major_id: school.major_id,
+          major_score: school.major_score,
+          major_name: school.major_name,
+          year: school.year
         });
       }
     }

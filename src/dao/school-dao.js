@@ -10,11 +10,15 @@ import { initMajor } from './major-filrate';
 
 export default {
   // 通过批次id查询学校
-  querySchoolByLotIdAndAccountCategory: async (lotId, accountCategory) => {
+  querySchoolByLotIdAndAccountCategory: async (lotId, accountCategory, examYear) => {
     let schoolList = await db.query(
       new SqlObject(schoolMapper.querySchoolByLotIdAndAccountCategory, [
         lotId,
-        accountCategory
+        accountCategory,
+        examYear,
+        examYear - 1,
+        examYear - 2,
+        examYear - 3
       ])
     );
 
@@ -62,11 +66,15 @@ export default {
   },
 
   // 通过学校id和当前年份获取学校
-  queryMajorBySchoolId: async (schoolId, lotId) => {
+  queryMajorBySchoolId: async (schoolId, lotId, examYear) => {
     let majorList = await db.query(
       new SqlObject(schoolMapper.getMajorBySchoolId, [
         schoolId,
-        lotId
+        lotId,
+        examYear,
+        examYear - 1,
+        examYear - 2,
+        examYear - 3
       ])
     );
 

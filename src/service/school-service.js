@@ -22,7 +22,7 @@ import {
 
 /**
  * 学校例子
- * { lot_id: 1,
+ * {     lot_id: 1,
     //   score: 590,
     //   year: 2019,
     //   gender: 0,
@@ -86,7 +86,7 @@ export default {
       scoreRange,
       { currentLotsScore, oldOneLotsScore, oldTwoLotsScore, oldThreeLotsScore }
     ] = await Promise.all([
-      schoolDao.querySchoolByLotIdAndAccountCategory(lotId, accountCategory),
+      schoolDao.querySchoolByLotIdAndAccountCategory(lotId, accountCategory, examYear),
       schoolDao.queryScoreRankByCategoryAndYear(accountCategory, examYear),
       controlScoreRangeDao.queryScoreRangeByLotsId(lotId),
       schoolDao.queryLotsScore(examYear, accountCategory)
@@ -246,7 +246,7 @@ export default {
       scoreRange,
       { currentLotsScore, oldOneLotsScore, oldTwoLotsScore, oldThreeLotsScore }
     ] = await Promise.all([
-      schoolDao.querySchoolByLotIdAndAccountCategory(lotId, accountCategory),
+      schoolDao.querySchoolByLotIdAndAccountCategory(lotId, accountCategory, examYear),
       schoolDao.querySchoolWithMajorByLotIdAndAccountCategory(
         lotId,
         accountCategory
@@ -255,6 +255,8 @@ export default {
       controlScoreRangeDao.queryScoreRangeByLotsId(lotId),
       schoolDao.queryLotsScore(examYear, accountCategory)
     ]);
+
+    console.log(originalSchoolList[0]);
 
     // 通过专业名字筛学校
     resultSchoolList = filtrateMajorName({
@@ -352,7 +354,7 @@ export default {
       { currentRank, oldRank, oldTwoRank, oldThreeRank },
       { currentLotsScore, oldOneLotsScore, oldTwoLotsScore, oldThreeLotsScore }
     ] = await Promise.all([
-      schoolDao.queryMajorBySchoolId(schoolId, lotId),
+      schoolDao.queryMajorBySchoolId(schoolId, lotId, examYear),
       schoolDao.queryScoreRankByCategoryAndYear(accountCategory, examYear),
       schoolDao.queryLotsScore(examYear, accountCategory)
     ]);

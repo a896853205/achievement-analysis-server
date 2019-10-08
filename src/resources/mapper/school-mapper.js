@@ -63,7 +63,7 @@ export default {
 	a.name LIKE ?`,
   querySchoolByLotIdAndAccountCategory: `
 	-- 根据批次id 查学校
-	select 
+	SELECT 
 	a.fk_lots_id as lot_id,
 	a.score,
 	a.year,
@@ -71,7 +71,10 @@ export default {
 	a.poverty,
 	a.enrollment,
 	b.lots_name as lot_name,
-	c.*
+	c.*,
+	sys_t_major.id as major_id,
+	sys_t_major.major_name,
+	t_major_enrollment_info.enrollment_score as major_score
 	from 
 	merge_school_lots a
 	left join
@@ -139,10 +142,22 @@ export default {
 		on a.id = f.school_id
 	) as c
 	on a.fk_school_id = c.school_id
-	where 
+		left join
+	t_major_enrollment_info
+	on a.fk_school_id =t_major_enrollment_info.fk_school_id
+	left join
+	sys_t_major
+	on sys_t_major.id =t_major_enrollment_info.fk_major_id
+	where
+	a.fk_lots_id =t_major_enrollment_info.fk_lot_id
+	AND	
 	a.fk_lots_id = ?
 	AND
-	a.accountCategory = ?;
+	a.accountCategory = ?
+	AND
+	a.year = t_major_enrollment_info.year
+	AND
+	(a.year = ? OR a.year = ? OR a.year = ? OR a.year = ?);
 `,
   querySchoolByLotIdAndNameAndAccountCategory: `
 select 
@@ -258,7 +273,13 @@ a.accountCategory = ?;
 		sys_t_major a
 	) as c
 	on a.fk_major_id = c.major_id
-	where a.fk_school_id =? and a.fk_lot_id =?;
+	where 
+	a.fk_school_id =?
+	and
+	a.fk_lot_id =?
+	AND
+	(a.year = ? OR a.year = ? OR a.year = ? OR a.year = ?)
+	;
 	`,
   // 带有major_category_id表
   // `
@@ -307,7 +328,8 @@ a.accountCategory = ?;
 	b.lots_name as lot_name,
 	c.*,
 	sys_t_major.id as major_id,
-	sys_t_major.major_name as major_name
+	sys_t_major.major_name as major_name,
+	t_major_enrollment_info.enrollment_score as major_score
 	from 
 	merge_school_lots a
 	left join
@@ -381,9 +403,12 @@ a.accountCategory = ?;
 	left join
 	sys_t_major
 	on sys_t_major.id =t_major_enrollment_info.fk_major_id
-	where a.fk_lots_id =?
+	where
+	t_major_enrollment_info.year = a.year
 	AND
-a.accountCategory = ?;`,
+	a.fk_lots_id = ?
+	AND
+	a.accountCategory = ?;`,
   queryScoreRankByCategoryAndYear: `
 		select
 		*

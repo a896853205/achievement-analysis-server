@@ -138,10 +138,10 @@ export const splitSchoolByRange = (
   gatherValue,
   oldYear
 ) => {
-  let score1 = score - scoreRange.down_score_1,
-    score2 = score - scoreRange.down_score_2,
-    score3 = score - scoreRange.down_score_3,
-    score4 = score,
+  // score1 = score - scoreRange.down_score_1,
+  // score2 = score - scoreRange.down_score_2,
+  // score3 = score - scoreRange.down_score_3,
+  let score4 = score,
     score5 = score + scoreRange.up_score_4,
     score6 = score + scoreRange.up_score_5,
     schoolListA = [],
@@ -155,33 +155,73 @@ export const splitSchoolByRange = (
       return item.year === oldYear;
     });
     if (currentSchool) {
-      if (currentSchool.score >= score1 && currentSchool.score < score2) {
-        schoolItem.gather = 'e';
-        schoolListE.push(schoolItem);
-      } else if (
-        currentSchool.score >= score2 &&
-        currentSchool.score < score3
-      ) {
-        schoolItem.gather = 'd';
-        schoolListD.push(schoolItem);
-      } else if (
-        currentSchool.score >= score3 &&
-        currentSchool.score < score4
-      ) {
-        schoolItem.gather = 'c';
-        schoolListC.push(schoolItem);
-      } else if (
-        currentSchool.score >= score4 &&
-        currentSchool.score < score5
-      ) {
+      if (currentSchool.score >= score4 && currentSchool.score < score5) {
         schoolItem.gather = 'b';
         schoolListB.push(schoolItem);
+        continue;
       } else if (
         currentSchool.score >= score5 &&
         currentSchool.score < score6
       ) {
         schoolItem.gather = 'a';
         schoolListA.push(schoolItem);
+        continue;
+      } else {
+        // 不是ab集合需要判断其专业的分数情况
+        let majorArr = schoolItem.major;
+
+        // 筛选年份
+        majorArr = majorArr.filter(item => {
+          return item.year === oldYear;
+        });
+
+        // 排除掉分数为空的专业
+        majorArr = majorArr.filter(item => {
+          return item.major_score;
+        });
+
+        // 如果没有专业分的学校则是c集合
+        if (!majorArr.length) {
+          schoolItem.gather = 'c';
+          schoolListC.push(schoolItem);
+          continue;
+        }
+
+        // 分数降序排列
+        majorArr.sort((prep, next) => {
+          return next.major_score - prep.major_score;
+        });
+
+        // 判断分数是否比专业最高的高,如果高则是e集合
+        if (score > majorArr[0].major_score) {
+          schoolItem.gather = 'e';
+          schoolListE.push(schoolItem);
+          continue;
+        }
+
+        // 取中位数的major,大于中位数的是d集合
+        let majorLength = majorArr.length;
+        if (majorLength & 1) {
+          // 奇数
+          if (score > majorArr[(majorLength + 1) / 2 - 1].major_score) {
+            schoolItem.gather = 'd';
+            schoolListD.push(schoolItem);
+            continue;
+          }
+        } else {
+          // 偶数
+          let prepMajor = majorArr[majorLength / 2 - 1];
+          let nextMajor = majorArr[majorLength / 2];
+          if (score > (prepMajor.major_score + nextMajor.major_score) / 2) {
+            schoolItem.gather = 'd';
+            schoolListD.push(schoolItem);
+            continue;
+          }
+        }
+
+        // 其他的都是c集合
+        schoolItem.gather = 'c';
+        schoolListC.push(schoolItem);
       }
     }
   }
