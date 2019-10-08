@@ -77,10 +77,10 @@ export default {
 	t_major_enrollment_info.enrollment_score as major_score
 	from 
 	merge_school_lots a
-	left join
+	inner join
 	sys_t_lots b
 	on a.fk_lots_id =b.id
-	left join
+	inner join
 	(
 		select 
 		a.id as school_id,
@@ -142,10 +142,10 @@ export default {
 		on a.id = f.school_id
 	) as c
 	on a.fk_school_id = c.school_id
-		left join
+		inner join
 	t_major_enrollment_info
 	on a.fk_school_id =t_major_enrollment_info.fk_school_id
-	left join
+	inner join
 	sys_t_major
 	on sys_t_major.id =t_major_enrollment_info.fk_major_id
 	where
@@ -332,10 +332,10 @@ a.accountCategory = ?;
 	t_major_enrollment_info.enrollment_score as major_score
 	from 
 	merge_school_lots a
-	left join
+	inner join
 	sys_t_lots b
 	on a.fk_lots_id =b.id
-	left join
+	inner join
 	(
 		select 
 		a.id as school_id,
@@ -397,10 +397,10 @@ a.accountCategory = ?;
 		on a.id = f.school_id
 	) as c
 	on a.fk_school_id = c.school_id
-	left join
+	inner join
 	t_major_enrollment_info
 	on a.fk_school_id =t_major_enrollment_info.fk_school_id
-	left join
+	inner join
 	sys_t_major
 	on sys_t_major.id =t_major_enrollment_info.fk_major_id
 	where

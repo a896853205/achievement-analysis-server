@@ -123,6 +123,8 @@ export default {
       examYear - 1
     );
 
+    
+
     // 把学校的位次和线差也加上
     resultSchoolList = bindScoreAndRank({
       resultList: resultSchoolList,

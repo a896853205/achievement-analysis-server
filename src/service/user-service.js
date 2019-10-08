@@ -12,6 +12,9 @@ export default {
   login: async (userName, passWord) => {
     let user = await userDao.selectByUserName(userName);
 
+    console.log(userName, passWord);
+    console.log(user);
+    
     if (!user || user.password !== passWord) {
       // 没有此用户或者密码不正确
 

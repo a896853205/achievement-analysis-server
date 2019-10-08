@@ -21,38 +21,32 @@ export default {
     uuid = ?
   `,
   selectByUuid: `
-    SELECT
+  SELECT
     t_user.*,
-    sys_t_province.name as provinceName,
-    sys_t_city.name as cityName,
-    sys_t_area.name as areaName
-    FROM
-    t_user,sys_t_province,sys_t_city,sys_t_area
-    WHERE
+    sys_t_province.NAME AS provinceName,
+    sys_t_city.NAME AS cityName,
+    sys_t_area.NAME AS areaName 
+  FROM
+    t_user
+    LEFT JOIN sys_t_province ON t_user.provinceCode = sys_t_province.CODE
+    LEFT JOIN sys_t_city ON t_user.cityCode = sys_t_city.CODE
+    LEFT JOIN sys_t_area ON t_user.areaCode = sys_t_area.CODE
+  WHERE
     t_user.uuid = ?
-    AND
-    t_user.provinceCode = sys_t_province.code
-    AND
-    t_user.cityCode = sys_t_city.code
-    AND
-    t_user.areaCode = sys_t_area.code
     `,
   selectByUserName: `
   SELECT
-  t_user.*,
-  sys_t_province.name as provinceName,
-  sys_t_city.name as cityName,
-  sys_t_area.name as areaName
+    t_user.*,
+    sys_t_province.NAME AS provinceName,
+    sys_t_city.NAME AS cityName,
+    sys_t_area.NAME AS areaName 
   FROM
-  t_user,sys_t_province,sys_t_city,sys_t_area
+    t_user
+    LEFT JOIN sys_t_province ON t_user.provinceCode = sys_t_province.CODE
+    LEFT JOIN sys_t_city ON t_user.cityCode = sys_t_city.CODE
+    LEFT JOIN sys_t_area ON t_user.areaCode = sys_t_area.CODE
   WHERE
-  t_user.username = ?
-  AND
-  t_user.provinceCode = sys_t_province.code
-  AND
-  t_user.cityCode = sys_t_city.code
-  AND
-  t_user.areaCode = sys_t_area.code
+    t_user.username = ?
   `, // 通过用户名查询用户
   updatePassword: `
     update
