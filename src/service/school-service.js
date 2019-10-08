@@ -123,8 +123,6 @@ export default {
       examYear - 1
     );
 
-    
-
     // 把学校的位次和线差也加上
     resultSchoolList = bindScoreAndRank({
       resultList: resultSchoolList,
@@ -154,6 +152,11 @@ export default {
       culList: resultSchoolList,
       examYear
     });
+
+    // 删除前端不使用的数据
+    for (let schoolItem of resultSchoolList) {
+      delete schoolItem.major;
+    }
 
     return {
       schoolList: resultSchoolList
@@ -258,8 +261,6 @@ export default {
       schoolDao.queryLotsScore(examYear, accountCategory)
     ]);
 
-    console.log(originalSchoolList[0]);
-
     // 通过专业名字筛学校
     resultSchoolList = filtrateMajorName({
       originalSchoolList,
@@ -312,6 +313,11 @@ export default {
       culList: resultSchoolList,
       examYear
     });
+
+    // 删除前端不使用的数据
+    for (let schoolItem of resultSchoolList) {
+      delete schoolItem.major;
+    }
 
     return {
       schoolList: resultSchoolList
