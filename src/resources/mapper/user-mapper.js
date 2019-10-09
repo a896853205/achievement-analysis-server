@@ -56,11 +56,11 @@ export default {
     where
     uuid=?
   `,
-  updateSimulatedCount: `
+  updateReportAlterTime: `
     update
     t_user
     set
-    simulatedCount=?
+    reportAlterTime=?
     where
     uuid=?
   `,

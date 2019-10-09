@@ -14,8 +14,8 @@ export default {
     let insertVoluntary = new SqlObject(voluntaryMapper.insertVoluntary, [
         allParam
       ]),
-      updateUserCount = new SqlObject(userMapper.updateSimulatedCount, [
-        user.simulatedCount - 1,
+      updateUserCount = new SqlObject(userMapper.updateReportAlterTime, [
+        user.reportAlterTime - 1,
         user.uuid
       ]);
 

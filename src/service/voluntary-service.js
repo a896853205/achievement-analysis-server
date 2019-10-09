@@ -16,7 +16,7 @@ export default {
   saveVoluntary: async (lotId, voluntary, user) => {
     let voluntaryUuid = uuid();
 
-    if (user.simulatedCount > 0) {
+    if (user.reportAlterTime > 0) {
       let allParam = [];
 
       for (let schoolOption of voluntary) {
