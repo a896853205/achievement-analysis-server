@@ -138,10 +138,12 @@ export const splitSchoolByRange = (
   gatherValue,
   oldYear
 ) => {
-  // score1 = score - scoreRange.down_score_1,
   // score2 = score - scoreRange.down_score_2,
   // score3 = score - scoreRange.down_score_3,
-  let score4 = score,
+
+  // 最下限
+  let score1 = score - scoreRange.down_score_1,
+    score4 = score,
     score5 = score + scoreRange.up_score_4,
     score6 = score + scoreRange.up_score_5,
     schoolListA = [],
@@ -154,7 +156,15 @@ export const splitSchoolByRange = (
     let currentSchool = schoolItem.scoreAndRank.find(item => {
       return item.year === oldYear;
     });
-    if (currentSchool) {
+
+    if (currentSchool && currentSchool.score) {
+      
+      // 判断是否超过最高控制分数和最低控制分数
+      if (currentSchool.score < score1 || currentSchool.score > score6) {
+        continue;
+      }
+
+      // 开始筛选集合
       if (currentSchool.score >= score4 && currentSchool.score < score5) {
         schoolItem.gather = 'b';
         schoolListB.push(schoolItem);
