@@ -108,9 +108,25 @@ export default {
   },
 
   //注册新用户
-  saveUser: async (username, password, userUuid) => {
+  saveUser: async ({
+    username,
+    password,
+    userUuid,
+    roleCode,
+    scoreAlterTime,
+    reportAlterTime,
+    deepAlterTime
+  }) => {
     return await db.query(
-      new SqlObject(userMapper.saveUser, [username, password, userUuid])
+      new SqlObject(userMapper.saveUser, [
+        username,
+        password,
+        userUuid,
+        roleCode,
+        scoreAlterTime,
+        reportAlterTime,
+        deepAlterTime
+      ])
     );
   }
 };

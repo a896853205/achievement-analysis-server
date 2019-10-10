@@ -65,5 +65,12 @@ export default {
     uuid=?
   `,
   // query: 'select * from equip where importance > 0 order by importance desc',
-  saveUser: `insert into t_user (username,password,uuid)  values (?,?,?)`
+  saveUser: `
+  INSERT
+  INTO
+  t_user
+  ( username, password, uuid, roleCode, scoreAlterTime, reportAlterTime, deepAlterTime )
+  VALUES
+  ( ?, ?, ?, ?, ?, ?, ? )
+`
 };

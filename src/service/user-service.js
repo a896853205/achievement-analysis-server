@@ -1,6 +1,7 @@
 // dao
 import userDao from '../dao/user-dao';
 import schoolDao from '../dao/school-dao';
+import systemDao from '../dao/system-dao';
 
 // 算法函数
 import { parseCurrentScore, computeLotsScoreDifferMsg } from './rank-filtrate';
@@ -12,9 +13,6 @@ export default {
   login: async (userName, passWord) => {
     let user = await userDao.selectByUserName(userName);
 
-    console.log(userName, passWord);
-    console.log(user);
-    
     if (!user || user.password !== passWord) {
       // 没有此用户或者密码不正确
 
@@ -121,8 +119,19 @@ export default {
   },
 
   // 注册
-  saveUser: async (username, password, userUuid) => {
-    return await userDao.saveUser(username, password, userUuid);
+  saveUser: async (username, password, userUuid, userRole = 1) => {
+    // 查询权限表userRole
+    let role = await systemDao.selectRoleByCode(userRole);
+
+    return await userDao.saveUser({
+      username,
+      password,
+      userUuid,
+      roleCode: userRole,
+      scoreAlterTime: role.scoreAlterTime,
+      reportAlterTime: role.reportAlterTime,
+      deepAlterTime: role.deepAlterTime
+    });
   },
 
   //检查用户名是否存在

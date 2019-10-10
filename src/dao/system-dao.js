@@ -83,5 +83,12 @@ export default {
     );
 
     return gatherOption;
+  },
+
+  // 查询权限
+  selectRoleByCode: async roleCode => {
+    return (await db.query(
+      new SqlObject(systemMapper.selectRoleByCode, [roleCode])
+    ))[0];
   }
 };

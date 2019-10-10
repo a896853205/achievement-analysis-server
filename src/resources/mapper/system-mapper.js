@@ -64,5 +64,14 @@ export default {
   *
   FROM
   sys_t_gather
+  `,
+  // 查询权限表
+  selectRoleByCode: `
+  SELECT
+  *
+  FROM
+  sys_t_role
+  WHERE
+  roleCode = ?
   `
 };
