@@ -31,7 +31,8 @@ export default {
     examYear,
     uuid,
     phone,
-    email
+    email,
+    scoreAlterTime
   }) => {
     try {
       let [provinceCode, cityCode, areaCode] = address;
@@ -47,6 +48,7 @@ export default {
           cityCode,
           areaCode,
           examYear,
+          scoreAlterTime,
           uuid
         ])
       );
@@ -83,6 +85,7 @@ export default {
     gender,
     accountCategory,
     score,
+    scoreAlterTime,
     uuid
   }) => {
     await db.query(
@@ -91,6 +94,7 @@ export default {
         gender,
         accountCategory,
         score,
+        scoreAlterTime,
         uuid
       ])
     );

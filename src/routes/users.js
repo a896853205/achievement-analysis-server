@@ -44,7 +44,7 @@ router.post('/getUserInfo', async ctx => {
   });
 });
 
-// 设置用户基本信息(高考决策第一步, 或者个人修改页面)
+// 设置用户基本信息(高考决策第一步)
 router.post('/setUserInfo', async ctx => {
   let {
       nickname,
@@ -58,27 +58,35 @@ router.post('/setUserInfo', async ctx => {
     } = ctx.request.body,
     user = ctx.state.data;
 
-  let result = await userService.setUserInfo({
-    nickname,
-    gender,
-    phone,
-    email,
-    score,
-    accountCategory,
-    address,
-    examYear,
-    uuid: user.uuid
-  });
-
-  if (result) {
-    ctx.body = new Result({
-      msg: '已更新基本用户信息',
-      data: result
+  if (user.scoreAlterTime > 0) {
+    let result = await userService.setUserInfo({
+      nickname,
+      gender,
+      phone,
+      email,
+      score,
+      accountCategory,
+      address,
+      examYear,
+      uuid: user.uuid,
+      scoreAlterTime: user.scoreAlterTime - 1
     });
+
+    if (result) {
+      ctx.body = new Result({
+        msg: '已更新基本用户信息',
+        data: result
+      });
+    } else {
+      ctx.body = new Result({
+        status: 0,
+        msg: '基本用户信息不完整,请填写完整'
+      });
+    }
   } else {
     ctx.body = new Result({
       status: 0,
-      msg: '基本用户信息不完整,请填写完整'
+      msg: '修改用户重要信息次数不足,请充值'
     });
   }
 });
@@ -112,11 +120,16 @@ router.post('/setUserImportInfo', async ctx => {
   let { examYear, gender, accountCategory, score } = ctx.request.body,
     user = ctx.state.data;
 
+  if (user.scoreAlterTime > 0) {
     let result = await userService.setUserImportInfo({
-      examYear, gender, accountCategory, score,
+      examYear,
+      gender,
+      accountCategory,
+      score,
+      scoreAlterTime: user.scoreAlterTime - 1,
       uuid: user.uuid
     });
-  
+
     if (result) {
       ctx.body = new Result({
         msg: '已更新基本用户重要信息',
@@ -128,6 +141,12 @@ router.post('/setUserImportInfo', async ctx => {
         msg: '重要用户信息不完整,请填写完整'
       });
     }
+  } else {
+    ctx.body = new Result({
+      status: 0,
+      msg: '修改用户重要信息次数不足,请充值'
+    });
+  }
 });
 
 // 修改密码

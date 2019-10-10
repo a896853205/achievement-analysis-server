@@ -37,7 +37,8 @@ export default {
     examYear,
     uuid,
     phone,
-    email
+    email,
+    scoreAlterTime
   }) => {
     if (
       nickname === undefined ||
@@ -55,6 +56,7 @@ export default {
     ) {
       return;
     } else {
+      // 判断修改分数的次数 > 0 才继续往下进行
       // 可以修改个人信息
       let result = await userDao.updateUser({
         nickname,
@@ -65,7 +67,8 @@ export default {
         examYear,
         uuid,
         phone,
-        email
+        email,
+        scoreAlterTime
       });
 
       return result;
@@ -89,6 +92,7 @@ export default {
     gender,
     accountCategory,
     score,
+    scoreAlterTime,
     uuid
   }) => {
     // 这里判断次数,如果小于返回-1,如果还有次数就update
@@ -97,6 +101,7 @@ export default {
       gender,
       accountCategory,
       score,
+      scoreAlterTime,
       uuid
     });
 
