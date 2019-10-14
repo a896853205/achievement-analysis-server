@@ -5,7 +5,7 @@ export const parseCurrentScore = (score, currentRank = [], oldRank = []) => {
   });
 
   oldRank.sort((one, two) => {
-    return two.rank - one.rank;
+    return one.rank - two.rank;
   });
 
   let fitCurrent = null,
@@ -22,6 +22,11 @@ export const parseCurrentScore = (score, currentRank = [], oldRank = []) => {
     if (oldItem.rank >= fitCurrent.rank) {
       fitOld = oldItem;
     }
+  }
+
+  // 边界没有的情况
+  if (!fitOld) {
+    fitOld = oldRank[oldRank.length - 1]
   }
 
   return {
