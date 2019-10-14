@@ -60,7 +60,8 @@ export default {
     submit_time, 
     t_user_voluntary_result.fk_lots_id,
     t_major_enrollment_info.year,
-    sys_t_lots.lots_name
+    sys_t_lots.lots_name,
+    reportType
   FROM
     t_user_voluntary_result,sys_t_lots,t_major_enrollment_info
   WHERE

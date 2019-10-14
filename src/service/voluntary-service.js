@@ -10,7 +10,8 @@ import {
   voluntaryGradedStrategy,
   voluntaryScoreStrategy,
   voluntaryPlanStrategy,
-  culDeepId
+  culDeepId,
+  findDeepFatherId
 } from './voluntary-filtrate';
 
 export default {
@@ -234,9 +235,40 @@ export default {
     if (schoolPropertyData) property = +schoolPropertyData.id;
     if (schoolInfo) rank = +schoolInfo.rank;
 
-    let deepId = culDeepId(arrangement, nature, type, property, rank);
+    let analysisId = culDeepId(arrangement, nature, type, property, rank);
 
+    let unitSatisfactionObj = await systemDao.selectUnitSatisfaction(analysisId);
+
+    let disciplineCode = await schoolDao.selectDisciplineCodeByVoluntaryInfo({
+      uuid: voluntaryUuid,
+      fk_five_volunteer_id: voluntarieerId,
+      major_index: majorIndex
+    });
+
+    if (!disciplineCode) {
+      return {
+        unitSatisfactionObj
+      }
+    }
+
+    // 专业的id找专业优化code, 这个专业优化code和deepId一起查询派遣库的数据
+    let majorFutureObj = null;
+    do {
+      majorFutureObj = await schoolDao.selectMajorFuture({
+        analysisId,
+        disciplineCode: disciplineCode.code
+      });
+
+      // 查找父级id
+      analysisId = findDeepFatherId(analysisId);
+    } while (!majorFutureObj);
+
+    // 没有code数据就不查
     // 使用deepId查询两张表查出对应数据发给前台
+    return {
+      unitSatisfactionObj,
+      majorFutureObj
+    };
   },
 
   /**

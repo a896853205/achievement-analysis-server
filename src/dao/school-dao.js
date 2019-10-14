@@ -199,10 +199,31 @@ export default {
       new SqlObject(schoolMapper.selectSchoolBasicInfo, [id])
     );
 
-    if (schoolInfo) {
-      return schoolInfo[0];
-    } else {
-      return;
-    }
+    return schoolInfo[0];
+  },
+
+  // 使用入学id查询优化专业码
+  selectDisciplineCodeByVoluntaryInfo: async ({
+    uuid,
+    fk_five_volunteer_id,
+    major_index
+  }) => {
+    return (await db.query(
+      new SqlObject(schoolMapper.selectDisciplineCodeByVoluntaryInfo, [
+        uuid,
+        fk_five_volunteer_id,
+        major_index
+      ])
+    ))[0];
+  },
+
+  // 查询专业未来前景
+  selectMajorFuture: async ({ analysisId, disciplineCode }) => {
+    return (await db.query(
+      new SqlObject(schoolMapper.selectMajorFuture, [
+        analysisId,
+        disciplineCode
+      ])
+    ))[0];
   }
 };

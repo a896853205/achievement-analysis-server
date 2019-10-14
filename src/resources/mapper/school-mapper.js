@@ -534,5 +534,32 @@ a.accountCategory = ?;
 			t_school
 		WHERE
 		  id = ?
+	`,
+	// 使用入学id查询优化专业码
+	selectDisciplineCodeByVoluntaryInfo: `
+		SELECT
+			sys_t_discipline.code
+		FROM
+			t_major_enrollment_info, sys_t_discipline, t_user_voluntary_result
+		WHERE
+			t_major_enrollment_info.id = t_user_voluntary_result.fk_enrollment_id
+		AND
+			t_major_enrollment_info.fk_discipline_id = sys_t_discipline.id
+		AND
+			uuid = ?
+		AND
+			fk_five_volunteer_id = ?
+		AND
+			major_index = ?
+		`,
+	selectMajorFuture: `
+		SELECT
+			*
+		FROM
+			sys_t_major_future
+		WHERE
+			analysisId = ?
+		AND
+		  disciplineCode = ?
 	`
 };

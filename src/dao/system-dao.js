@@ -95,5 +95,12 @@ export default {
     return (await db.query(
       new SqlObject(systemMapper.selectRoleByCode, [roleCode])
     ))[0];
+  },
+
+  // 根据deepId 查询单位满意度
+  selectUnitSatisfaction: async deepId => {
+    return (await db.query(
+      new SqlObject(systemMapper.selectUnitSatisfaction, [deepId])
+    ))[0];
   }
 };

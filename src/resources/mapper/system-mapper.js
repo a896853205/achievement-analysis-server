@@ -81,5 +81,14 @@ export default {
   sys_t_role
   WHERE
   roleCode = ?
+  `,
+  // 根据分析出来的id查询单位满意度的具体情况
+  selectUnitSatisfaction: `
+  SELECT
+    *
+  FROM
+    sys_t_unit_satisfaction
+  WHERE
+    analysisId = ?
   `
 };

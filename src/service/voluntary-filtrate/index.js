@@ -717,7 +717,29 @@ const DEEP_FATHER = [
   -1
 ];
 
-const useDeepRule = () => {};
+const useDeepRule = schoolDeepString => {
+  for (let RULE_ITEM of DEEP_RULE) {
+    let ruleArr = RULE_ITEM.rule.split(''),
+      schoolDeepArr = schoolDeepString.split(''),
+      isSame = true;
+
+    for (let i = 0; i < ruleArr.length; i++) {
+      let ruleItem = ruleArr[i];
+
+      if (ruleItem === '_') {
+        continue;
+      } else {
+        if (schoolDeepArr[i] !== ruleArr[i]) {
+          isSame = false;
+        }
+      }
+    }
+
+    if (isSame) {
+      return RULE_ITEM.value;
+    }
+  }
+};
 
 /**
  * 计算深度层次的id
@@ -793,3 +815,7 @@ export const culDeepId = (arrangement, nature, type, property, rank) => {
   console.log(schoolDeepString);
   return useDeepRule(schoolDeepString);
 };
+
+export const findDeepFatherId = (analysisId) => {
+  return DEEP_FATHER[analysisId];
+}
