@@ -617,3 +617,179 @@ export const voluntaryPlanStrategy = {
     return planDetailArr;
   }
 };
+
+/**
+ * 发展前景报告决策规则
+ * 第一位 b 本科 z 专科
+ * 第二位 1 公办 2 民办 c 成人
+ * 第三四位 对应sys_t_school_type
+ * 第五位 1 985 2 211
+ * 第六七位 L3 小于300 B3 大于300
+ * 第八九位 L2 小于200 L4 大于200小于400 B4 大于400
+ */
+const DEEP_RULE = [
+  { rule: 'b1__1____', value: 1 },
+  { rule: 'b1122____', value: 2 },
+  { rule: 'b1042____', value: 3 },
+  { rule: 'b1__2____', value: 4 },
+  { rule: 'b106_L3__', value: 5 },
+  { rule: 'b106_B3__', value: 6 },
+  { rule: 'b113___L2', value: 7 },
+  { rule: 'b113___L4', value: 8 },
+  { rule: 'b113___B4', value: 9 },
+  { rule: 'b112___L2', value: 10 },
+  { rule: 'b112___L4', value: 11 },
+  { rule: 'b112___B4', value: 12 },
+  { rule: 'b116_L3__', value: 13 },
+  { rule: 'b116_B3__', value: 14 },
+  { rule: 'b104_____', value: 15 },
+  { rule: 'b109_L3__', value: 16 },
+  { rule: 'b109_B3__', value: 17 },
+  { rule: 'b101_____', value: 18 },
+  { rule: 'b1_______', value: 19 },
+  { rule: 'b216_____', value: 20 },
+  { rule: 'b212_____', value: 21 },
+  { rule: 'b213_____', value: 22 },
+  { rule: 'b215_____', value: 23 },
+  { rule: 'b2_______', value: 24 },
+  { rule: 'z112_____', value: 25 },
+  { rule: 'z113_____', value: 26 },
+  { rule: 'z109_____', value: 27 },
+  { rule: 'z106_____', value: 28 },
+  { rule: 'z110_____', value: 29 },
+  { rule: 'z104_____', value: 30 },
+  { rule: 'z111_____', value: 31 },
+  { rule: 'z114_____', value: 32 },
+  { rule: 'z116_____', value: 33 },
+  { rule: 'z1_______', value: 34 },
+  { rule: 'z2_______', value: 35 },
+  { rule: 'c1_______', value: 36 },
+  { rule: 'b1_______', value: 37 },
+  { rule: 'b________', value: 38 },
+  { rule: 'z________', value: 39 },
+  { rule: '_________', value: 40 }
+];
+
+/**
+ * 向上查找数组, index就是对应其原来id
+ */
+const DEEP_FATHER = [
+  -1,
+  4,
+  4,
+  4,
+  19,
+  19,
+  19,
+  19,
+  19,
+  19,
+  19,
+  19,
+  19,
+  19,
+  19,
+  19,
+  19,
+  19,
+  19,
+  24,
+  24,
+  24,
+  24,
+  24,
+  34,
+  34,
+  34,
+  34,
+  34,
+  34,
+  34,
+  34,
+  34,
+  34,
+  37,
+  37,
+  37,
+  38,
+  39,
+  40,
+  -1
+];
+
+const useDeepRule = () => {};
+
+/**
+ * 计算深度层次的id
+ * @param {String} arrangement 层次
+ * @param {Number} nature 类别 e.g. 1公办 2民办
+ * @param {Number} type 类型 e.g. 13综合类
+ * @param {Number} property 属性 e.g. 1985
+ * @param {Number} rank 排名
+ */
+export const culDeepId = (arrangement, nature, type, property, rank) => {
+  let schoolDeepString = '';
+
+  // 层次化成字符串参数
+  switch (arrangement) {
+    case '本科':
+      schoolDeepString += 'b';
+      break;
+    case '专科':
+      schoolDeepString += 'z';
+      break;
+    default:
+      schoolDeepString += '_';
+  }
+
+  // 类别化成字符串参数
+  if (nature) {
+    schoolDeepString += nature;
+  } else {
+    schoolDeepString += '_';
+  }
+
+  // 类型化成字符串参数
+  if (type) {
+    if (type < 10) {
+      type = '0' + type;
+    }
+    schoolDeepString += type;
+  } else {
+    schoolDeepString += '__';
+  }
+
+  // 属性化成字符串参数
+  if (property) {
+    schoolDeepString += property;
+  } else {
+    schoolDeepString += '_';
+  }
+
+  // 将第一段分数化成字符串参数
+  if (rank) {
+    if (rank > 0 && rank <= 300) {
+      schoolDeepString += 'L3';
+    } else {
+      schoolDeepString += 'B3';
+    }
+  } else {
+    schoolDeepString += '__';
+  }
+
+  // 将第二段分数化成字符串参数
+  if (rank) {
+    if (rank > 0 && rank <= 200) {
+      schoolDeepString += 'L2';
+    } else if (rank > 200 && rank <= 400) {
+      schoolDeepString += 'L4';
+    } else {
+      schoolDeepString += 'B4';
+    }
+  } else {
+    schoolDeepString += '__';
+  }
+
+  console.log(schoolDeepString);
+  return useDeepRule(schoolDeepString);
+};

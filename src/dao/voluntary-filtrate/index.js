@@ -1,87 +1,40 @@
-// 工具类
-import { objectHelper } from '../../../util/object-helper';
+export const initVoluntaryOption = originalVoluntaryList => {
+  let voluntaryList = [];
 
-let initMajorObj = itemObj => {
-  return {
-    fk_major_id: itemObj.fk_major_id,
-    major_name: itemObj.major_name,
-    major_index: itemObj.major_index
-  };
-};
-
-let initSchoolObj = itemObj => {
-  return {
-    fk_five_volunteer_id: itemObj.fk_five_volunteer_id,
-    volunteer_name: itemObj.volunteer_name,
-    fk_school_id: itemObj.fk_school_id,
-    name: itemObj.name,
-    gather: itemObj.gather,
-    major: [initMajorObj(itemObj)]
-  };
-};
-
-// 初始化志愿的学校
-let initVoluntaryObj = itemObj => {
-  return {
-    uuid: itemObj.uuid,
-    fk_lots_id: itemObj.fk_lots_id,
-    lots_name: itemObj.lots_name,
-    submit_time: itemObj.submit_time,
-    school: [initSchoolObj(itemObj)]
-  };
-};
-
-export const initVoluntary = voluntaryList => {
-  let resultVoluntaryList = [];
-
-  for (let i = 0; i < voluntaryList.length; i++) {
-    // 如果有就不新建voluntarySchool
+  /**
+   * 1	华东师范大学	2	金融学类
+     2	北京理工大学	3	经济管理试验班
+     3	中南大学	2	金融学类
+     4	北京科技大学	2	工科试验班类
+     5	北京工业大学	3	英语
+  */
+  for (let item of originalVoluntaryList) {
+    // 如果有了就下一个
     if (
-      !voluntaryList[i] || resultVoluntaryList.findIndex(resultItem => {
-        if (resultItem) {
-          return voluntaryList[i].uuid === resultItem.uuid;
-        }
-      }) !== -1
+      voluntaryList.find(
+        findItem => findItem.value === item.fk_five_volunteer_id
+      )
     ) {
       continue;
     }
 
-    let oneVoluntary = initVoluntaryObj(voluntaryList[i]);
-    voluntaryList[i] = null;
+    let majorList = originalVoluntaryList.filter(filterItem =>
+      item.fk_five_volunteer_id === filterItem.fk_five_volunteer_id
+    );
 
-    for (let j = i + 1; j < voluntaryList.length; j++) {
-      // 同一个志愿
-      if (oneVoluntary.uuid === voluntaryList[j].uuid) {
-        // 没有那个志愿的话就插入该志愿
-        let schoolIndexSameIndex = oneVoluntary.school.findIndex(resultItem => {
-          return (
-            voluntaryList[j].fk_five_volunteer_id ===
-            resultItem.fk_five_volunteer_id
-          );
-        });
+    let majorListOption = majorList.map(mapItem => {
+      return {
+        value: mapItem.major_index,
+        label: mapItem.major_name
+      };
+    });
 
-        if (schoolIndexSameIndex === -1) {
-          oneVoluntary.school.push(initSchoolObj(voluntaryList[j]));
-          voluntaryList[j] = null;
-        } else {
-          // 有这个志愿,需要看看是不是一个专业
-          // 如果不是一个专业就插入
-          let majorIndexSameIndex = oneVoluntary.school[schoolIndexSameIndex].major.findIndex(resultItem => {
-            return voluntaryList[j].major_index === resultItem.major_index;
-          });
-
-          if (majorIndexSameIndex === -1) {
-            oneVoluntary.school[schoolIndexSameIndex].major.push(
-              initMajorObj(voluntaryList[j])
-            );
-            voluntaryList[j] = null;
-          }
-        }
-      }
-    }
-
-    resultVoluntaryList.push(oneVoluntary);
+    // 将学校插入第一级中
+    voluntaryList.push({
+      value: item.fk_five_volunteer_id,
+      label: item.name,
+      children: majorListOption || []
+    });
   }
-
-  return resultVoluntaryList;
+  return voluntaryList;
 };

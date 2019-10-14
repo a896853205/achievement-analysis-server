@@ -3,7 +3,7 @@ export default {
     INSERT
     INTO
     t_user_voluntary_result
-    (uuid, fk_five_volunteer_id, fk_school_id, fk_enrollment_id, major_index, submit_time, fk_lots_id, fk_user_uuid, gender, year, gather)
+    (uuid, fk_five_volunteer_id, fk_school_id, fk_enrollment_id, major_index, submit_time, fk_lots_id, fk_user_uuid, gender, year, gather, reportType)
     VALUES
     ?`,
   queryVoluntaryByVoluntaryUuid: `
@@ -71,5 +71,35 @@ export default {
     t_major_enrollment_info.id = t_user_voluntary_result.fk_enrollment_id
   AND
     t_user_voluntary_result.year = t_major_enrollment_info.year;
-  `
+  `,
+  queryVoluntaryListByVoluntaryUuid: `
+  SELECT 
+    fk_five_volunteer_id,
+    t_school.name,
+    major_index,
+    sys_t_major.major_name
+  FROM
+    t_user_voluntary_result, t_school, t_major_enrollment_info, sys_t_major
+  WHERE
+    t_user_voluntary_result.fk_school_id = t_school.id
+  AND
+    fk_enrollment_id = t_major_enrollment_info.id
+  AND
+    t_major_enrollment_info.fk_major_id = sys_t_major.id
+  AND
+    uuid = ?
+  `,
+  selectVoluntaryResultByVolunteerAndMajorIndex: `
+  SELECT 
+    *
+  FROM 
+    t_user_voluntary_result,merge_school_lots
+  WHERE
+    t_user_voluntary_result.fk_five_volunteer_id = ?
+  AND
+    t_user_voluntary_result.major_index = ?
+  AND
+    t_user_voluntary_result.uuid = ?
+  AND
+    t_user_voluntary_result.year = merge_school_lots.year`
 }

@@ -44,6 +44,14 @@ export default {
   from
   sys_t_lots
   `,
+  selectLotById: `
+  SELECT
+    *
+  FROM
+    sys_t_lots
+  WHERE
+    id = ?
+  `,
 	queryVoluntaryOption: `
   -- 根据批次id 查对应志愿个数
   select

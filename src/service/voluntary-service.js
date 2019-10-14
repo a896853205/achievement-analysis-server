@@ -1,5 +1,6 @@
 import voluntaryDao from '../dao/voluntary-dao';
 import systemDao from '../dao/system-dao';
+import schoolDao from '../dao/school-dao';
 
 // uuid
 import uuid from 'uuid/v1';
@@ -8,12 +9,13 @@ import {
   voluntaryCompleteStrategy,
   voluntaryGradedStrategy,
   voluntaryScoreStrategy,
-  voluntaryPlanStrategy
+  voluntaryPlanStrategy,
+  culDeepId
 } from './voluntary-filtrate';
 
 export default {
   // 保存志愿信息
-  saveVoluntary: async (lotId, voluntary, user) => {
+  saveVoluntary: async (lotId, voluntary, user, reportType) => {
     let voluntaryUuid = uuid();
 
     if (user.reportAlterTime > 0) {
@@ -37,7 +39,8 @@ export default {
               // 因为查询的是年份的year
               user.examYear,
               // user.poverty,
-              schoolOption.gather
+              schoolOption.gather,
+              reportType
             );
 
             allParam.push(param);
@@ -50,7 +53,7 @@ export default {
         return -1;
       }
 
-      await voluntaryDao.saveVoluntary(allParam, user);
+      await voluntaryDao.saveVoluntary(allParam, user, reportType);
     } else {
       // 没有次数了
       return 0;
@@ -201,9 +204,50 @@ export default {
   },
 
   /**
+   * 计算深度体验报告
+   */
+  culVoluntaryDeepResult: async (voluntaryUuid, voluntarieerId, majorIndex) => {
+    // 查询school_id
+    let voluntary = await voluntaryDao.selectVoluntaryResultByVolunteerAndMajorIndex(
+      voluntaryUuid,
+      voluntarieerId,
+      majorIndex
+    );
+    // 通过voluntary查询 层次,类别,类型,属性,排名
+    let [
+      lotData,
+      schoolTypeData,
+      schoolPropertyData,
+      schoolInfo
+    ] = await Promise.all([
+      systemDao.selectLotById(voluntary.fk_lots_id),
+      schoolDao.selectSchoolType(voluntary.fk_school_id),
+      schoolDao.selectSchoolProperty(voluntary.fk_school_id),
+      schoolDao.selectSchoolBasicInfo(voluntary.fk_school_id)
+    ]);
+
+    let arrangement, nature, type, property, rank;
+
+    if (lotData) arrangement = lotData.gradation;
+    if (schoolInfo) nature = +schoolInfo.fk_nature_id;
+    if (schoolTypeData) type = +schoolTypeData.id;
+    if (schoolPropertyData) property = +schoolPropertyData.id;
+    if (schoolInfo) rank = +schoolInfo.rank;
+
+    let deepId = culDeepId(arrangement, nature, type, property, rank);
+
+    // 使用deepId查询两张表查出对应数据发给前台
+  },
+
+  /**
    * 通过用户uuid查询志愿情况
    */
   queryVoluntaryList: async userUuid => {
     return await voluntaryDao.queryVoluntaryByUserUuid(userUuid);
+  },
+
+  // 通过志愿表的uuid查询志愿情况
+  queryVoluntaryListByVoluntaryUuid: async voluntaryUuid => {
+    return await voluntaryDao.queryVoluntaryListByVoluntaryUuid(voluntaryUuid);
   }
 };

@@ -8,13 +8,14 @@ router.prefix('/voluntary');
 
 // 保存志愿信息
 router.post('/saveVoluntary', async ctx => {
-  let { lotId, voluntary } = ctx.request.body,
+  let { lotId, voluntary, reportType } = ctx.request.body,
     user = ctx.state.data;
 
   let voluntaryUuid = await voluntaryService.saveVoluntary(
     lotId,
     voluntary,
-    user
+    user,
+    reportType
   );
 
   if (voluntaryUuid === 0) {
@@ -34,6 +35,7 @@ router.post('/saveVoluntary', async ctx => {
   }
 });
 
+// 获取报表报告
 router.post('/getVoluntaryResult', async ctx => {
   let { voluntaryUuid } = ctx.request.body;
 
@@ -43,6 +45,32 @@ router.post('/getVoluntaryResult', async ctx => {
 
   ctx.body = new Result({
     data: voluntaryResult
+  });
+});
+
+// 获取志愿表通过志愿表的uuid
+router.post('/getVoluntaryListOption', async ctx => {
+  let { voluntaryUuid } = ctx.request.body;
+
+  let voluntaryList = await voluntaryService.queryVoluntaryListByVoluntaryUuid(voluntaryUuid);
+
+  ctx.body = new Result({
+    data: voluntaryList
+  });
+})
+
+// 获取深度分析报告
+router.post('/getVoluntaryDeepResult', async ctx => {
+  let { voluntaryUuid, voluntarieerId, majorIndex } = ctx.request.body;
+
+  let voluntaryDeepResult = await voluntaryService.culVoluntaryDeepResult(
+    voluntaryUuid,
+    voluntarieerId,
+    majorIndex
+  );
+
+  ctx.body = new Result({
+    data: voluntaryDeepResult
   });
 });
 

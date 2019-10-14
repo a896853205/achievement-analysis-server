@@ -508,5 +508,31 @@ a.accountCategory = ?;
 		)
 		AND
 		accountCategory = ?
+	`,
+  selectSchoolType: `
+		SELECT
+			*
+		FROM
+			merge_school_school_type
+		WHERE
+		  fk_school_id = ?
+	`,
+	selectSchoolProperty: `
+		SELECT
+			*
+		FROM
+			merge_school_school_property
+		WHERE
+			fk_school_id = ?
+		ORDER BY
+		  fk_school_property_id
+	`,
+	selectSchoolBasicInfo: `
+		SELECT
+			*
+		FROM
+			t_school
+		WHERE
+		  id = ?
 	`
 };

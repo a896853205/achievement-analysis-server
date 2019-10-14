@@ -5,8 +5,11 @@ import { db, SqlObject } from '../resources/db-connect';
 import voluntaryMapper from '../resources/mapper/voluntary-mapper';
 import userMapper from '../resources/mapper/user-mapper';
 
+// 算法
+import { initVoluntaryOption } from './voluntary-filtrate';
+
 export default {
-  saveVoluntary: async (allParam, user) => {
+  saveVoluntary: async (allParam, user, reportType) => {
     // 在这里使用事件处理
     // 插入voluntary 而且 将 用户的测评次数-1
 
@@ -14,10 +17,21 @@ export default {
     let insertVoluntary = new SqlObject(voluntaryMapper.insertVoluntary, [
         allParam
       ]),
+      updateUserCount;
+
+    // 普通报表
+    if (reportType === 1) {
       updateUserCount = new SqlObject(userMapper.updateReportAlterTime, [
         user.reportAlterTime - 1,
         user.uuid
       ]);
+      // 深度报表
+    } else if (reportType === 2) {
+      updateUserCount = new SqlObject(userMapper.updateDeepAlterTime, [
+        user.deepAlterTime - 1,
+        user.uuid
+      ]);
+    }
 
     await db.transactions([insertVoluntary, updateUserCount]);
   },
@@ -43,5 +57,28 @@ export default {
     // 去重进行处理
     let unique = new Map();
     return voluntaryList.filter(o => !unique.has(o.uuid) && unique.set(o.uuid));
+  },
+
+  queryVoluntaryListByVoluntaryUuid: async voluntaryUuid => {
+    let voluntaryList = await db.query(
+      new SqlObject(voluntaryMapper.queryVoluntaryListByVoluntaryUuid, [
+        voluntaryUuid
+      ])
+    );
+
+    return initVoluntaryOption(voluntaryList);
+  },
+
+  selectVoluntaryResultByVolunteerAndMajorIndex: async (
+    voluntaryUuid,
+    voluntarieerId,
+    majorIndex
+  ) => {
+    return (await db.query(
+      new SqlObject(
+        voluntaryMapper.selectVoluntaryResultByVolunteerAndMajorIndex,
+        [voluntarieerId, majorIndex, voluntaryUuid]
+      )
+    ))[0];
   }
 };

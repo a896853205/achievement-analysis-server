@@ -10,7 +10,11 @@ import { initMajor } from './major-filrate';
 
 export default {
   // 通过批次id查询学校
-  querySchoolByLotIdAndAccountCategory: async (lotId, accountCategory, examYear) => {
+  querySchoolByLotIdAndAccountCategory: async (
+    lotId,
+    accountCategory,
+    examYear
+  ) => {
     let schoolList = await db.query(
       new SqlObject(schoolMapper.querySchoolByLotIdAndAccountCategory, [
         lotId,
@@ -47,17 +51,17 @@ export default {
     accountCategory
   ) => {
     let originalSchoolList = await db.query(
-      new SqlObject(schoolMapper.querySchoolWithMajorByLotIdAndAccountCategory, [
-        lotId,
-        accountCategory
-      ])
+      new SqlObject(
+        schoolMapper.querySchoolWithMajorByLotIdAndAccountCategory,
+        [lotId, accountCategory]
+      )
     );
 
     return originalSchoolList;
   },
 
   // 查询所有学校
-  querySchool: async (schoolName) => {
+  querySchool: async schoolName => {
     let schoolList = await db.query(
       new SqlObject(schoolMapper.querySchool, [`%${schoolName}%`])
     );
@@ -161,5 +165,44 @@ export default {
       oldTwoLotsScore,
       oldThreeLotsScore
     };
+  },
+
+  // 查询学校的类型通过学校id
+  selectSchoolType: async id => {
+    let schoolTypeList = await db.query(
+      new SqlObject(schoolMapper.selectSchoolType, [id])
+    );
+
+    if (schoolTypeList) {
+      return schoolTypeList[0];
+    } else {
+      return;
+    }
+  },
+
+  // 查询学校的属性通过学校id
+  selectSchoolProperty: async id => {
+    let schoolProperty = await db.query(
+      new SqlObject(schoolMapper.selectSchoolProperty, [id])
+    );
+
+    if (schoolProperty) {
+      return schoolProperty[0];
+    } else {
+      return;
+    }
+  },
+
+  // 查询学校的基础信息
+  selectSchoolBasicInfo: async id => {
+    let schoolInfo = await db.query(
+      new SqlObject(schoolMapper.selectSchoolBasicInfo, [id])
+    );
+
+    if (schoolInfo) {
+      return schoolInfo[0];
+    } else {
+      return;
+    }
   }
 };

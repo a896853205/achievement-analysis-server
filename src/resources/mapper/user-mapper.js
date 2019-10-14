@@ -64,6 +64,14 @@ export default {
     where
     uuid=?
   `,
+  updateDeepAlterTime: `
+    UPDATE
+    t_user
+    SET
+    deepAlterTime = ?
+    WHERE
+    uuid = ?
+  `,
   // query: 'select * from equip where importance > 0 order by importance desc',
   saveUser: `
   INSERT

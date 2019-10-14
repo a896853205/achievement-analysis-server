@@ -60,6 +60,11 @@ export default {
     return areaFeature;
   },
 
+  // 通过id获得批次信息
+  selectLotById: async id => {
+    return (await db.query(new SqlObject(systemMapper.selectLotById, [id])))[0];
+  },
+
   // 获取批次信息
   queryLots: async () => {
     let lots = await db.query(new SqlObject(systemMapper.queryLots));
