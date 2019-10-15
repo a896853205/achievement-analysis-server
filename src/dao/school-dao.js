@@ -186,11 +186,7 @@ export default {
       new SqlObject(schoolMapper.selectSchoolProperty, [id])
     );
 
-    if (schoolProperty) {
-      return schoolProperty[0];
-    } else {
-      return;
-    }
+    return schoolProperty[0];
   },
 
   // 查询学校的基础信息
