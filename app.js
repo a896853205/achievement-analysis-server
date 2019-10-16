@@ -14,9 +14,12 @@ import entryScore from './src/routes/entryScore';
 import school from './src/routes/school';
 import questionnaire from './src/routes/questionnaire';
 import voluntary from './src/routes/voluntary';
+import news from './src/routes/news'
 
 // key
-import { TOKEN_KEY } from './src/constants/keys';
+import {
+	TOKEN_KEY
+} from './src/constants/keys';
 
 // 中间件
 import getToken from './src/middle/verify-token';
@@ -42,10 +45,12 @@ app.use(async (ctx, next) => {
 	});
 });
 
-let unlessPathArr = [ '/users/register', '/users/login', /^\/system/ ];
+let unlessPathArr = ['/users/register', '/users/login', /^\/system/];
 
 app.use(
-	jwt({ secret: TOKEN_KEY }).unless({
+	jwt({
+		secret: TOKEN_KEY
+	}).unless({
 		path: unlessPathArr
 	})
 );
@@ -56,7 +61,7 @@ app.use(
 // middlewares
 app.use(
 	bodyparser({
-		enableTypes: [ 'json', 'form', 'text' ]
+		enableTypes: ['json', 'form', 'text']
 	})
 );
 app.use(json());
@@ -85,6 +90,7 @@ app.use(entryScore.routes(), entryScore.allowedMethods());
 app.use(school.routes(), school.allowedMethods());
 app.use(questionnaire.routes(), questionnaire.allowedMethods());
 app.use(voluntary.routes(), voluntary.allowedMethods());
+app.use(news.routes(), voluntary.allowedMethods())
 
 // error-handling
 app.on('error', (err, ctx) => {
