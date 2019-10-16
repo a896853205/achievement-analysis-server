@@ -3,6 +3,8 @@ import { request } from 'http';
 import newsService from '../service/news';
 const router = require('koa-router')();
 
+router.prefix('/news');
+
 router.post('/getNewsDetail', async data => {
   const { uuid } = request.body;
 
