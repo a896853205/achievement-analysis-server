@@ -3,7 +3,7 @@ export default {
     SELECT
     *
     FROM
-    t_news,
+    t_news
     WHERE
     uuid = ?
     `
