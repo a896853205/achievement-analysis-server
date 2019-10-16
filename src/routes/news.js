@@ -5,12 +5,12 @@ const router = require('koa-router')();
 
 router.prefix('/news');
 
-router.post('/getNewsDetail', async data => {
-  const { uuid } = request.body;
+router.post('/getNewsDetail', async ctx => {
+  const { uuid } = ctx.request.body;
 
   newsList = await newsService.select(uuid);
 
-  data.body = new Result({
+  ctx.data.body = new Result({
     data: newsList
   });
 });
