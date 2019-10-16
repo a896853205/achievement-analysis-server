@@ -8,7 +8,7 @@ router.prefix('/news');
 router.post('/getNewsDetail', async ctx => {
   const { uuid } = ctx.request.body;
 
-  newsList = await newsService.selectNewsDetail(uuid);
+  let newsList = await newsService.selectNewsDetail(uuid);
 
   ctx.data.body = new Result({
     data: newsList
