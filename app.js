@@ -51,7 +51,7 @@ app.use(
 );
 
 // error handler
-onerror(app);
+// onerror(app);
 
 // middlewares
 app.use(
@@ -89,6 +89,10 @@ app.use(voluntary.routes(), voluntary.allowedMethods());
 // error-handling
 app.on('error', (err, ctx) => {
 	console.error('server error', err, ctx);
+	ctx.body = new Result({
+		status: 0,
+		msg: '网络有点问题呦,请稍后再试'
+	});
 });
 
 module.exports = app;

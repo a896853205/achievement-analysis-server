@@ -36,9 +36,9 @@ if (SAP_CONTROL === ENVIRONMENT.DEV) {
 } else {
   // 生产环境域名
   dbConfig = {
-    host: 'localhost',
+    host: '62.234.76.58',
     user: 'root',
-    password: LOCATION_DATA_BASE_KEY,
+    password: DATA_BASE_KEY,
     database: 'college',
     port: 3306,
     // 最大连接数，默认为10
