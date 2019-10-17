@@ -17,6 +17,9 @@ router.post('/getNewsDetail', async ctx => {
 
 router.post('/getNewsProfileList', async ctx => {
   const { type, count } = ctx.request.body;
+  /*
+  根据返回的类型与数量查询指定数量的新闻
+  */
 
   let ProfileList = await newsService.queryNewsProfileByType(type, count);
 

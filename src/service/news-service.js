@@ -12,7 +12,9 @@ export default {
   },
 
   queryNewsProfileByType: async (type, count) => {
-    console.log(type, count);
+    /**
+     * 返回包含指定数量的新闻的数组
+     */
     return await newsDao.queryNewsProfileByType(type, count);
   }
 };

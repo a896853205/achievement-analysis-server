@@ -18,7 +18,6 @@ export default {
   },
 
   queryNewsProfileByType: async (type, count) => {
-    console.log(type, count);
     return await db.query(
       new SqlObject(newsMapper.queryNewsProfileByType, [type, +count])
     );
