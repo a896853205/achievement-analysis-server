@@ -17,7 +17,7 @@ export default {
   `,
   queryNewsProfileByType: `
     SELECT
-    'uuid','type','createTime','from','viewTimes','title'
+    uuid, type, createTime, comeFrom, viewTimes, title
     FROM
     t_news
     WHERE

@@ -16,4 +16,6 @@ router.get('/getEntryScore', async ctx => {
   })
 })
 
+
+
 export default router;
