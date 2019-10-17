@@ -14,5 +14,18 @@ export default {
     viewTimes = viewTimes + 1
     WHERE
     uuid = ?
+  `,
+  queryNewsProfileByType: `
+    SELECT
+    'uuid','type','createTime','from','viewTimes','title'
+    FROM
+    t_news
+    WHERE
+    type = ?
+    ORDER BY
+    createTime
+    DESC
+    LIMIT 
+    ?
   `
 };

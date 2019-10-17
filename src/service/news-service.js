@@ -9,5 +9,10 @@ export default {
     await newsDao.updatePlusOneNewsViewTimes(uuid);
 
     return await newsDao.selectNewsByuuid(uuid);
+  },
+
+  queryNewsProfileByType: async (type, count) => {
+    console.log(type, count);
+    return await newsDao.queryNewsProfileByType(type, count);
   }
 };

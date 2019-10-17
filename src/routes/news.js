@@ -15,4 +15,14 @@ router.post('/getNewsDetail', async ctx => {
   });
 });
 
+router.post('/getNewsProfileList', async ctx => {
+  const { type, count } = ctx.request.body;
+
+  let ProfileList = await newsService.queryNewsProfileByType(type, count);
+
+  ctx.body = new Result({
+    data: ProfileList
+  });
+});
+
 export default router;

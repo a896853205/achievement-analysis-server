@@ -15,5 +15,12 @@ export default {
     return (await db.query(
       new SqlObject(newsMapper.updatePlusOneNewsViewTimes, [uuid])
     ))[0];
+  },
+
+  queryNewsProfileByType: async (type, count) => {
+    console.log(type, count);
+    return await db.query(
+      new SqlObject(newsMapper.queryNewsProfileByType, [type, +count])
+    );
   }
 };
