@@ -15,7 +15,7 @@ import school from './src/routes/school';
 import questionnaire from './src/routes/questionnaire';
 import voluntary from './src/routes/voluntary';
 import news from './src/routes/news';
-
+import indexData from './src/routes/index-data';
 // key
 import { TOKEN_KEY } from './src/constants/keys';
 
@@ -43,7 +43,13 @@ app.use(async (ctx, next) => {
   });
 });
 
-let unlessPathArr = ['/users/register', '/users/login', /^\/system/, /^\/news/];
+let unlessPathArr = [
+  '/users/register',
+  '/users/login',
+  /^\/system/,
+  /^\/news/,
+  /^\/index/
+];
 
 app.use(
   jwt({
@@ -89,7 +95,7 @@ app.use(school.routes(), school.allowedMethods());
 app.use(questionnaire.routes(), questionnaire.allowedMethods());
 app.use(voluntary.routes(), voluntary.allowedMethods());
 app.use(news.routes(), voluntary.allowedMethods());
-
+app.use(indexData.routes(), voluntary.allowedMethods());
 // error-handling
 app.on('error', (err, ctx) => {
   console.error('server error', err, ctx);

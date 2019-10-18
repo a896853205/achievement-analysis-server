@@ -17,7 +17,7 @@ export default {
   `,
   queryNewsProfileByType: `
     SELECT
-    uuid, type, createTime, comeFrom, viewTimes, title
+    uuid, type, createTime, comeFrom, viewTimes, title,profilePicUrl
     FROM
     t_news
     WHERE
