@@ -21,5 +21,9 @@ export default {
     return await db.query(
       new SqlObject(newsMapper.queryNewsProfileByType, [type, count])
     );
+  },
+
+  queryHotNewsProfile: async () => {
+    return await db.query(new SqlObject(newsMapper.queryHotNewsProfile));
   }
 };

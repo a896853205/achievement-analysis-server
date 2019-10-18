@@ -15,7 +15,25 @@ router.post('/getNewsDetail', async ctx => {
   });
 });
 
-router.post('/');
+router.post('/getRecommendNews', async ctx => {
+  const { type } = ctx.request.body;
+  /**
+   * 根据type返回7个推荐新闻
+   */
+  let RecommendNews = await newsService.queryRecommendNewsByType(type);
+
+  ctx.body = new Result({
+    data: RecommendNews
+  });
+});
+
+router.post('/getHotNews', async ctx => {
+  let HotNewsList = await newsService.queryHotNewsProfile();
+
+  ctx.body = new Result({
+    data: HotNewsList
+  });
+});
 // router.post('/getNewsProfileList', async ctx => {
 //   const { type, count } = ctx.request.body;
 //   /*

@@ -16,5 +16,19 @@ export default {
      * 返回包含指定数量的新闻的数组
      */
     return await newsDao.queryNewsProfileByType(type, count);
+  },
+
+  queryRecommendNewsByType: async type => {
+    /**
+     * 返回7个
+     */
+    return await newsDao.queryNewsProfileByType(type, 7);
+  },
+
+  queryHotNewsProfile: async () => {
+    /**
+     * 返回10个viewtimes次数最多
+     */
+    return await newsDao.queryHotNewsProfile();
   }
 };

@@ -27,5 +27,16 @@ export default {
     DESC
     LIMIT 
     ?
+  `,
+  queryHotNewsProfile: `
+    SELECT
+    uuid, type, createTime, comeFrom, viewTimes, title,profilePicUrl
+    FROM
+    t_news
+    ORDER BY
+    viewTimes
+    DESC
+    LIMIT 
+    10
   `
 };
