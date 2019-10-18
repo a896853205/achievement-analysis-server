@@ -15,6 +15,7 @@ router.post('/getNewsDetail', async ctx => {
   });
 });
 
+router.post('/');
 // router.post('/getNewsProfileList', async ctx => {
 //   const { type, count } = ctx.request.body;
 //   /*

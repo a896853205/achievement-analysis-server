@@ -1,6 +1,6 @@
 import Result from '../../util/response';
 import { request } from 'http';
-import IndexDataService from '../service/Indexdata-service';
+import IndexDataService from '../service/index-data-service';
 
 const router = require('koa-router')();
 

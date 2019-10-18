@@ -3,8 +3,8 @@ import newsDao from '../dao/news-dao';
 export default {
   getIndexData: async () => {
     let [
-      schoolNewslist,
-      majorNewslist,
+      schoolNewsList,
+      majorNewsList,
       studentReadNewsList,
       rankNewsList
     ] = await Promise.all([
@@ -20,8 +20,8 @@ export default {
 剩余三个未处理
   */
     return {
-      schoolNewslist,
-      majorNewslist,
+      schoolNewsList,
+      majorNewsList,
       studentReadNewsList,
       rankNewsList,
       courseList: [],
