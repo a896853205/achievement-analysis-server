@@ -11,7 +11,7 @@ export default {
       newsDao.queryNewsProfileByType(1, 4),
       newsDao.queryNewsProfileByType(2, 4),
       newsDao.queryNewsProfileByType(3, 5),
-      newsDao.queryNewsProfileByType(4, 4)
+      newsDao.queryNewsProfileByType(4, 3)
     ]);
     /**
   * 	
