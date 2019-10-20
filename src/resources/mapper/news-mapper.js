@@ -38,5 +38,28 @@ export default {
     DESC
     LIMIT 
     10
+  `,
+  queryMoreNews: `
+    SELECT
+    uuid, type, createTime, comeFrom, viewTimes, title,profilePicUrl
+    FROM
+    t_news
+    WHERE
+    type = ?
+    ORDER BY
+    viewTimes,createTime
+    DESC
+    LIMIT 
+    ?,20
+  `,
+  queryAllNewsByType: `
+    SELECT
+    *
+    FROM
+    t_news
+    WHERE
+   type = ?
+   
+    
   `
 };
