@@ -1,5 +1,5 @@
 import newsDao from '../dao/news-dao';
-import { RecommendNewsNum, PageNews } from '../constants/api-constants';
+import { RECOMMEND_NEWS_NUM, PAGE_NEWS } from '../constants/api-constants';
 export default {
   /**
    * 根据uuid查找新闻详细信息
@@ -22,7 +22,7 @@ export default {
     /**
      * 返回7个 RecommendNewsNum=7
      */
-    return await newsDao.queryNewsProfileByType(type, RecommendNewsNum);
+    return await newsDao.queryNewsProfileByType(type, RECOMMEND_NEWS_NUM);
   },
 
   queryHotNewsProfile: async () => {
@@ -43,13 +43,12 @@ export default {
    * 返回新闻条数
    */
   queryMaxPageByType: async type => {
-    let NewsList = await newsDao.queryAllNewsByType(type);
+    /**
+     * AllNewsNum
+     */
+    let allNewsNum = await newsDao.queryAllNewsNumByType(type);
+    let maxPage = Math.ceil(allNewsNum.totalNum / PAGE_NEWS);
 
-    let NewsListNum = await NewsList.length;
-
-    let MaxPage = NewsListNum / PageNews;
-    MaxPage = Math.ceil(MaxPage);
-
-    return await MaxPage;
+    return await maxPage;
   }
 };
