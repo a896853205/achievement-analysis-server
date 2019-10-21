@@ -1,7 +1,7 @@
 import { db, SqlObject } from '../resources/db-connect';
 
 import newsMapper from '../resources/mapper/news-mapper';
-
+import { PageNews } from '../constants/api-constants';
 export default {
   // 查询新闻通过该新闻的uuid
   selectNewsByuuid: async uuid => {
@@ -25,5 +25,17 @@ export default {
 
   queryHotNewsProfile: async () => {
     return await db.query(new SqlObject(newsMapper.queryHotNewsProfile));
+  },
+
+  queryAllNewsByType: async type => {
+    return await db.query(new SqlObject(newsMapper.queryAllNewsByType, [type]));
+  },
+
+  queryMoreNews: async (page, type) => {
+    page = await ((page - 1) * PageNews);
+
+    return await db.query(
+      new SqlObject(newsMapper.queryMoreNews, [type, page])
+    );
   }
 };

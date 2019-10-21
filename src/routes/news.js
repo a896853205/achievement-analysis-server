@@ -1,6 +1,7 @@
 import Result from '../../util/response';
 import { request } from 'http';
 import newsService from '../service/news-service';
+import { PageNews } from '../constants/api-constants';
 const router = require('koa-router')();
 
 router.prefix('/news');
@@ -32,6 +33,26 @@ router.post('/getHotNews', async ctx => {
 
   ctx.body = new Result({
     data: HotNewsList
+  });
+});
+
+router.post('/getMoreNews', async ctx => {
+  const { page, type } = ctx.request.body;
+  /**
+   * MaxPage是常量，代表一页多少条
+   * Maxpage为Pagemax
+   */
+  let MoreNewsList = await newsService.queryMoreNews(page, type);
+
+  let MaxPage = await newsService.queryMaxPageByType(type);
+  const MoreNews = {
+    MoreNewsList,
+    PageMax: MaxPage,
+    PageLength: PageNews
+  };
+
+  ctx.body = new Result({
+    data: MoreNews
   });
 });
 // router.post('/getNewsProfileList', async ctx => {
