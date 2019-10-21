@@ -48,7 +48,8 @@ let unlessPathArr = [
   '/users/login',
   /^\/system/,
   /^\/news/,
-  /^\/index/
+  /^\/index/,
+  '/school/getSchoolProfileDetail'
 ];
 
 app.use(

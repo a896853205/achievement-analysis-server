@@ -86,7 +86,11 @@ export default {
       scoreRange,
       { currentLotsScore, oldOneLotsScore, oldTwoLotsScore, oldThreeLotsScore }
     ] = await Promise.all([
-      schoolDao.querySchoolByLotIdAndAccountCategory(lotId, accountCategory, examYear),
+      schoolDao.querySchoolByLotIdAndAccountCategory(
+        lotId,
+        accountCategory,
+        examYear
+      ),
       schoolDao.queryScoreRankByCategoryAndYear(accountCategory, examYear),
       controlScoreRangeDao.queryScoreRangeByLotsId(lotId),
       schoolDao.queryLotsScore(examYear, accountCategory)
@@ -251,7 +255,11 @@ export default {
       scoreRange,
       { currentLotsScore, oldOneLotsScore, oldTwoLotsScore, oldThreeLotsScore }
     ] = await Promise.all([
-      schoolDao.querySchoolByLotIdAndAccountCategory(lotId, accountCategory, examYear),
+      schoolDao.querySchoolByLotIdAndAccountCategory(
+        lotId,
+        accountCategory,
+        examYear
+      ),
       schoolDao.querySchoolWithMajorByLotIdAndAccountCategory(
         lotId,
         accountCategory
@@ -414,5 +422,49 @@ export default {
     let schoolDetail = await schoolDao.selectSchoolDetail(schoolId);
 
     return schoolDetail;
+  },
+  getSchoolProfileDetail: async id => {
+    let school = await schoolDao.selectSchoolByid(id);
+
+    let schoolPropertyArr = school.map(
+      async item =>
+        await schoolDao.selectSchoolPropertyNameById(item.fk_school_property_id)
+    );
+
+    let {
+      code,
+      name,
+      fk_province_code,
+      fk_nature_id,
+      school_address,
+      school_phone,
+      school_intro,
+      campus,
+      rank
+    } = await schoolDao.selectSchoolInfoById(id);
+
+    let schoolProvince = await schoolDao.selectSchoolProvince(fk_province_code);
+    let Province = schoolProvince.name;
+
+    let schoolNature1 = await schoolDao.selectSchoolNature(fk_nature_id);
+    let schoolNature = schoolNature1.type;
+
+    let schoolType1 = await schoolDao.selectSchoolType(id);
+    let schoolType = schoolType1.fk_school_type_id;
+
+    let schoolTypeName1 = await schoolDao.selectSchoolTypeName(schoolType);
+    let schoolTypeName = schoolTypeName1.type;
+    return {
+      name,
+      school_address,
+      school_phone,
+      school_intro,
+      campus,
+      rank,
+      Province,
+      schoolNature,
+      schoolTypeName,
+      schoolPropertyArr
+    };
   }
 };

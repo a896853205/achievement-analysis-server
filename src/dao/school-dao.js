@@ -221,5 +221,46 @@ export default {
         disciplineCode
       ])
     ))[0];
+  },
+  /**
+   * 根据id得到院校id和985
+   */
+  selectSchoolByid: async id => {
+    return await db.query(new SqlObject(schoolMapper.selectSchoolByid, [id]));
+  },
+  selectSchoolPropertyNameById: async id => {
+    return (await db.query(
+      new SqlObject(schoolMapper.selectSchoolPropertyNameById, [id])
+    ))[0];
+  },
+
+  selectSchoolInfoById: async id => {
+    return (await db.query(
+      new SqlObject(schoolMapper.selectSchoolInfoById, [id])
+    ))[0];
+  },
+
+  selectSchoolProvince: async id => {
+    return (await db.query(
+      new SqlObject(schoolMapper.selectProvinceById, [id])
+    ))[0];
+  },
+
+  selectSchoolNature: async id => {
+    return (await db.query(
+      new SqlObject(schoolMapper.selectSchoolNature, [id])
+    ))[0];
+  },
+
+  selectSchoolType: async id => {
+    return (await db.query(
+      new SqlObject(schoolMapper.selectSchoolType, [id])
+    ))[0];
+  },
+
+  selectSchoolTypeName: async id => {
+    return (await db.query(
+      new SqlObject(schoolMapper.selectSchoolTypeName, [id])
+    ))[0];
   }
 };

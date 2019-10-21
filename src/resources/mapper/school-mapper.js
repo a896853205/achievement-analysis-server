@@ -517,7 +517,7 @@ a.accountCategory = ?;
 		WHERE
 		  fk_school_id = ?
 	`,
-	selectSchoolProperty: `
+  selectSchoolProperty: `
 		SELECT
 			*
 		FROM
@@ -527,7 +527,7 @@ a.accountCategory = ?;
 		ORDER BY
 		  fk_school_property_id
 	`,
-	selectSchoolBasicInfo: `
+  selectSchoolBasicInfo: `
 		SELECT
 			*
 		FROM
@@ -535,8 +535,8 @@ a.accountCategory = ?;
 		WHERE
 		  id = ?
 	`,
-	// 使用入学id查询优化专业码
-	selectDisciplineCodeByVoluntaryInfo: `
+  // 使用入学id查询优化专业码
+  selectDisciplineCodeByVoluntaryInfo: `
 		SELECT
 			sys_t_discipline.code
 		FROM
@@ -552,7 +552,7 @@ a.accountCategory = ?;
 		AND
 			major_index = ?
 		`,
-	selectMajorFuture: `
+  selectMajorFuture: `
 		SELECT
 			*
 		FROM
@@ -561,5 +561,65 @@ a.accountCategory = ?;
 			analysisId = ?
 		AND
 		  disciplineCode = ?
+	`,
+  selectSchoolByid: `
+			SELECT
+			fk_school_id,fk_school_property_id
+			FROM
+			merge_school_school_property
+			WHERE
+			id = ?
+			`,
+  selectSchoolPropertyNameById: `
+			SELECT
+			type
+			FROM
+			sys_t_school_property
+			WHERE
+			id = ?
+	`,
+  selectSchoolInfoById: `
+			SELECT
+			*
+			FROM
+			t_school
+			WHERE
+			id = ?
+	`,
+  selectProvinceById: `
+			SELECT
+			name
+			FROM
+			sys_t_province
+			WHERE
+			id = ?
+
+	`,
+
+  selectSchoolNature: `
+			SELECT
+			type
+			FROM
+			sys_t_school_nature
+			WHERE
+			id= ?
+	`,
+
+  selectSchoolType: `
+			SELECT
+			fk_school_type_id
+			FROM
+			merge_school_school_type
+			WHERE
+			fk_school_id = ?
+	`,
+
+  selectSchoolTypeName: `
+			SELECT
+			type
+			FROM
+			sys_t_school_type
+			WHERE
+			id = ?
 	`
 };

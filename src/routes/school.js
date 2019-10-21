@@ -117,4 +117,14 @@ router.post('/searchSchool', async ctx => {
   });
 });
 
+router.post('/getSchoolProfileDetail', async ctx => {
+  const { id } = ctx.request.body;
+
+  let schoolInfo = await schoolService.getSchoolProfileDetail(id);
+
+  ctx.body = new Result({
+    data: schoolInfo
+  });
+});
+
 export default router;
