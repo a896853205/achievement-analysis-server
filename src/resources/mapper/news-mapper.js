@@ -59,7 +59,14 @@ export default {
     t_news
     WHERE
    type = ?
-   
-    
+    `,
+
+  queryAllNewsNumByType: `
+    SELECT
+    COUNT(*) as totalNum
+    FROM
+    t_news
+    WHERE
+    type = ?
   `
 };
