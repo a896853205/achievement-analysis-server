@@ -262,5 +262,20 @@ export default {
     return (await db.query(
       new SqlObject(schoolMapper.selectSchoolTypeName, [id])
     ))[0];
+  },
+
+  querySchoolScores: async (fk_school_id, accountCategory) => {
+    return await db.query(
+      new SqlObject(schoolMapper.querySchoolScores, [
+        fk_school_id,
+        accountCategory
+      ])
+    );
+  },
+
+  selectSchoolLotsById: async id => {
+    return await db.query(
+      new SqlObject(schoolMapper.selectSchoolLotsById, [id])
+    );
   }
 };

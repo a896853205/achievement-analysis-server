@@ -50,7 +50,8 @@ let unlessPathArr = [
   /^\/news/,
   /^\/index/,
   '/school/getSchoolProfileDetail',
-  '/school/getSchoolDetail'
+  '/school/getSchoolDetail',
+  '/school/getSchoolScoreList'
 ];
 
 app.use(

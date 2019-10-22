@@ -621,5 +621,20 @@ a.accountCategory = ?;
 			sys_t_school_type
 			WHERE
 			id = ?
+	`,
+  querySchoolScores: `
+			SELECT
+			*
+			FROM
+			merge_school_lots
+			WHERE
+			fk_school_id = ? AND accountCategory = ?
+	`,
+  selectSchoolLotsById: `
+			SELECT
+			*
+			FROM
+			sys_t_lots
+			
 	`
 };

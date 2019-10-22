@@ -470,5 +470,43 @@ export default {
       schoolTypeName,
       schoolPropertyArr
     };
+  },
+
+  getSchoolScores: async (fk_school_id, accountCategory) => {
+    let [schoolList, lots_list] = await Promise.all([
+      schoolDao.querySchoolScores(fk_school_id, accountCategory),
+      schoolDao.selectSchoolLotsById()
+    ]);
+
+    let schoolScoreList = [];
+    let schoolScoreDaoList = [];
+
+    for (let item of schoolList) {
+      let lots_name;
+      let gradation;
+      let { fk_lots_id, score, year, gender, poverty, enrollment } = item;
+      for (let i of lots_list) {
+        if (i.id === fk_lots_id) {
+          lots_name = i.lots_name;
+          gradation = i.gradation;
+          break;
+        }
+      }
+      // let { lots_name, gradation } = await schoolDao.selectSchoolLotsById(
+      //   fk_lots_id
+      // );
+
+      schoolScoreList.push({
+        score,
+        year,
+        gender,
+        poverty,
+        enrollment,
+        lots_name,
+        gradation
+      });
+    }
+
+    return schoolScoreList;
   }
 };
