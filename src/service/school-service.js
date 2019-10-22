@@ -421,6 +421,10 @@ export default {
   getSchoolDetail: async schoolId => {
     let schoolDetail = await schoolDao.selectSchoolDetail(schoolId);
 
+    if (schoolDetail) {
+      schoolDetail.school_intro = schoolDetail.school_intro.substring(0, 100);
+    }
+
     return schoolDetail;
   },
   getSchoolProfileDetail: async id => {
