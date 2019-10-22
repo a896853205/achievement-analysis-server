@@ -427,26 +427,19 @@ export default {
 
     return schoolDetail;
   },
-  
+  // 通过学校的id和科目类型查询出历年分数
   getSchoolScores: async (fk_school_id, accountCategory) => {
-    let [schoolList, lots_list] = await Promise.all([
-      schoolDao.querySchoolScores(fk_school_id, accountCategory),
-      schoolDao.selectSchoolLots()
-    ]);
-
-    let schoolScoreList = [];
+    let [schoolList, lotsList] = await Promise.all([
+        schoolDao.querySchoolScores(fk_school_id, accountCategory),
+        schoolDao.selectSchoolLots()
+      ]),
+      schoolScoreList = [];
 
     for (let item of schoolList) {
-      let lots_name;
-      let gradation;
-      let { fk_lots_id, score, year, gender, poverty, enrollment } = item;
-      for (let i of lots_list) {
-        if (i.id === fk_lots_id) {
-          lots_name = i.lots_name;
-          gradation = i.gradation;
-          break;
-        }
-      }
+      let { fk_lots_id, score, year, gender, poverty, enrollment } = item,
+        { lots_name, gradation } = lotsList.find(
+          lotsItem => lotsItem.id === fk_lots_id
+        );
 
       schoolScoreList.push({
         score,
@@ -454,7 +447,7 @@ export default {
         gender,
         poverty,
         enrollment,
-        lots_name,
+        lotsName: lots_name,
         gradation
       });
     }
