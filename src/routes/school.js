@@ -117,4 +117,17 @@ router.post('/searchSchool', async ctx => {
   });
 });
 
+router.post('/getSchoolScoreList', async ctx => {
+  const { fk_school_id, accountCategory } = ctx.request.body;
+
+  let schoolScoreList = await schoolService.getSchoolScores(
+    fk_school_id,
+    accountCategory
+  );
+
+  ctx.body = new Result({
+    data: schoolScoreList
+  });
+});
+
 export default router;

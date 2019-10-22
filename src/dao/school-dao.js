@@ -221,5 +221,20 @@ export default {
         disciplineCode
       ])
     ))[0];
+  },
+
+  querySchoolScores: async (fk_school_id, accountCategory) => {
+    return await db.query(
+      new SqlObject(schoolMapper.querySchoolScores, [
+        fk_school_id,
+        accountCategory
+      ])
+    );
+  },
+
+  selectSchoolLots: async id => {
+    return await db.query(
+      new SqlObject(schoolMapper.selectSchoolLots, [id])
+    );
   }
 };

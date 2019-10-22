@@ -86,7 +86,11 @@ export default {
       scoreRange,
       { currentLotsScore, oldOneLotsScore, oldTwoLotsScore, oldThreeLotsScore }
     ] = await Promise.all([
-      schoolDao.querySchoolByLotIdAndAccountCategory(lotId, accountCategory, examYear),
+      schoolDao.querySchoolByLotIdAndAccountCategory(
+        lotId,
+        accountCategory,
+        examYear
+      ),
       schoolDao.queryScoreRankByCategoryAndYear(accountCategory, examYear),
       controlScoreRangeDao.queryScoreRangeByLotsId(lotId),
       schoolDao.queryLotsScore(examYear, accountCategory)
@@ -251,7 +255,11 @@ export default {
       scoreRange,
       { currentLotsScore, oldOneLotsScore, oldTwoLotsScore, oldThreeLotsScore }
     ] = await Promise.all([
-      schoolDao.querySchoolByLotIdAndAccountCategory(lotId, accountCategory, examYear),
+      schoolDao.querySchoolByLotIdAndAccountCategory(
+        lotId,
+        accountCategory,
+        examYear
+      ),
       schoolDao.querySchoolWithMajorByLotIdAndAccountCategory(
         lotId,
         accountCategory
@@ -413,6 +421,44 @@ export default {
   getSchoolDetail: async schoolId => {
     let schoolDetail = await schoolDao.selectSchoolDetail(schoolId);
 
+    if (schoolDetail) {
+      schoolDetail.school_intro = schoolDetail.school_intro.substring(0, 100);
+    }
+
     return schoolDetail;
+  },
+  
+  getSchoolScores: async (fk_school_id, accountCategory) => {
+    let [schoolList, lots_list] = await Promise.all([
+      schoolDao.querySchoolScores(fk_school_id, accountCategory),
+      schoolDao.selectSchoolLots()
+    ]);
+
+    let schoolScoreList = [];
+
+    for (let item of schoolList) {
+      let lots_name;
+      let gradation;
+      let { fk_lots_id, score, year, gender, poverty, enrollment } = item;
+      for (let i of lots_list) {
+        if (i.id === fk_lots_id) {
+          lots_name = i.lots_name;
+          gradation = i.gradation;
+          break;
+        }
+      }
+
+      schoolScoreList.push({
+        score,
+        year,
+        gender,
+        poverty,
+        enrollment,
+        lots_name,
+        gradation
+      });
+    }
+
+    return schoolScoreList;
   }
 };
