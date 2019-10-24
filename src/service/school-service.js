@@ -436,7 +436,15 @@ export default {
       schoolScoreList = [];
 
     for (let item of schoolList) {
-      let { fk_lots_id, score, year, gender, poverty, enrollment } = item,
+      let {
+          fk_lots_id,
+          score,
+          year,
+          gender,
+          poverty,
+          enrollment,
+          maxScore
+        } = item,
         { lots_name, gradation } = lotsList.find(
           lotsItem => lotsItem.id === fk_lots_id
         );
@@ -448,7 +456,8 @@ export default {
         poverty,
         enrollment,
         lotsName: lots_name,
-        gradation
+        gradation,
+        maxScore
       });
     }
 
