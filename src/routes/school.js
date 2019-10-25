@@ -130,4 +130,19 @@ router.post('/getSchoolScoreList', async ctx => {
   });
 });
 
+/**
+ * 根据学校id查询招生简章等信息
+ */
+router.post('/getEnrollmentGuideNews', async ctx => {
+  const { schoolId } = ctx.request.body;
+
+  let schoolEnrollment = await schoolService.selectSchoolEnrollmentGuideNewsById(
+    schoolId
+  );
+
+  ctx.body = new Result({
+    data: schoolEnrollment
+  });
+});
+
 export default router;

@@ -575,5 +575,13 @@ a.accountCategory = ?;
 			*
 			FROM
 			sys_t_lots	
-	`
+	`,
+  selectSchoolEnrollmentGuideNewsById: `
+    SELECT
+    *
+    FROM
+    t_school_enrollment_guide_news
+    WHERE
+    fk_school_id = ?
+  `
 };

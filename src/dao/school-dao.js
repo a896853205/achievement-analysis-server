@@ -233,8 +233,13 @@ export default {
   },
 
   selectSchoolLots: async id => {
+    return await db.query(new SqlObject(schoolMapper.selectSchoolLots, [id]));
+  },
+  selectSchoolEnrollmentGuideNewsById: async fk_school_id => {
     return await db.query(
-      new SqlObject(schoolMapper.selectSchoolLots, [id])
+      new SqlObject(schoolMapper.selectSchoolEnrollmentGuideNewsById, [
+        fk_school_id
+      ])
     );
   }
 };

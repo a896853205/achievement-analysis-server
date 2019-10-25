@@ -462,5 +462,12 @@ export default {
     }
 
     return schoolScoreList;
+  },
+
+  /**
+   * 返回招生简章的数组
+   */
+  selectSchoolEnrollmentGuideNewsById: async fk_school_id => {
+    return await schoolDao.selectSchoolEnrollmentGuideNewsById(fk_school_id);
   }
 };
