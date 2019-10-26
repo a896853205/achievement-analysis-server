@@ -419,11 +419,16 @@ a.accountCategory = ?;
 		AND
 		(year=? OR year=? OR year=? OR year=?)
 	`,
-  querySchoolDetail: `select 
+	querySchoolDetail: `
+	select 
 	a.id as school_id,
 	a.code as school_code,
 	a.name as school_name,
 	a.fk_province_code as province_code,
+	a.masterNum as masterNum,
+	a.doctorNum as doctorNum,
+	a.englishTitle as englishTitle,
+	a.schoolCreateTime as schoolCreateTime,
 	b.name as province_name,
 	a.school_address,
 	a.school_phone,
@@ -529,7 +534,7 @@ a.accountCategory = ?;
 	`,
   selectSchoolBasicInfo: `
 		SELECT
-			*
+			name,fk_province_code,fk_nature_id,school_address,school_phone,school_intro,campus,rank,masterNum,doctorNum,englishTitle,schoolCreateTime
 		FROM
 			t_school
 		WHERE
@@ -578,14 +583,14 @@ a.accountCategory = ?;
 	`,
   selectSchoolEnrollmentGuideNewsById: `
     SELECT
-    *
+    uuid,createTime,viewTimes,title
     FROM
     t_school_enrollment_guide_news
     WHERE
     fk_school_id = ?
 	`,
-	// 通过年份查询当年分数和位次
-	queryLotsScoreByCurrentYear:`
+  // 通过年份查询当年分数和位次
+  queryLotsScoreByCurrentYear: `
 		SELECT
 		*
 		FROM
@@ -593,6 +598,11 @@ a.accountCategory = ?;
 		WHERE
 		year = ?
 		AND
-		accountCategory = ?
+		accountCategory = ?`,
+  queryMajor: `
+		SELECT
+		*
+		FROM
+		sys_t_major_category
 	`
 };

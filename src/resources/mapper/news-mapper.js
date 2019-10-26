@@ -69,12 +69,5 @@ export default {
     WHERE
     type = ?
   `,
-  selectSchoolEnrollmentById: `
-    SELECT
-    *
-    FROM
-    t_school_enrollment_guide_news
-    WHERE
-    fk_school_id = ?
-  `
+  
 };
