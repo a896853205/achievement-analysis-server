@@ -145,4 +145,17 @@ router.post('/getEnrollmentGuideNews', async ctx => {
   });
 });
 
+/**
+ * 根据id查询学校排名
+ */
+router.post('/getSchoolRank', async ctx => {
+  const { schoolId } = ctx.request.body;
+
+  let schoolRank = await schoolService.selectSchoolRankById(schoolId);
+
+  ctx.body = new Result({
+    data: schoolRank
+  });
+});
+
 export default router;

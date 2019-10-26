@@ -594,5 +594,14 @@ a.accountCategory = ?;
 			*
 			FROM
 			sys_t_major_category
+	`,
+
+  selectSchoolRankById: `
+		SELECT 
+		ruankeRank,schoolFriendRank,qsRank,usnewsRank,\`rank\`
+		FROM
+		t_school
+		WHERE
+		id = ?
 	`
 };
