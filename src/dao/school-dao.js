@@ -167,6 +167,16 @@ export default {
     };
   },
 
+  // 根据年份查询所有分数和对应位次
+  queryLotsScoreByCurrentYear: async (year, accountCategory) => {
+    return await db.query(
+      new SqlObject(schoolMapper.queryLotsScoreByCurrentYear, [
+        year,
+        accountCategory
+      ])
+    );
+  },
+
   // 查询学校的类型通过学校id
   selectSchoolType: async id => {
     let schoolTypeList = await db.query(
@@ -235,6 +245,7 @@ export default {
   selectSchoolLots: async id => {
     return await db.query(new SqlObject(schoolMapper.selectSchoolLots, [id]));
   },
+
   selectSchoolEnrollmentGuideNewsById: async fk_school_id => {
     return await db.query(
       new SqlObject(schoolMapper.selectSchoolEnrollmentGuideNewsById, [

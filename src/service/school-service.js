@@ -17,7 +17,8 @@ import {
 import {
   proxyParseToOldScore,
   culLineDifferStrategies,
-  bindScoreAndRank
+  bindScoreAndRank,
+  calScoreTransformRank
 } from './rank-filtrate';
 
 /**
@@ -421,10 +422,6 @@ export default {
   getSchoolDetail: async schoolId => {
     let schoolDetail = await schoolDao.selectSchoolDetail(schoolId);
 
-    if (schoolDetail) {
-      schoolDetail.school_intro = schoolDetail.school_intro.substring(0, 100);
-    }
-
     return schoolDetail;
   },
   // 通过学校的id和科目类型查询出历年分数
@@ -433,7 +430,8 @@ export default {
         schoolDao.querySchoolScores(fk_school_id, accountCategory),
         schoolDao.selectSchoolLots()
       ]),
-      schoolScoreList = [];
+      schoolScoreList = [],
+      scoreAndRankDao = [];
 
     for (let item of schoolList) {
       let {
@@ -449,6 +447,10 @@ export default {
           lotsItem => lotsItem.id === fk_lots_id
         );
 
+      scoreAndRankDao.push(
+        schoolDao.queryLotsScoreByCurrentYear(year, accountCategory)
+      );
+
       schoolScoreList.push({
         score,
         year,
@@ -459,6 +461,20 @@ export default {
         gradation,
         maxScore
       });
+    }
+
+    // 将当年的最低位次放在数组中
+    let socreAndRank = await Promise.all(scoreAndRankDao);
+    
+    for (let i = 0; i < schoolScoreList.length; i++) {
+      let fitCurrent = calScoreTransformRank(
+        schoolScoreList[i].score,
+        socreAndRank[i]
+      );
+
+      if (fitCurrent) {
+        schoolScoreList[i].lastRank = fitCurrent.rank;
+      }
     }
 
     return schoolScoreList;

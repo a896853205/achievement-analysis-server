@@ -274,3 +274,20 @@ export const culLineDifferStrategies = {
     return score - lotsScore.filter(item => item.fk_lots_id === 7)[0].score;
   }
 };
+
+export const calScoreTransformRank = (score, currentRank = []) => {
+  let fitCurrent = null;
+
+  currentRank.sort((one, two) => {
+    return two.score - one.score;
+  });
+
+  for (let currentItem of currentRank) {
+    if (score >= currentItem.score) {
+      fitCurrent = currentItem;
+      break;
+    }
+  }
+  
+  return fitCurrent;
+};

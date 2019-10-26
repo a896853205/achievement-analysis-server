@@ -583,5 +583,16 @@ a.accountCategory = ?;
     t_school_enrollment_guide_news
     WHERE
     fk_school_id = ?
-  `
+	`,
+	// 通过年份查询当年分数和位次
+	queryLotsScoreByCurrentYear:`
+		SELECT
+		*
+		FROM
+		t_rank
+		WHERE
+		year = ?
+		AND
+		accountCategory = ?
+	`
 };
