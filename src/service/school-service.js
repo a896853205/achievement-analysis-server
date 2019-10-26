@@ -488,5 +488,14 @@ export default {
   },
   selectSchoolRankById: async id => {
     return await schoolDao.selectSchoolRankById(id);
+  },
+  selectEnrollmentGuideNewsDetail: async enrollmentGuideNewsUuid => {
+    let guideNewsDetail = await schoolDao.selectEnrollmentGuideNewsDetail(enrollmentGuideNewsUuid)
+    
+    if (guideNewsDetail) {
+      await schoolDao.updateAddEnrollmentGuideViews(enrollmentGuideNewsUuid);
+    }
+    
+    return guideNewsDetail;
   }
 };

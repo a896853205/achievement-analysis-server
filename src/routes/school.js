@@ -146,6 +146,21 @@ router.post('/getEnrollmentGuideNews', async ctx => {
 });
 
 /**
+ * 根据招生简章的uuid查询招生简章
+ */
+router.post('/getEnrollmentGuideNewsDetail', async ctx => {
+  const { uuid } = ctx.request.body;
+
+  let enrollmentGuideNewsDetail = await schoolService.selectEnrollmentGuideNewsDetail(
+    uuid
+  );
+
+  ctx.body = new Result({
+    data: enrollmentGuideNewsDetail
+  });
+});
+
+/**
  * 根据id查询学校排名
  */
 router.post('/getSchoolRank', async ctx => {

@@ -612,5 +612,21 @@ a.accountCategory = ?;
 		t_school
 		WHERE
 		id = ?
+	`,
+	selectEnrollmentGuideNewsDetail: `
+		SELECT
+		title,content,viewTimes
+		FROM
+		t_school_enrollment_guide_news
+		WHERE
+		uuid = ?
+	`,
+	updateAddEnrollmentGuideViews: `
+		UPDATE
+		t_school_enrollment_guide_news
+		SET
+		viewTimes= viewTimes + 1
+		WHERE
+		uuid = ?
 	`
 };

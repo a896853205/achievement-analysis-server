@@ -260,5 +260,22 @@ export default {
     return (await db.query(
       new SqlObject(schoolMapper.selectSchoolRankById, [id])
     ))[0];
+  },
+  /**
+   * 通过
+   */
+  selectEnrollmentGuideNewsDetail: async guideNewsUuid => {
+    return (await db.query(
+      new SqlObject(schoolMapper.selectEnrollmentGuideNewsDetail, [
+        guideNewsUuid
+      ])
+    ))[0];
+  },
+  updateAddEnrollmentGuideViews: async enrollmentGuideNewsUuid => {
+    return (await db.query(
+      new SqlObject(schoolMapper.updateAddEnrollmentGuideViews, [
+        enrollmentGuideNewsUuid
+      ])
+    ))[0];
   }
 };
