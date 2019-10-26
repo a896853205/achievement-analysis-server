@@ -16,6 +16,7 @@ import questionnaire from './src/routes/questionnaire';
 import voluntary from './src/routes/voluntary';
 import news from './src/routes/news';
 import indexData from './src/routes/index-data';
+import major from './src/routes/major';
 // key
 import { TOKEN_KEY } from './src/constants/keys';
 
@@ -100,6 +101,7 @@ app.use(questionnaire.routes(), questionnaire.allowedMethods());
 app.use(voluntary.routes(), voluntary.allowedMethods());
 app.use(news.routes(), voluntary.allowedMethods());
 app.use(indexData.routes(), voluntary.allowedMethods());
+app.use(major.routes(), voluntary.allowedMethods());
 // error-handling
 app.on('error', (err, ctx) => {
   console.error('server error', err, ctx);

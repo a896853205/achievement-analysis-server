@@ -424,6 +424,11 @@ a.accountCategory = ?;
 	a.code as school_code,
 	a.name as school_name,
 	a.fk_province_code as province_code,
+	a.rank as school_rank,
+	a.masterNum as school_masterNum,
+	a.doctorNum as school_doctorNum,
+	a.englishTitle as school_englishTitle,
+	a.schoolCreateTime as school_schoolCreateTime,
 	b.name as province_name,
 	a.school_address,
 	a.school_phone,
@@ -529,7 +534,7 @@ a.accountCategory = ?;
 	`,
   selectSchoolBasicInfo: `
 		SELECT
-			*
+			name,fk_province_code,fk_nature_id,school_address,school_phone,school_intro,campus,rank,masterNum,doctorNum,englishTitle,schoolCreateTime
 		FROM
 			t_school
 		WHERE
@@ -578,10 +583,16 @@ a.accountCategory = ?;
 	`,
   selectSchoolEnrollmentGuideNewsById: `
     SELECT
-    *
+    uuid,createTime,viewTimes,title
     FROM
     t_school_enrollment_guide_news
     WHERE
     fk_school_id = ?
-  `
+	`,
+  queryMajor: `
+			SELECT
+			*
+			FROM
+			sys_t_major_category
+	`
 };

@@ -421,10 +421,6 @@ export default {
   getSchoolDetail: async schoolId => {
     let schoolDetail = await schoolDao.selectSchoolDetail(schoolId);
 
-    if (schoolDetail) {
-      schoolDetail.school_intro = schoolDetail.school_intro.substring(0, 100);
-    }
-
     return schoolDetail;
   },
   // 通过学校的id和科目类型查询出历年分数
