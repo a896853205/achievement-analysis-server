@@ -252,5 +252,13 @@ export default {
         fk_school_id
       ])
     );
+  },
+  /**
+   * 根据id查询学校排名
+   */
+  selectSchoolRankById: async id => {
+    return (await db.query(
+      new SqlObject(schoolMapper.selectSchoolRankById, [id])
+    ))[0];
   }
 };
