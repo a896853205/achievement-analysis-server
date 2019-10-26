@@ -55,7 +55,8 @@ let unlessPathArr = [
   '/school/getSchoolScoreList',
   '/school/getEnrollmentGuideNews',
   '/school/getSchoolRank',
-  '/school/getEnrollmentGuideNewsDetail'
+  '/school/getEnrollmentGuideNewsDetail',
+  '/major/getMajorCategory'
 ];
 
 app.use(

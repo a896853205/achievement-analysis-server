@@ -419,7 +419,7 @@ a.accountCategory = ?;
 		AND
 		(year=? OR year=? OR year=? OR year=?)
 	`,
-	querySchoolDetail: `
+  querySchoolDetail: `
 	select 
 	a.id as school_id,
 	a.code as school_code,
@@ -599,9 +599,9 @@ a.accountCategory = ?;
 		year = ?
 		AND
 		accountCategory = ?`,
-  queryMajor: `
+  queryMajorLevelTwo: `
 		SELECT
-		*
+		major_level_two_code,major_name,major_level_one_code,major_category_code
 		FROM
 		sys_t_major_category
 	`,
