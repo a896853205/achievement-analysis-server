@@ -39,5 +39,46 @@ export default {
     }
 
     return majorCategory;
+  },
+
+  selectMajorDetailByid: async ID => {
+    let {
+      major_name,
+      major_level_one_code,
+      major_category_code,
+      id
+    } = await majorDao.selectMajorNameById(ID);
+
+    let majorLevelOne = await majorDao.selectMajorLevelOneName(
+      major_level_one_code
+    );
+    let majorLevelOneName = majorLevelOne.name;
+
+    let majorCategory = await majorDao.selectMajorCategoryName(
+      major_category_code
+    );
+    let majorCategoryName = majorCategory.name;
+
+    let {
+      major_intro,
+      study_threshold,
+      main_course,
+      postgraduate_intro,
+      graduate_destination
+    } = await majorDao.selectMajorIntroById(id);
+
+    let { education_system } = await majorDao.selectMajorSystemById(id);
+
+    return {
+      major_name,
+      majorLevelOneName,
+      majorCategoryName,
+      major_intro,
+      study_threshold,
+      main_course,
+      postgraduate_intro,
+      graduate_destination,
+      education_system
+    };
   }
 };
