@@ -419,6 +419,7 @@ a.accountCategory = ?;
 		AND
 		(year=? OR year=? OR year=? OR year=?)
 	`,
+	// 根据学校id查询学校基本情况
   querySchoolDetail: `
 	select 
 	a.id as school_id,
@@ -434,6 +435,7 @@ a.accountCategory = ?;
 	a.school_phone,
 	a.school_intro,
 	a.fk_nature_id as school_nature_id,
+	a.logoName,
 	c.type as school_nature_name,
 	d.area_feature_id,
 	d.area_feature_name,
