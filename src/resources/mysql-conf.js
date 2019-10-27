@@ -36,7 +36,7 @@ if (SAP_CONTROL === ENVIRONMENT.DEV) {
 } else {
   // 生产环境域名
   dbConfig = {
-    host: '62.234.76.58',
+    host: 'localhost',
     user: 'root',
     password: DATA_BASE_KEY,
     database: 'college',
