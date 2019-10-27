@@ -51,22 +51,9 @@ export default {
         major_category_code: majorCategoryCode,
         id
       } = await majorDao.selectMajorNameById(majorTwoCode),
-      [
-        majorLevelOne,
-        majorCategory,
-        {
-          major_intro: majorIntro,
-          study_threshold: studyThreshold,
-          main_course: mainCourse,
-          postgraduate_intro: postgraduateIntro,
-          graduate_destination: graduateDestination
-        },
-        { education_system: educationSystem }
-      ] = await Promise.all([
+      [majorLevelOne, majorCategory] = await Promise.all([
         majorDao.selectMajorLevelOneByCode(majorLevelOneCode),
-        majorDao.selectMajorCategoryByCode(majorCategoryCode),
-        majorDao.selectMajorIntroById(id),
-        majorDao.selectMajorSystemById(id)
+        majorDao.selectMajorCategoryByCode(majorCategoryCode)
       ]),
       majorLevelOneName = '',
       majorCategoryName = '';
@@ -79,7 +66,26 @@ export default {
     return {
       majorName,
       majorLevelOneName,
-      majorCategoryName,
+      majorCategoryName
+    };
+  },
+  selectMajorDetail: async majorTwoCode => {
+    let { id } = await majorDao.selectMajorNameById(majorTwoCode),
+      [
+        {
+          major_intro: majorIntro,
+          study_threshold: studyThreshold,
+          main_course: mainCourse,
+          postgraduate_intro: postgraduateIntro,
+          graduate_destination: graduateDestination
+        },
+        { education_system: educationSystem }
+      ] = await Promise.all([
+        majorDao.selectMajorIntroById(id),
+        majorDao.selectMajorSystemById(id)
+      ]);
+
+    return {
       majorIntro,
       studyThreshold,
       mainCourse,
@@ -87,5 +93,30 @@ export default {
       graduateDestination,
       educationSystem
     };
+  },
+  queryHotMajors: async () => {
+    let hotMajors = await majorDao.queryHotMajors();
+    console.log(hotMajors);
+    let HotMajors = [];
+
+    for (let item of hotMajors) {
+      let { fk_major_id } = await majorDao.selectMajorEnrollmentId(
+        item.fk_enrollment_id
+      );
+      let {
+        major_level_two_code,
+        major_name
+      } = await majorDao.selectHotMajorDetail(fk_major_id);
+      if (major_level_two_code) {
+        HotMajors.push({ major_level_two_code, major_name });
+      } else {
+        continue;
+      }
+      if (HotMajors.length === 7) {
+        break;
+      }
+    }
+
+    return HotMajors;
   }
 };

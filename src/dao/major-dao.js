@@ -39,5 +39,18 @@ export default {
     return (await db.query(
       new SqlObject(majorMapper.selectMajorSystemById, [id])
     ))[0];
+  },
+  queryHotMajors: async () => {
+    return await db.query(new SqlObject(majorMapper.queryHotMajors));
+  },
+  selectMajorEnrollmentId: async id => {
+    return (await db.query(
+      new SqlObject(majorMapper.selectMajorEnrollmentId, [id])
+    ))[0];
+  },
+  selectHotMajorDetail: async id => {
+    return (await db.query(
+      new SqlObject(majorMapper.selectHotMajorDetail, [id])
+    ))[0];
   }
 };

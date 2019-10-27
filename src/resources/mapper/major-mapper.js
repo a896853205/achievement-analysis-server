@@ -66,5 +66,34 @@ export default {
     WHERE
     fk_major_id = ?
 
+  `,
+  queryHotMajors: `
+    SELECT
+    COUNT(fk_enrollment_id),fk_enrollment_id
+    FROM
+    t_user_voluntary_result
+    GROUP BY
+    fk_enrollment_id
+    ORDER BY 
+    COUNT(fk_enrollment_id)
+    LIMIT
+    50
+
+  `,
+  selectMajorEnrollmentId: `
+    SELECT
+    fk_major_id
+    FROM
+    t_major_enrollment_info
+    WHERE
+    id = ?
+  `,
+  selectHotMajorDetail: `
+    SELECT
+    major_level_two_code,major_name
+    FROM
+      sys_t_major
+      WHERE
+       id = ?
   `
 };

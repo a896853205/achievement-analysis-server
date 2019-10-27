@@ -13,7 +13,7 @@ router.post('/getMajorCategory', async ctx => {
   });
 });
 
-router.post('/getMajorDetail', async ctx => {
+router.post('/getMajorProfile', async ctx => {
   const { major_level_two_code } = ctx.request.body;
 
   let majorDetail = await majorService.selectMajorDetailByid(
@@ -24,5 +24,21 @@ router.post('/getMajorDetail', async ctx => {
     data: majorDetail
   });
 });
+router.post('/getMajorDetail', async ctx => {
+  const { major_level_two_code } = ctx.request.body;
 
+  let majorDetail = await majorService.selectMajorDetail(major_level_two_code);
+
+  ctx.body = new Result({
+    data: majorDetail
+  });
+});
+
+router.post('/getHotMajors', async ctx => {
+  let hotMajors = await majorService.queryHotMajors();
+
+  ctx.body = new Result({
+    data: hotMajors
+  });
+});
 export default router;
