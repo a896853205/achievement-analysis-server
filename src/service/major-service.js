@@ -42,5 +42,50 @@ export default {
     }
 
     return majorCategory;
+  },
+
+  selectMajorDetailByid: async majorTwoCode => {
+    let {
+        major_name: majorName,
+        major_level_one_code: majorLevelOneCode,
+        major_category_code: majorCategoryCode,
+        id
+      } = await majorDao.selectMajorNameById(majorTwoCode),
+      [
+        majorLevelOne,
+        majorCategory,
+        {
+          major_intro: majorIntro,
+          study_threshold: studyThreshold,
+          main_course: mainCourse,
+          postgraduate_intro: postgraduateIntro,
+          graduate_destination: graduateDestination
+        },
+        { education_system: educationSystem }
+      ] = await Promise.all([
+        majorDao.selectMajorLevelOneByCode(majorLevelOneCode),
+        majorDao.selectMajorCategoryByCode(majorCategoryCode),
+        majorDao.selectMajorIntroById(id),
+        majorDao.selectMajorSystemById(id)
+      ]),
+      majorLevelOneName = '',
+      majorCategoryName = '';
+
+    if (majorLevelOne) {
+      majorLevelOneName = majorLevelOne.name;
+      majorCategoryName = majorCategory.name;
+    }
+
+    return {
+      majorName,
+      majorLevelOneName,
+      majorCategoryName,
+      majorIntro,
+      studyThreshold,
+      mainCourse,
+      postgraduateIntro,
+      graduateDestination,
+      educationSystem
+    };
   }
 };

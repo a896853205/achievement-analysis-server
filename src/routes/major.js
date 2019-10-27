@@ -13,4 +13,16 @@ router.post('/getMajorCategory', async ctx => {
   });
 });
 
+router.post('/getMajorDetail', async ctx => {
+  const { major_level_two_code } = ctx.request.body;
+
+  let majorDetail = await majorService.selectMajorDetailByid(
+    major_level_two_code
+  );
+
+  ctx.body = new Result({
+    data: majorDetail
+  });
+});
+
 export default router;

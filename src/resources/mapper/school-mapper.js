@@ -601,12 +601,8 @@ a.accountCategory = ?;
 		year = ?
 		AND
 		accountCategory = ?`,
-  queryMajorLevelTwo: `
-		SELECT
-		major_level_two_code,major_name,major_level_one_code,major_category_code
-		FROM
-		sys_t_major_category
-	`,
+ 
+
   selectSchoolRankById: `
 		SELECT 
 		ruankeRank,schoolFriendRank,qsRank,usnewsRank,\`rank\`
