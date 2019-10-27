@@ -48,8 +48,7 @@ export default {
     let {
         major_name: majorName,
         major_level_one_code: majorLevelOneCode,
-        major_category_code: majorCategoryCode,
-        id
+        major_category_code: majorCategoryCode
       } = await majorDao.selectMajorNameById(majorTwoCode),
       [majorLevelOne, majorCategory] = await Promise.all([
         majorDao.selectMajorLevelOneByCode(majorLevelOneCode),
@@ -96,7 +95,7 @@ export default {
   },
   queryHotMajors: async () => {
     let hotMajors = await majorDao.queryHotMajors();
-    console.log(hotMajors);
+
     let HotMajors = [];
 
     for (let item of hotMajors) {
@@ -107,12 +106,14 @@ export default {
         major_level_two_code,
         major_name
       } = await majorDao.selectHotMajorDetail(fk_major_id);
+
       if (major_level_two_code) {
         HotMajors.push({ major_level_two_code, major_name });
       } else {
         continue;
       }
-      if (HotMajors.length === 7) {
+
+      if (HotMajors.length >= 7) {
         break;
       }
     }

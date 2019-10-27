@@ -14,20 +14,21 @@ router.post('/getMajorCategory', async ctx => {
 });
 
 router.post('/getMajorProfile', async ctx => {
-  const { major_level_two_code } = ctx.request.body;
+  const { majorTwoCode } = ctx.request.body;
 
   let majorDetail = await majorService.selectMajorDetailByid(
-    major_level_two_code
+    majorTwoCode
   );
 
   ctx.body = new Result({
     data: majorDetail
   });
 });
-router.post('/getMajorDetail', async ctx => {
-  const { major_level_two_code } = ctx.request.body;
 
-  let majorDetail = await majorService.selectMajorDetail(major_level_two_code);
+router.post('/getMajorDetail', async ctx => {
+  const { majorTwoCode } = ctx.request.body;
+
+  let majorDetail = await majorService.selectMajorDetail(majorTwoCode);
 
   ctx.body = new Result({
     data: majorDetail
