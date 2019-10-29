@@ -266,9 +266,8 @@ a.accountCategory = ?;
 		select 
 		a.id as major_id,
 		a.major_name,
-		a.major_code,
-		a.comment,
-		a.fk_major_category_id as major_category_id
+		a.major_level_two_code,
+		a.comment
 		from
 		sys_t_major a
 	) as c
