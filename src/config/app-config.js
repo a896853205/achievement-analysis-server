@@ -6,7 +6,7 @@ import { ENVIRONMENT } from '../constants/app-constants';
 export const SAP_CONTROL = ENVIRONMENT.PRO;  // 生产环境
 
 // 项目版本号
-export const kAppVersion = 'v1.0.0';
+export const kAppVersion = 'v0.0.6';
 
 /*
     项目内部版本号
@@ -14,4 +14,4 @@ export const kAppVersion = 'v1.0.0';
          99.99.99 版本为   999999000
          后三位为打包测试时使用 每打包一次+1
  */
-export const kAPPInfo_Appversion = '10000005';
+export const kAPPInfo_Appversion = '00000006';
