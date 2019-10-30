@@ -359,15 +359,12 @@ export default {
       resultSchoolList
     );
 
-    let len = resultSchoolList.length;
-    let resultList = [];
-
-    for (let i = 0; i < len; i = i + PAGE_SCHOOL) {
-      resultList.push(resultSchoolList.slice(i, i + PAGE_SCHOOL));
-    }
-
     return {
-      schoolList: { resultList: resultList[page - 1], totalSchool: len }
+      schoolList: resultSchoolList.slice(
+        (page - 1) * PAGE_SCHOOL,
+        (page - 1) * PAGE_SCHOOL + PAGE_SCHOOL
+      ),
+      totalSchool: resultSchoolList.length
     };
   },
 
