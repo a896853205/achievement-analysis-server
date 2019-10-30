@@ -277,5 +277,23 @@ export default {
         enrollmentGuideNewsUuid
       ])
     ))[0];
+  },
+
+  querySchoolAll: async schoolName => {
+    // new SqlObject(schoolMapper.querySchool, [`%${schoolName}%`])
+    return await db.query(
+      new SqlObject(schoolMapper.querySchoolAll, [`%${schoolName}%`])
+    );
+  },
+  querySchoolPropertyIdById: async fk_school_id => {
+    return await db.query(
+      new SqlObject(schoolMapper.querySchoolPropertyIdById, [fk_school_id])
+    );
+  },
+  selectSchoolProperty: async () => {
+    return await db.query(new SqlObject(schoolMapper.selectSchoolPropertyById));
+  },
+  selectSchoolNature: async () => {
+    return await db.query(new SqlObject(schoolMapper.selectSchoolNatureById));
   }
 };

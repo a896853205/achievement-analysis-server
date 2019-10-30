@@ -1,7 +1,7 @@
 // dao
 import schoolDao from '../dao/school-dao';
 import controlScoreRangeDao from '../dao/control-score-range-dao';
-
+import { PAGE_SCHOOL } from '../constants/api-constants';
 // 筛选算法
 import {
   filtrateNatureSchool,
@@ -339,7 +339,8 @@ export default {
     propertyValues,
     typeValues,
     areaFeatureValues,
-    schoolName
+    schoolName,
+    page
   }) => {
     let resultSchoolList = await schoolDao.querySchool(schoolName);
 
@@ -358,8 +359,15 @@ export default {
       resultSchoolList
     );
 
+    let len = resultSchoolList.length;
+    let resultList = [];
+
+    for (let i = 0; i < len; i = i + PAGE_SCHOOL) {
+      resultList.push(resultSchoolList.slice(i, i + PAGE_SCHOOL));
+    }
+
     return {
-      schoolList: resultSchoolList
+      schoolList: { resultList: resultList[page - 1], totalSchool: len }
     };
   },
 
@@ -465,7 +473,7 @@ export default {
 
     // 将当年的最低位次放在数组中
     let socreAndRank = await Promise.all(scoreAndRankDao);
-    
+
     for (let i = 0; i < schoolScoreList.length; i++) {
       let fitCurrent = calScoreTransformRank(
         schoolScoreList[i].score,
@@ -490,12 +498,14 @@ export default {
     return await schoolDao.selectSchoolRankById(id);
   },
   selectEnrollmentGuideNewsDetail: async enrollmentGuideNewsUuid => {
-    let guideNewsDetail = await schoolDao.selectEnrollmentGuideNewsDetail(enrollmentGuideNewsUuid)
-    
+    let guideNewsDetail = await schoolDao.selectEnrollmentGuideNewsDetail(
+      enrollmentGuideNewsUuid
+    );
+
     if (guideNewsDetail) {
       await schoolDao.updateAddEnrollmentGuideViews(enrollmentGuideNewsUuid);
     }
-    
+
     return guideNewsDetail;
   }
 };
