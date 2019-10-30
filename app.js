@@ -25,7 +25,10 @@ import getToken from './src/middle/verify-token';
 import Result from './util/response';
 import jwt from 'koa-jwt';
 
+import enforceHttps from 'koa-sslify';
+
 const app = new Koa();
+
 
 // 跨域
 app.use(cors());
@@ -108,6 +111,8 @@ app.use(voluntary.routes(), voluntary.allowedMethods());
 app.use(news.routes(), voluntary.allowedMethods());
 app.use(indexData.routes(), voluntary.allowedMethods());
 app.use(major.routes(), voluntary.allowedMethods());
+
+app.use(enforceHttps());
 // error-handling
 app.on('error', (err, ctx) => {
   console.error('server error', err, ctx);
