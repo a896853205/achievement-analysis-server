@@ -47,8 +47,7 @@ export default {
      * AllNewsNum
      */
     let allNewsNum = await newsDao.queryAllNewsNumByType(type);
-    let maxPage = Math.ceil(allNewsNum.totalNum / PAGE_NEWS);
 
-    return await maxPage;
+    return await allNewsNum;
   }
 };

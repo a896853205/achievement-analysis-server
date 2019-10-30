@@ -60,7 +60,10 @@ export default {
 	) as f
 	on a.id = f.school_id
 	WHERE
-	a.name LIKE ?`,
+	a.name LIKE ?
+	
+	`,
+
   querySchoolByLotIdAndAccountCategory: `
 	-- 根据批次id 查学校
 	SELECT 
@@ -158,6 +161,7 @@ export default {
 	a.year = t_major_enrollment_info.year
 	AND
 	(a.year = ? OR a.year = ? OR a.year = ? OR a.year = ?);
+	
 `,
   querySchoolByLotIdAndNameAndAccountCategory: `
 select 
@@ -418,7 +422,7 @@ a.accountCategory = ?;
 		AND
 		(year=? OR year=? OR year=? OR year=?)
 	`,
-	// 根据学校id查询学校基本情况
+  // 根据学校id查询学校基本情况
   querySchoolDetail: `
 	select 
 	a.id as school_id,
@@ -600,7 +604,6 @@ a.accountCategory = ?;
 		year = ?
 		AND
 		accountCategory = ?`,
- 
 
   selectSchoolRankById: `
 		SELECT 
@@ -610,7 +613,7 @@ a.accountCategory = ?;
 		WHERE
 		id = ?
 	`,
-	selectEnrollmentGuideNewsDetail: `
+  selectEnrollmentGuideNewsDetail: `
 		SELECT
 		title,content,viewTimes
 		FROM
@@ -618,12 +621,44 @@ a.accountCategory = ?;
 		WHERE
 		uuid = ?
 	`,
-	updateAddEnrollmentGuideViews: `
+  updateAddEnrollmentGuideViews: `
 		UPDATE
 		t_school_enrollment_guide_news
 		SET
 		viewTimes= viewTimes + 1
 		WHERE
 		uuid = ?
+	`,
+  querySchoolAll: `
+			SELECT
+			name,id,fk_nature_id
+			FROM
+			t_school
+			LIMIT
+			?,12
+	
+	`,
+  querySchoolPropertyIdById: `
+			SELECT
+			fk_school_property_id
+			FROM
+			merge_school_school_property
+			WHERE
+			fk_school_id = ?
+
+	`,
+  selectSchoolProperty: `
+			SELECT
+			type
+			FROM
+			sys_t_school_property
+		
+	`,
+  selectSchoolNature: `
+			SELECT
+			type
+			FROM
+			sys_t_school_nature
+		
 	`
 };

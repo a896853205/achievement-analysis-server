@@ -1,5 +1,5 @@
 // 筛选学校性质
-export const filtrateNatureSchool = (natureValues, schoolList) => {
+export const filtrateNatureSchool = (natureValues = [], schoolList) => {
   if (natureValues.length) {
     let fitNatureSchoolList = [];
 
@@ -26,7 +26,7 @@ export const filtrateNatureSchool = (natureValues, schoolList) => {
 };
 
 // 对学校属性进行筛选
-export const filtratePropertySchool = (propertyValues, schoolList) => {
+export const filtratePropertySchool = (propertyValues = [], schoolList) => {
   if (propertyValues.length) {
     let fitPropertySchoolList = [];
 
@@ -53,7 +53,7 @@ export const filtratePropertySchool = (propertyValues, schoolList) => {
 };
 
 // 对高校类别进行筛选
-export const filtrateTypeSchool = (typeValues, schoolList) => {
+export const filtrateTypeSchool = (typeValues = [], schoolList) => {
   if (typeValues.length) {
     let fitTypeSchoolList = [];
 
@@ -80,7 +80,10 @@ export const filtrateTypeSchool = (typeValues, schoolList) => {
 };
 
 // 对地域特色进行筛选
-export const filtrateAreaFeatureSchool = (areaFeatureValues, schoolList) => {
+export const filtrateAreaFeatureSchool = (
+  areaFeatureValues = [],
+  schoolList
+) => {
   if (areaFeatureValues.length) {
     let fitTypeSchoolList = [];
 
@@ -158,7 +161,6 @@ export const splitSchoolByRange = (
     });
 
     if (currentSchool && currentSchool.score) {
-      
       // 判断是否超过最高控制分数和最低控制分数
       if (currentSchool.score < score1 || currentSchool.score > score6) {
         continue;
