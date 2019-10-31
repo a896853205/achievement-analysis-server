@@ -34,8 +34,8 @@ var port = normalizePort(process.env.PORT || '1208');
  */
 
 var options = {
-  key: fs.readFileSync(path.join('../ssl/ssl.key')),
-  cert: fs.readFileSync(path.join('../ssl/ssl.pem'))
+  key: fs.readFileSync(path.join('./ssl/ssl.key')),
+  cert: fs.readFileSync(path.join('./ssl/ssl.pem'))
 };
 
 var server = http.createServer(app.callback());
