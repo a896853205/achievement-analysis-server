@@ -25,7 +25,7 @@ import getToken from './src/middle/verify-token';
 import Result from './util/response';
 import jwt from 'koa-jwt';
 
-import enforceHttps from 'koa-sslify';
+const sslify = require('koa-sslify').default;
 
 const app = new Koa();
 
@@ -112,7 +112,7 @@ app.use(news.routes(), voluntary.allowedMethods());
 app.use(indexData.routes(), voluntary.allowedMethods());
 app.use(major.routes(), voluntary.allowedMethods());
 
-app.use(enforceHttps());
+app.use(sslify());
 // error-handling
 app.on('error', (err, ctx) => {
   console.error('server error', err, ctx);
