@@ -291,7 +291,7 @@ export default {
     );
   },
   selectSchoolProperty: async () => {
-    return await db.query(new SqlObject(schoolMapper.selectSchoolPropertyById));
+    return await db.query(new SqlObject(schoolMapper.selectSchoolProperty));
   },
   selectSchoolNature: async () => {
     return await db.query(new SqlObject(schoolMapper.selectSchoolNatureById));
