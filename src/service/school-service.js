@@ -8,6 +8,7 @@ import {
   filtratePropertySchool,
   filtrateTypeSchool,
   filtrateAreaFeatureSchool,
+  filtrateProvinceSchool,
   filtrateMajorName,
   splitSchoolByRange,
   culEnrollRateStrategies,
@@ -76,6 +77,7 @@ export default {
     propertyValues,
     typeValues,
     areaFeatureValues,
+    provinceListValues,
     accountCategory,
     examYear,
     score,
@@ -109,6 +111,12 @@ export default {
     // 对地域特色进行筛选
     resultSchoolList = filtrateAreaFeatureSchool(
       areaFeatureValues,
+      resultSchoolList
+    );
+
+    // 对所在省份进行筛选
+    resultSchoolList = filtrateProvinceSchool(
+      provinceListValues,
       resultSchoolList
     );
 

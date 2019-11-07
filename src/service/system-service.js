@@ -23,6 +23,11 @@ export default {
     };
   },
 
+  // 获取省信息
+  getProvince: async () => {
+    return await systemDao.queryProvince();
+  },
+  
   // 获取学校办学性质
   getSchoolNatureOption: async () => {
     let schoolNatureList = await systemDao.querySchoolNature();

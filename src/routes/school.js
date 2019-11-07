@@ -20,6 +20,7 @@ router.post('/getSchool', async ctx => {
       propertyValues,
       typeValues,
       areaFeatureValues,
+      provinceListValues,
       gatherValue,
       schoolName,
       majorName
@@ -35,6 +36,7 @@ router.post('/getSchool', async ctx => {
       propertyValues,
       typeValues,
       areaFeatureValues,
+      provinceListValues,
       gatherValue,
       accountCategory: user.accountCategory,
       examYear: user.examYear,
