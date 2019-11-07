@@ -10,7 +10,7 @@ router.post('/getNewsDetail', async ctx => {
   const { uuid } = ctx.request.body;
 
   let newsList = await newsService.selectNewsDetail(uuid);
-
+  console.log(newsList);
   ctx.body = new Result({
     data: newsList
   });

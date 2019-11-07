@@ -28,14 +28,16 @@ router.post('/getSchoolOption', async ctx => {
     schoolType,
     areaFeature,
     voluntaryOptionList,
-    gatherOptionList
+    gatherOptionList,
+    provinceList
   ] = await Promise.all([
     systemService.getSchoolNatureOption(),
     systemService.getSchoolPropertyOption(),
     systemService.getSchoolTypeOption(),
     systemService.getAreaFeatureOption(),
     systemService.getVoluntaryOption(lotId),
-    systemService.getGatherOption()
+    systemService.getGatherOption(),
+    systemService.getProvince()
   ]);
 
   ctx.body = new Result({
@@ -45,7 +47,8 @@ router.post('/getSchoolOption', async ctx => {
       schoolType,
       areaFeature,
       voluntaryOptionList,
-      gatherOptionList
+      gatherOptionList,
+      provinceList
     }
   });
 });
