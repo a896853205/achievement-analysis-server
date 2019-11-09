@@ -11,3 +11,5 @@ export const RANK_NEWS_LIST_NUM = 3;
 export const PAGE_NEWS = 20;
 
 export const PAGE_SCHOOL = 12;
+
+export const QUESTION_NEWS_LIST_NUM = 4;
