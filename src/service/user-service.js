@@ -38,7 +38,8 @@ export default {
     uuid,
     phone,
     email,
-    scoreAlterTime
+    scoreAlterTime,
+    highSchool
   }) => {
     if (
       nickname === undefined ||
@@ -68,7 +69,8 @@ export default {
         uuid,
         phone,
         email,
-        scoreAlterTime
+        scoreAlterTime,
+        highSchool
       });
 
       return result;

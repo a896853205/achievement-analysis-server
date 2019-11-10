@@ -54,7 +54,8 @@ router.post('/setUserInfo', async ctx => {
       score,
       accountCategory,
       address,
-      examYear
+      examYear,
+      highSchool
     } = ctx.request.body,
     user = ctx.state.data;
 
@@ -69,7 +70,8 @@ router.post('/setUserInfo', async ctx => {
       address,
       examYear,
       uuid: user.uuid,
-      scoreAlterTime: user.scoreAlterTime - 1
+      scoreAlterTime: user.scoreAlterTime - 1,
+      highSchool
     });
 
     if (result) {

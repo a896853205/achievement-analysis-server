@@ -32,7 +32,8 @@ export default {
     uuid,
     phone,
     email,
-    scoreAlterTime
+    scoreAlterTime,
+    highSchool
   }) => {
     try {
       let [provinceCode, cityCode, areaCode] = address;
@@ -49,6 +50,7 @@ export default {
           areaCode,
           examYear,
           scoreAlterTime,
+          highSchool,
           uuid
         ])
       );

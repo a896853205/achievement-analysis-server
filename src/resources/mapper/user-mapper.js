@@ -3,7 +3,7 @@
 export default {
   // insert: 'insert into equip(uuid, name, money, des, importance) values(?, ?, ?, ?, ?)',
   // deleteById: 'delete from equip where uuid = ?',
-  update: `update t_user set nickname=?, gender=?,phone=?,email=?,score=?, accountCategory=?, provinceCode = ?, cityCode = ?, areaCode = ?, examYear=?, scoreAlterTime=? where uuid=?`,
+  update: `update t_user set nickname=?, gender=?,phone=?,email=?,score=?, accountCategory=?, provinceCode = ?, cityCode = ?, areaCode = ?, examYear=?, scoreAlterTime=?, highSchool=? where uuid=?`,
   updateBasicInfo: `
     UPDATE
     t_user
