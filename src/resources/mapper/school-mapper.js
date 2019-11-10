@@ -660,5 +660,14 @@ a.accountCategory = ?;
 			FROM
 			sys_t_school_nature
 		
+	`,
+  queryHighSchoolById: `
+			SELECT
+			highSchoolName,code
+			FROM
+			sys_t_high_school
+			WHERE
+			areaCode = ?
+			
 	`
 };

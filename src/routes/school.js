@@ -177,4 +177,14 @@ router.post('/getSchoolRank', async ctx => {
   });
 });
 
+router.post('/getHighSchool', async ctx => {
+  const { areaCode } = ctx.request.body;
+
+  let highSchool = await schoolService.queryHighSchoolById(areaCode);
+
+  ctx.body = new Result({
+    data: highSchool
+  });
+});
+
 export default router;

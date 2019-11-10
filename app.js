@@ -29,7 +29,6 @@ const sslify = require('koa-sslify').default;
 
 const app = new Koa();
 
-
 // 跨域
 app.use(cors());
 
@@ -59,6 +58,7 @@ let unlessPathArr = [
   '/school/getEnrollmentGuideNews',
   '/school/getSchoolRank',
   '/school/getEnrollmentGuideNewsDetail',
+  '/school/getHighSchool',
   '/major/getMajorCategory',
   '/major/getMajorDetail',
   '/major/getMajorProfile',
