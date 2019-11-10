@@ -3,7 +3,8 @@ import {
   SCHOOL_NEWS_LIST_NUM,
   MAJOR_NEWS_LIST_NUM,
   STUDENT_READ_NEWS_LIST_NUM,
-  RANK_NEWS_LIST_NUM
+  RANK_NEWS_LIST_NUM,
+  QUESTION_NEWS_LIST_NUM
 } from '../constants/api-constants';
 export default {
   getIndexData: async () => {
@@ -11,12 +12,14 @@ export default {
       schoolNewsList,
       majorNewsList,
       studentReadNewsList,
-      rankNewsList
+      rankNewsList,
+      questionNewsList
     ] = await Promise.all([
       newsDao.queryNewsProfileByType(1, SCHOOL_NEWS_LIST_NUM),
       newsDao.queryNewsProfileByType(2, MAJOR_NEWS_LIST_NUM),
       newsDao.queryNewsProfileByType(3, STUDENT_READ_NEWS_LIST_NUM),
-      newsDao.queryNewsProfileByType(4, RANK_NEWS_LIST_NUM)
+      newsDao.queryNewsProfileByType(4, RANK_NEWS_LIST_NUM),
+      newsDao.queryNewsProfileByType(5, QUESTION_NEWS_LIST_NUM)
     ]);
     /**
      * 定义得到数量为常数，定义在constants文件夹，依次为 4  4 5 3
@@ -33,7 +36,7 @@ export default {
       studentReadNewsList,
       rankNewsList,
       courseList: [],
-      questionNewsList: [],
+      questionNewsList,
       schoolRecommendList: []
     };
   }

@@ -20,6 +20,7 @@ router.post('/getSchool', async ctx => {
       propertyValues,
       typeValues,
       areaFeatureValues,
+      provinceListValues,
       gatherValue,
       schoolName,
       majorName
@@ -35,6 +36,7 @@ router.post('/getSchool', async ctx => {
       propertyValues,
       typeValues,
       areaFeatureValues,
+      provinceListValues,
       gatherValue,
       accountCategory: user.accountCategory,
       examYear: user.examYear,
@@ -172,16 +174,6 @@ router.post('/getSchoolRank', async ctx => {
 
   ctx.body = new Result({
     data: schoolRank
-  });
-});
-
-router.post('/getHighSchool', async ctx => {
-  const { areaCode } = ctx.request.body;
-
-  let highSchool = await schoolService.queryHighSchoolById(areaCode);
-
-  ctx.body = new Result({
-    data: highSchool
   });
 });
 

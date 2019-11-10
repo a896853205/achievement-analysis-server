@@ -1,5 +1,5 @@
 export default {
-	queryProvince: `
+  queryProvince: `
   select
   *
   from sys_t_province`,
@@ -19,26 +19,26 @@ export default {
   WHERE
   cityCode = ?
   `,
-	querySchoolNature: `
+  querySchoolNature: `
   select
   *
   from sys_t_school_nature`,
-	querySchoolProperty: `
+  querySchoolProperty: `
   select
   *
   from
   sys_t_school_property`,
-	querySchoolType: `
+  querySchoolType: `
   select
   *
   from
   sys_t_school_type`,
-	queryAreaFeature: `
+  queryAreaFeature: `
   select
   *
   from
   sys_t_area_feature`,
-	queryLots: `
+  queryLots: `
   select
   *
   from
@@ -52,7 +52,7 @@ export default {
   WHERE
     id = ?
   `,
-	queryVoluntaryOption: `
+  queryVoluntaryOption: `
   -- 根据批次id 查对应志愿个数
   select
   a.fk_lot_id as lot_id,
@@ -90,5 +90,14 @@ export default {
     sys_t_unit_satisfaction
   WHERE
     analysisId = ?
-  `
+  `,
+  queryHighSchoolById: `
+			SELECT
+			highSchoolName,code
+			FROM
+			sys_t_high_school
+			WHERE
+			areaCode = ?
+			
+	`
 };

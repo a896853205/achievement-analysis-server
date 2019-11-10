@@ -109,6 +109,36 @@ export const filtrateAreaFeatureSchool = (
   }
 };
 
+// 对所在省份进行筛选
+export const filtrateProvinceSchool = (
+  provinceListValues,
+  resultSchoolList
+) => {
+  if (provinceListValues.length) {
+    let fitTypeSchoolList = [];
+
+    for (let schoolItem of resultSchoolList) {
+      let isFit = false;
+
+      for (let provinceListItem of provinceListValues) {
+        // 一旦有有一个包括就适合
+        if (schoolItem.province_id === provinceListItem) {
+          isFit = true;
+        }
+      }
+
+      // 如果适合就push进去
+      if (isFit) {
+        fitTypeSchoolList.push(schoolItem);
+      }
+    }
+
+    return fitTypeSchoolList;
+  } else {
+    return resultSchoolList;
+  }
+};
+
 // 对专业名进行筛选
 export const filtrateMajorName = ({
   originalSchoolList,

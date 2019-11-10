@@ -167,10 +167,6 @@ export default {
       ](voluntaryList);
       // 判断分数降序
       for (let i = 0; i < result.gradedResult.schoolScoreArr.length - 2; i++) {
-        console.log(
-          result.gradedResult.schoolScoreArr[i],
-          result.gradedResult.schoolScoreArr[i + 1]
-        );
         if (
           result.gradedResult.schoolScoreArr[i] <
           result.gradedResult.schoolScoreArr[i + 1]

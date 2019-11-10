@@ -58,7 +58,7 @@ let unlessPathArr = [
   '/school/getEnrollmentGuideNews',
   '/school/getSchoolRank',
   '/school/getEnrollmentGuideNewsDetail',
-  '/school/getHighSchool',
+  '/system/getHighSchool',
   '/major/getMajorCategory',
   '/major/getMajorDetail',
   '/major/getMajorProfile',

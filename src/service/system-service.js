@@ -23,11 +23,11 @@ export default {
     };
   },
 
+  // 获取省信息
   getProvince: async () => {
-    let provinceList = await systemDao.queryProvince();
-
-    return provinceList;
+    return await systemDao.queryProvince();
   },
+
   // 获取学校办学性质
   getSchoolNatureOption: async () => {
     let schoolNatureList = await systemDao.querySchoolNature();
@@ -73,5 +73,10 @@ export default {
     let gatherOptionList = await systemDao.queryGatherOption();
 
     return gatherOptionList;
+  },
+  queryHighSchoolById: async areaCode => {
+    let highSchool = await schoolDao.queryHighSchoolById(areaCode);
+
+    if (highSchool) return highSchool;
   }
 };

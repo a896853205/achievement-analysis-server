@@ -1,9 +1,15 @@
 import { ENVIRONMENT } from '../constants/app-constants';
 
 // 环境控制
+<<<<<<< HEAD
 // export const SAP_CONTROL = ENVIRONMENT.DEV; // 开发环境
 // export const SAP_CONTROL = ENVIRONMENT.TEST; // 测试环境
 export const SAP_CONTROL = ENVIRONMENT.PRO; // 生产环境
+=======
+// export const SAP_CONTROL = ENVIRONMENT.DEV;     // 开发环境
+// export const SAP_CONTROL = ENVIRONMENT.TEST; // 测试环境
+export const SAP_CONTROL = ENVIRONMENT.PRO;  // 生产环境
+>>>>>>> d936d47f326f128868c0511071bd613c9087b0ee
 
 // 项目版本号
 export const kAppVersion = 'v0.0.7';
