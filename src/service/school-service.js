@@ -512,10 +512,5 @@ export default {
     }
 
     return guideNewsDetail;
-  },
-  queryHighSchoolById: async areaCode => {
-    let highSchool = await schoolDao.queryHighSchoolById(areaCode);
-
-    if (highSchool) return highSchool;
   }
 };

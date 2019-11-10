@@ -77,13 +77,14 @@ export default {
     }
   },
 
-  setUserBasicInfo: async ({ nickname, phone, email, address, uuid }) => {
+  setUserBasicInfo: async ({ nickname, phone, email, address, uuid, highSchool }) => {
     let result = await userDao.updateUserBasic({
       nickname,
       phone,
       email,
       address,
-      uuid
+      uuid,
+      highSchool
     });
 
     return result;

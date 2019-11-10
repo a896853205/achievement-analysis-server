@@ -63,7 +63,7 @@ export default {
     }
   },
 
-  updateUserBasic: async ({ nickname, phone, email, address, uuid }) => {
+  updateUserBasic: async ({ nickname, phone, email, address, uuid, highSchool }) => {
     let [provinceCode, cityCode, areaCode] = address;
     await db.query(
       new SqlObject(userMapper.updateBasicInfo, [
@@ -73,6 +73,7 @@ export default {
         provinceCode,
         cityCode,
         areaCode,
+        highSchool,
         uuid
       ])
     );

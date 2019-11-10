@@ -8,7 +8,7 @@ export default {
     UPDATE
     t_user
     SET
-    nickname = ?, phone = ?, email = ?, provinceCode = ?, cityCode = ?, areaCode = ?
+    nickname = ?, phone = ?, email = ?, provinceCode = ?, cityCode = ?, areaCode = ?, highSchool = ?
     WHERE
     uuid = ?
   `,

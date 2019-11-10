@@ -102,5 +102,10 @@ export default {
     return (await db.query(
       new SqlObject(systemMapper.selectUnitSatisfaction, [deepId])
     ))[0];
+  },
+  queryHighSchoolById: async areaCode => {
+    return await db.query(
+      new SqlObject(systemMapper.queryHighSchoolById, [areaCode])
+    );
   }
 };

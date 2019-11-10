@@ -94,7 +94,7 @@ router.post('/setUserInfo', async ctx => {
 });
 
 router.post('/setUserBasicInfo', async ctx => {
-  let { nickname, phone, email, address } = ctx.request.body,
+  let { nickname, phone, email, address, highSchool } = ctx.request.body,
     user = ctx.state.data;
 
   let result = await userService.setUserBasicInfo({
@@ -102,7 +102,8 @@ router.post('/setUserBasicInfo', async ctx => {
     phone,
     email,
     address,
-    uuid: user.uuid
+    uuid: user.uuid,
+    highSchool
   });
 
   if (result) {

@@ -62,5 +62,14 @@ router.get('/getLotsOption', async ctx => {
     }
   });
 });
+router.post('/getHighSchool', async ctx => {
+  const { areaCode } = ctx.request.body;
+
+  let highSchoolList = await systemService.queryHighSchoolById(areaCode);
+
+  ctx.body = new Result({
+    data: highSchoolList
+  });
+});
 
 export default router;

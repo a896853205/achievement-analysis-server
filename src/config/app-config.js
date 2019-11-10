@@ -5,6 +5,7 @@ export const SAP_CONTROL = ENVIRONMENT.DEV;     // 开发环境
 // export const SAP_CONTROL = ENVIRONMENT.TEST; // 测试环境
 // export const SAP_CONTROL = ENVIRONMENT.PRO; // 生产环境
 
+
 // 项目版本号
 export const kAppVersion = 'v0.0.7';
 

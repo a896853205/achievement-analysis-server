@@ -27,7 +27,7 @@ export default {
   getProvince: async () => {
     return await systemDao.queryProvince();
   },
-  
+
   // 获取学校办学性质
   getSchoolNatureOption: async () => {
     let schoolNatureList = await systemDao.querySchoolNature();
@@ -73,5 +73,10 @@ export default {
     let gatherOptionList = await systemDao.queryGatherOption();
 
     return gatherOptionList;
+  },
+  queryHighSchoolById: async areaCode => {
+    let highSchoolList = await systemDao.queryHighSchoolById(areaCode);
+
+    if (highSchoolList) return highSchoolList;
   }
 };
