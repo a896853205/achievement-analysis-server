@@ -295,5 +295,10 @@ export default {
   },
   selectSchoolNature: async () => {
     return await db.query(new SqlObject(schoolMapper.selectSchoolNatureById));
+  },
+  queryHighSchoolById: async areaCode => {
+    return await db.query(
+      new SqlObject(schoolMapper.queryHighSchoolById, [areaCode])
+    );
   }
 };
