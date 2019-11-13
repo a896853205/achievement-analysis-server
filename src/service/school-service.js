@@ -1,7 +1,7 @@
 // dao
-import schoolDao from '../dao/school-dao';
-import controlScoreRangeDao from '../dao/control-score-range-dao';
-import { PAGE_SCHOOL } from '../constants/api-constants';
+import schoolDao from "../dao/school-dao";
+import controlScoreRangeDao from "../dao/control-score-range-dao";
+import { PAGE_SCHOOL } from "../constants/api-constants";
 // 筛选算法
 import {
   filtrateNatureSchool,
@@ -13,14 +13,14 @@ import {
   splitSchoolByRange,
   culEnrollRateStrategies,
   culRiskRateStrategies
-} from './school-filtrate';
+} from "./school-filtrate";
 
 import {
   proxyParseToOldScore,
   culLineDifferStrategies,
   bindScoreAndRank,
   calScoreTransformRank
-} from './rank-filtrate';
+} from "./rank-filtrate";
 
 /**
  * 学校例子
@@ -255,7 +255,12 @@ export default {
     majorName,
     score,
     accountCategory,
-    examYear
+    examYear,
+    natureValues,
+    propertyValues,
+    typeValues,
+    areaFeatureValues,
+    provinceListValues
   }) => {
     let [
       resultSchoolList,
@@ -277,6 +282,27 @@ export default {
       controlScoreRangeDao.queryScoreRangeByLotsId(lotId),
       schoolDao.queryLotsScore(examYear, accountCategory)
     ]);
+
+    // 对办学性质进行筛选
+    resultSchoolList = filtrateNatureSchool(natureValues, resultSchoolList);
+
+    // 对学校属性进行筛选
+    resultSchoolList = filtratePropertySchool(propertyValues, resultSchoolList);
+
+    // 对高校类别进行筛选
+    resultSchoolList = filtrateTypeSchool(typeValues, resultSchoolList);
+
+    // 对地域特色进行筛选
+    resultSchoolList = filtrateAreaFeatureSchool(
+      areaFeatureValues,
+      resultSchoolList
+    );
+
+    // 对所在省份进行筛选
+    resultSchoolList = filtrateProvinceSchool(
+      provinceListValues,
+      resultSchoolList
+    );
 
     // 通过专业名字筛学校
     resultSchoolList = filtrateMajorName({
