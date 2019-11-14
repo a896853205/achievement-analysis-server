@@ -198,14 +198,14 @@ export const splitSchoolByRange = (
 
       // 开始筛选集合
       if (currentSchool.score >= score4 && currentSchool.score < score5) {
-        schoolItem.gather = 'b';
+        schoolItem.gather = "b";
         schoolListB.push(schoolItem);
         continue;
       } else if (
         currentSchool.score >= score5 &&
         currentSchool.score < score6
       ) {
-        schoolItem.gather = 'a';
+        schoolItem.gather = "a";
         schoolListA.push(schoolItem);
         continue;
       } else {
@@ -224,7 +224,7 @@ export const splitSchoolByRange = (
 
         // 如果没有专业分的学校则是c集合
         if (!majorArr.length) {
-          schoolItem.gather = 'c';
+          schoolItem.gather = "c";
           schoolListC.push(schoolItem);
           continue;
         }
@@ -236,7 +236,7 @@ export const splitSchoolByRange = (
 
         // 判断分数是否比专业最高的高,如果高则是e集合
         if (score > majorArr[0].major_score) {
-          schoolItem.gather = 'e';
+          schoolItem.gather = "e";
           schoolListE.push(schoolItem);
           continue;
         }
@@ -246,7 +246,7 @@ export const splitSchoolByRange = (
         if (majorLength & 1) {
           // 奇数
           if (score > majorArr[(majorLength + 1) / 2 - 1].major_score) {
-            schoolItem.gather = 'd';
+            schoolItem.gather = "d";
             schoolListD.push(schoolItem);
             continue;
           }
@@ -255,29 +255,29 @@ export const splitSchoolByRange = (
           let prepMajor = majorArr[majorLength / 2 - 1];
           let nextMajor = majorArr[majorLength / 2];
           if (score > (prepMajor.major_score + nextMajor.major_score) / 2) {
-            schoolItem.gather = 'd';
+            schoolItem.gather = "d";
             schoolListD.push(schoolItem);
             continue;
           }
         }
 
         // 其他的都是c集合
-        schoolItem.gather = 'c';
+        schoolItem.gather = "c";
         schoolListC.push(schoolItem);
       }
     }
   }
 
   switch (gatherValue) {
-    case 'a':
+    case "a":
       return schoolListA;
-    case 'b':
+    case "b":
       return schoolListB;
-    case 'c':
+    case "c":
       return schoolListC;
-    case 'd':
+    case "d":
       return schoolListD;
-    case 'e':
+    case "e":
       return schoolListE;
     default:
       return [
@@ -305,21 +305,53 @@ export const culEnrollRateStrategies = {
         return item.year === examYear - 3;
       });
 
-      if (
-        oldOneScoreAndRank &&
-        oldTwoScoreAndRank &&
-        oldThreeScoreAndRank &&
-        oldOneScoreAndRank.rank &&
-        oldTwoScoreAndRank.rank &&
-        oldThreeScoreAndRank.rank
-      ) {
+      if (!oldOneScoreAndRank || !oldTwoScoreAndRank || !oldThreeScoreAndRank) {
+        // 如果全没有就是未知
+        if (
+          !oldOneScoreAndRank &&
+          !oldTwoScoreAndRank &&
+          !oldThreeScoreAndRank
+        ) {
+          culList[i].enrollRate = 4;
+        } else {
+          // 如果有两个有且大于最大值
+          // 位次小于两年最小值提档概率中
+          // 其他情况为低
+          let minRank = Infinity;
+          let haveNum = 0;
+          if (oldOneScoreAndRank) {
+            minRank = Math.min(minRank, oldOneScoreAndRank.rank);
+            haveNum++;
+          }
+
+          if (oldTwoScoreAndRank) {
+            minRank = Math.min(minRank, oldTwoScoreAndRank.rank);
+            haveNum++;
+          }
+
+          if (oldThreeScoreAndRank) {
+            minRank = Math.min(minRank, oldThreeScoreAndRank.rank);
+            haveNum++;
+          }
+
+          if (stuOldOneScoreAndRank.rank <= minRank && haveNum === 2) {
+            culList[i].enrollRate = 2;
+          } else {
+            culList[i].enrollRate = 1;
+          }
+        }
         // 看看是不是比最小的小
+      } else {
+        // 如果三年数据都存在,位次小于最小值提档概率高,
+        // 位次小于平均值提档概率中,
+        // 其他情况为低
         let avgRank = parseInt(
           (oldOneScoreAndRank.rank +
             oldTwoScoreAndRank.rank +
             oldThreeScoreAndRank.rank) /
             3
         );
+
         if (
           stuOldOneScoreAndRank.rank <=
           Math.min.apply(
@@ -335,114 +367,70 @@ export const culEnrollRateStrategies = {
         } else {
           culList[i].enrollRate = 1;
         }
-      } else {
-        culList[i].enrollRate = 4;
       }
     }
 
     return culList;
   },
   2: ({ stuOldOneScoreAndRank, culList, examYear }) => {
-    for (let i = 0; i < culList.length; i++) {
-      let oldOneScoreAndRank = culList[i].scoreAndRank.find(item => {
-        return item.year === examYear - 3;
-      });
-      let oldTwoScoreAndRank = culList[i].scoreAndRank.find(item => {
-        return item.year === examYear - 2;
-      });
-      let oldThreeScoreAndRank = culList[i].scoreAndRank.find(item => {
-        return item.year === examYear - 1;
-      });
-      if (
-        oldOneScoreAndRank &&
-        oldTwoScoreAndRank &&
-        oldThreeScoreAndRank &&
-        oldOneScoreAndRank.rank &&
-        oldTwoScoreAndRank.rank &&
-        oldThreeScoreAndRank.rank
-      ) {
-        // 看看是不是比最小的小
-        let avgRank = parseInt(
-          (oldOneScoreAndRank.rank +
-            oldTwoScoreAndRank.rank +
-            oldThreeScoreAndRank.rank) /
-            3
-        );
-        if (
-          stuOldOneScoreAndRank.rank <=
-          Math.min.apply(
-            Math,
-            culList[i].scoreAndRank.map(o => {
-              return o.rank;
-            })
-          )
-        ) {
-          culList[i].enrollRate = 3;
-        } else if (stuOldOneScoreAndRank.rank <= avgRank) {
-          culList[i].enrollRate = 2;
-        } else {
-          culList[i].enrollRate = 1;
-        }
-      } else {
-        culList[i].enrollRate = 4;
-      }
-    }
-
-    return culList;
+    return culEnrollRateStrategies[1]({
+      stuOldOneScoreAndRank,
+      culList,
+      examYear
+    });
   },
   3: ({ stuOldOneScoreAndRank, culList, examYear }) => {
-    for (let i = 0; i < culList.length; i++) {
-      let oldOneScoreAndRank = culList[i].scoreAndRank.find(item => {
-        return item.year === examYear - 3;
-      });
-      let oldTwoScoreAndRank = culList[i].scoreAndRank.find(item => {
-        return item.year === examYear - 2;
-      });
-      let oldThreeScoreAndRank = culList[i].scoreAndRank.find(item => {
-        return item.year === examYear - 1;
-      });
-      if (
-        oldOneScoreAndRank &&
-        oldTwoScoreAndRank &&
-        oldThreeScoreAndRank &&
-        oldOneScoreAndRank.rank &&
-        oldTwoScoreAndRank.rank &&
-        oldThreeScoreAndRank.rank
-      ) {
-        // 看看是不是比最小的小
-        let avgRank = parseInt(
-          (oldOneScoreAndRank.rank +
-            oldTwoScoreAndRank.rank +
-            oldThreeScoreAndRank.rank) /
-            3
-        );
-
-        if (
-          stuOldOneScoreAndRank.rank <=
-          Math.min.apply(
-            Math,
-            culList[i].scoreAndRank.map(o => {
-              return o.rank;
-            })
-          )
-        ) {
-          culList[i].enrollRate = 3;
-        } else if (stuOldOneScoreAndRank.rank <= avgRank) {
-          culList[i].enrollRate = 2;
-        } else {
-          culList[i].enrollRate = 1;
-        }
-      } else {
-        culList[i].enrollRate = 4;
-      }
-    }
-
-    return culList;
+    return culEnrollRateStrategies[1]({
+      stuOldOneScoreAndRank,
+      culList,
+      examYear
+    });
   },
   4: ({ culList, stuLineDiffer }) => {
     for (let i = 0; i < culList.length; i++) {
       let [oldOneDiffer, oldTwoDiffer, oldThreeDiffer] = culList[i].lineDiffir;
-      if (oldOneDiffer && oldTwoDiffer && oldThreeDiffer) {
+
+      if (
+        !Number.isInteger(oldOneDiffer) ||
+        !Number.isInteger(oldTwoDiffer) ||
+        !Number.isInteger(oldThreeDiffer)
+      ) {
+        // 如果全没有就是未知
+        if (
+          !Number.isInteger(oldOneDiffer) &&
+          !Number.isInteger(oldTwoDiffer) &&
+          !Number.isInteger(oldThreeDiffer)
+        ) {
+          culList[i].enrollRate = 4;
+        } else {
+          // 如果有两个
+          // 大于最大值为中
+          // 其他情况为低
+          let maxDiffir = 0;
+          let haveNum = 0;
+          if (Number.isInteger(oldOneDiffer)) {
+            maxDiffir = Math.max(maxDiffir, oldOneDiffer);
+            haveNum++;
+          }
+
+          if (Number.isInteger(oldTwoDiffer)) {
+            maxDiffir = Math.max(maxDiffir, oldTwoDiffer);
+            haveNum++;
+          }
+
+          if (Number.isInteger(oldThreeDiffer)) {
+            maxDiffir = Math.max(maxDiffir, oldThreeDiffer);
+            haveNum++;
+          }
+
+          if (stuLineDiffer >= maxDiffir && haveNum === 2) {
+            culList[i].enrollRate = 2;
+          } else {
+            culList[i].enrollRate = 1;
+          }
+        }
+      } else {
+        // 如果全部有就是取最大值和平均值进行比较
         let avgDiffer = parseInt(
           (oldOneDiffer + oldTwoDiffer + oldThreeDiffer) / 3
         );
@@ -454,76 +442,18 @@ export const culEnrollRateStrategies = {
         } else {
           culList[i].enrollRate = 1;
         }
-      } else {
-        culList[i].enrollRate = 4;
       }
     }
-
     return culList;
   },
   5: ({ culList, stuLineDiffer }) => {
-    for (let i = 0; i < culList.length; i++) {
-      let [oldOneDiffer, oldTwoDiffer, oldThreeDiffer] = culList[i].lineDiffir;
-      if (oldOneDiffer && oldTwoDiffer && oldThreeDiffer) {
-        let avgDiffer = parseInt(
-          (oldOneDiffer + oldTwoDiffer + oldThreeDiffer) / 3
-        );
-        if (stuLineDiffer >= Math.max.apply(Math, culList[i].lineDiffir)) {
-          culList[i].enrollRate = 3;
-        } else if (stuLineDiffer >= avgDiffer) {
-          culList[i].enrollRate = 2;
-        } else {
-          culList[i].enrollRate = 1;
-        }
-      } else {
-        culList[i].enrollRate = 4;
-      }
-    }
-
-    return culList;
+    return culEnrollRateStrategies[4]({ culList, stuLineDiffer });
   },
   6: ({ culList, stuLineDiffer }) => {
-    for (let i = 0; i < culList.length; i++) {
-      let [oldOneDiffer, oldTwoDiffer, oldThreeDiffer] = culList[i].lineDiffir;
-      if (oldOneDiffer && oldTwoDiffer && oldThreeDiffer) {
-        let avgDiffer = parseInt(
-          (oldOneDiffer + oldTwoDiffer + oldThreeDiffer) / 3
-        );
-        if (stuLineDiffer >= Math.max.apply(Math, culList[i].lineDiffir)) {
-          culList[i].enrollRate = 3;
-        } else if (stuLineDiffer >= avgDiffer) {
-          culList[i].enrollRate = 2;
-        } else {
-          culList[i].enrollRate = 1;
-        }
-      } else {
-        culList[i].enrollRate = 4;
-      }
-    }
-
-    return culList;
+    return culEnrollRateStrategies[4]({ culList, stuLineDiffer });
   },
   7: ({ culList, stuLineDiffer }) => {
-    for (let i = 0; i < culList.length; i++) {
-      let [oldOneDiffer, oldTwoDiffer, oldThreeDiffer] = culList[i].lineDiffir;
-      if (oldOneDiffer && oldTwoDiffer && oldThreeDiffer) {
-        let avgDiffer = parseInt(
-          (oldOneDiffer + oldTwoDiffer + oldThreeDiffer) / 3
-        );
-
-        if (stuLineDiffer >= Math.max.apply(Math, culList[i].lineDiffir)) {
-          culList[i].enrollRate = 3;
-        } else if (stuLineDiffer >= avgDiffer) {
-          culList[i].enrollRate = 2;
-        } else {
-          culList[i].enrollRate = 1;
-        }
-      } else {
-        culList[i].enrollRate = 4;
-      }
-    }
-
-    return culList;
+    return culEnrollRateStrategies[4]({ culList, stuLineDiffer });
   }
 };
 
