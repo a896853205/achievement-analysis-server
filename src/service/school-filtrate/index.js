@@ -472,18 +472,16 @@ export const culRiskRateStrategies = {
       let oldOneScoreAndRank = culList[i].scoreAndRank.find(
         item => item.year === examYear - 1
       );
-      let oldTwoScoreAndRank = culList[i].scoreAndRank.find(
-        item => item.year === examYear - 2
-      );
-      let oldThreeScoreAndRank = culList[i].scoreAndRank.find(
-        item => item.year === examYear - 3
-      );
+      let [oldOneDiffer, oldTwoDiffer, oldThreeDiffer] = culList[i].lineDiffir;
+
       if (
-        oldOneScoreAndRank.rank &&
-        oldTwoScoreAndRank.rank &&
-        oldThreeScoreAndRank.rank &&
-        currentScoreAndRank.enrollment &&
-        oldOneScoreAndRank.enrollment
+        currentScoreAndRank &&
+        oldOneScoreAndRank &&
+        Number.isInteger(oldOneDiffer) &&
+        Number.isInteger(oldTwoDiffer) &&
+        Number.isInteger(oldThreeDiffer) &&
+        Number.isInteger(currentScoreAndRank.enrollment) &&
+        Number.isInteger(oldOneScoreAndRank.enrollment)
       ) {
         // 三年数值都有
         let wave1,
@@ -493,12 +491,11 @@ export const culRiskRateStrategies = {
           influenceFactor3,
           changeEnrollment,
           trueNum = 0;
-        wave1 = Math.abs(oldOneScoreAndRank.rank - oldTwoScoreAndRank.rank);
-        wave2 = Math.abs(oldTwoScoreAndRank.rank - oldThreeScoreAndRank.rank);
+        wave1 = Math.abs(oldOneDiffer - oldTwoDiffer);
+        wave2 = Math.abs(oldThreeDiffer - oldTwoDiffer);
         influenceFactor1 = wave1 + wave2 >= WAVE_THRESHOLD;
         influenceFactor2 =
-          oldOneScoreAndRank.rank > oldTwoScoreAndRank.rank &&
-          oldTwoScoreAndRank.rank > oldThreeScoreAndRank.rank;
+          oldOneDiffer > oldTwoDiffer && oldTwoDiffer > oldThreeDiffer;
         changeEnrollment =
           oldOneScoreAndRank.enrollment - currentScoreAndRank.enrollment;
         influenceFactor3 =
@@ -514,346 +511,88 @@ export const culRiskRateStrategies = {
         } else {
           culList[i].riskRate = 1;
         }
-      } else {
+      } else if (
+        !Number.isInteger(oldOneDiffer) &&
+        !Number.isInteger(oldTwoDiffer) &&
+        !Number.isInteger(oldThreeDiffer)
+      ) {
+        // 如果都没有返回未知
         culList[i].riskRate = 4;
+      } else {
+        // 如有一到两个
+        let influenceFactor3;
+
+        if (
+          Number.isInteger(oldOneScoreAndRank.enrollment) &&
+          Number.isInteger(currentScoreAndRank.enrollment)
+        ) {
+          let changeEnrollment =
+            oldOneScoreAndRank.enrollment - currentScoreAndRank.enrollment;
+          influenceFactor3 =
+            changeEnrollment > 0 &&
+            changeEnrollment / oldOneScoreAndRank.enrollment > PLAN_THRESHOLD;
+        }
+
+        // 如果招生人数变化大直接就是中
+        if (influenceFactor3) {
+          culList[i].riskRate = 2;
+        } else {
+          if (
+            !Number.isInteger(oldOneDiffer) ||
+            !Number.isInteger(oldTwoDiffer)
+          ) {
+            // 最近两年有
+            if (Math.abs(oldOneDiffer - oldTwoDiffer) >= WAVE_THRESHOLD / 2) {
+              culList[i].riskRate = 2;
+            } else {
+              culList[i].riskRate = 1;
+            }
+          } else if (
+            !Number.isInteger(oldThreeDiffer) ||
+            !Number.isInteger(oldOneDiffer)
+          ) {
+            // 最近一年和远的一年有
+            if (Math.abs(oldThreeDiffer - oldOneDiffer) >= WAVE_THRESHOLD / 2) {
+              culList[i].riskRate = 2;
+            } else {
+              culList[i].riskRate = 1;
+            }
+          } else if (
+            !Number.isInteger(oldThreeDiffer) ||
+            !Number.isInteger(oldTwoDiffer)
+          ) {
+            // 最远两年有
+            if (Math.abs(oldThreeDiffer - oldTwoDiffer) >= WAVE_THRESHOLD / 2) {
+              culList[i].riskRate = 2;
+            } else {
+              culList[i].riskRate = 1;
+            }
+          } else {
+            // 只有一年有
+            culList[i].riskRate = 3;
+          }
+        }
       }
     }
+
     return culList;
   },
   2: ({ culList, examYear }) => {
-    for (let i = 0; i < culList.length; i++) {
-      let currentScoreAndRank = culList[i].scoreAndRank.find(
-        item => item.year === examYear
-      );
-      let oldOneScoreAndRank = culList[i].scoreAndRank.find(
-        item => item.year === examYear - 1
-      );
-      let oldTwoScoreAndRank = culList[i].scoreAndRank.find(
-        item => item.year === examYear - 2
-      );
-      let oldThreeScoreAndRank = culList[i].scoreAndRank.find(
-        item => item.year === examYear - 3
-      );
-      if (
-        oldOneScoreAndRank.rank &&
-        oldTwoScoreAndRank.rank &&
-        oldThreeScoreAndRank.rank &&
-        currentScoreAndRank.enrollment &&
-        oldOneScoreAndRank.enrollment
-      ) {
-        // 三年数值都有
-        let wave1,
-          wave2,
-          influenceFactor1,
-          influenceFactor2,
-          influenceFactor3,
-          changeEnrollment,
-          trueNum = 0;
-        wave1 = Math.abs(oldOneScoreAndRank.rank - oldTwoScoreAndRank.rank);
-        wave2 = Math.abs(oldTwoScoreAndRank.rank - oldThreeScoreAndRank.rank);
-        influenceFactor1 = wave1 + wave2 >= WAVE_THRESHOLD;
-        influenceFactor2 =
-          oldOneScoreAndRank.rank > oldTwoScoreAndRank.rank &&
-          oldTwoScoreAndRank.rank > oldThreeScoreAndRank.rank;
-        changeEnrollment =
-          oldOneScoreAndRank.enrollment - currentScoreAndRank.enrollment;
-        influenceFactor3 =
-          changeEnrollment > 0 &&
-          changeEnrollment / oldOneScoreAndRank.enrollment > PLAN_THRESHOLD;
-        if (influenceFactor1) trueNum++;
-        if (influenceFactor2) trueNum++;
-        if (influenceFactor3) trueNum++;
-        if (trueNum >= 2) {
-          culList[i].riskRate = 3;
-        } else if (trueNum >= 1 && trueNum < 2) {
-          culList[i].riskRate = 2;
-        } else {
-          culList[i].riskRate = 1;
-        }
-      } else {
-        culList[i].riskRate = 4;
-      }
-    }
-    return culList;
+    return culRiskRateStrategies[1]({ culList, examYear });
   },
   3: ({ culList, examYear }) => {
-    for (let i = 0; i < culList.length; i++) {
-      let currentScoreAndRank = culList[i].scoreAndRank.find(
-        item => item.year === examYear
-      );
-      let oldOneScoreAndRank = culList[i].scoreAndRank.find(
-        item => item.year === examYear - 1
-      );
-      let oldTwoScoreAndRank = culList[i].scoreAndRank.find(
-        item => item.year === examYear - 2
-      );
-      let oldThreeScoreAndRank = culList[i].scoreAndRank.find(
-        item => item.year === examYear - 3
-      );
-      if (
-        oldOneScoreAndRank.rank &&
-        oldTwoScoreAndRank.rank &&
-        oldThreeScoreAndRank.rank &&
-        currentScoreAndRank.enrollment &&
-        oldOneScoreAndRank.enrollment
-      ) {
-        // 三年数值都有
-        let wave1,
-          wave2,
-          influenceFactor1,
-          influenceFactor2,
-          influenceFactor3,
-          changeEnrollment,
-          trueNum = 0;
-        wave1 = Math.abs(oldOneScoreAndRank.rank - oldTwoScoreAndRank.rank);
-        wave2 = Math.abs(oldTwoScoreAndRank.rank - oldThreeScoreAndRank.rank);
-        influenceFactor1 = wave1 + wave2 >= WAVE_THRESHOLD;
-        influenceFactor2 =
-          oldOneScoreAndRank.rank > oldTwoScoreAndRank.rank &&
-          oldTwoScoreAndRank.rank > oldThreeScoreAndRank.rank;
-        changeEnrollment =
-          oldOneScoreAndRank.enrollment - currentScoreAndRank.enrollment;
-        influenceFactor3 =
-          changeEnrollment > 0 &&
-          changeEnrollment / oldOneScoreAndRank.enrollment > PLAN_THRESHOLD;
-        if (influenceFactor1) trueNum++;
-        if (influenceFactor2) trueNum++;
-        if (influenceFactor3) trueNum++;
-        if (trueNum >= 2) {
-          culList[i].riskRate = 3;
-        } else if (trueNum >= 1 && trueNum < 2) {
-          culList[i].riskRate = 2;
-        } else {
-          culList[i].riskRate = 1;
-        }
-      } else {
-        culList[i].riskRate = 4;
-      }
-    }
-    return culList;
+    return culRiskRateStrategies[1]({ culList, examYear });
   },
   4: ({ culList, examYear }) => {
-    for (let i = 0; i < culList.length; i++) {
-      let currentScoreAndRank = culList[i].scoreAndRank.find(
-        item => item.year === examYear
-      );
-      let oldOneScoreAndRank = culList[i].scoreAndRank.find(
-        item => item.year === examYear - 1
-      );
-      let oldTwoScoreAndRank = culList[i].scoreAndRank.find(
-        item => item.year === examYear - 2
-      );
-      let oldThreeScoreAndRank = culList[i].scoreAndRank.find(
-        item => item.year === examYear - 3
-      );
-      if (
-        oldOneScoreAndRank.rank &&
-        oldTwoScoreAndRank.rank &&
-        oldThreeScoreAndRank.rank &&
-        currentScoreAndRank.enrollment &&
-        oldOneScoreAndRank.enrollment
-      ) {
-        // 三年数值都有
-        let wave1,
-          wave2,
-          influenceFactor1,
-          influenceFactor2,
-          influenceFactor3,
-          changeEnrollment,
-          trueNum = 0;
-        wave1 = Math.abs(oldOneScoreAndRank.rank - oldTwoScoreAndRank.rank);
-        wave2 = Math.abs(oldTwoScoreAndRank.rank - oldThreeScoreAndRank.rank);
-        influenceFactor1 = wave1 + wave2 >= WAVE_THRESHOLD;
-        influenceFactor2 =
-          oldOneScoreAndRank.rank > oldTwoScoreAndRank.rank &&
-          oldTwoScoreAndRank.rank > oldThreeScoreAndRank.rank;
-        changeEnrollment =
-          oldOneScoreAndRank.enrollment - currentScoreAndRank.enrollment;
-        influenceFactor3 =
-          changeEnrollment > 0 &&
-          changeEnrollment / oldOneScoreAndRank.enrollment > PLAN_THRESHOLD;
-        if (influenceFactor1) trueNum++;
-        if (influenceFactor2) trueNum++;
-        if (influenceFactor3) trueNum++;
-        if (trueNum >= 2) {
-          culList[i].riskRate = 3;
-        } else if (trueNum >= 1 && trueNum < 2) {
-          culList[i].riskRate = 2;
-        } else {
-          culList[i].riskRate = 1;
-        }
-      } else {
-        culList[i].riskRate = 4;
-      }
-    }
-    return culList;
+    return culRiskRateStrategies[1]({ culList, examYear });
   },
   5: ({ culList, examYear }) => {
-    for (let i = 0; i < culList.length; i++) {
-      let currentScoreAndRank = culList[i].scoreAndRank.find(
-        item => item.year === examYear
-      );
-      let oldOneScoreAndRank = culList[i].scoreAndRank.find(
-        item => item.year === examYear - 1
-      );
-      let oldTwoScoreAndRank = culList[i].scoreAndRank.find(
-        item => item.year === examYear - 2
-      );
-      let oldThreeScoreAndRank = culList[i].scoreAndRank.find(
-        item => item.year === examYear - 3
-      );
-      if (
-        oldOneScoreAndRank.rank &&
-        oldTwoScoreAndRank.rank &&
-        oldThreeScoreAndRank.rank &&
-        currentScoreAndRank.enrollment &&
-        oldOneScoreAndRank.enrollment
-      ) {
-        // 三年数值都有
-        let wave1,
-          wave2,
-          influenceFactor1,
-          influenceFactor2,
-          influenceFactor3,
-          changeEnrollment,
-          trueNum = 0;
-        wave1 = Math.abs(oldOneScoreAndRank.rank - oldTwoScoreAndRank.rank);
-        wave2 = Math.abs(oldTwoScoreAndRank.rank - oldThreeScoreAndRank.rank);
-        influenceFactor1 = wave1 + wave2 >= WAVE_THRESHOLD;
-        influenceFactor2 =
-          oldOneScoreAndRank.rank > oldTwoScoreAndRank.rank &&
-          oldTwoScoreAndRank.rank > oldThreeScoreAndRank.rank;
-        changeEnrollment =
-          oldOneScoreAndRank.enrollment - currentScoreAndRank.enrollment;
-        influenceFactor3 =
-          changeEnrollment > 0 &&
-          changeEnrollment / oldOneScoreAndRank.enrollment > PLAN_THRESHOLD;
-        if (influenceFactor1) trueNum++;
-        if (influenceFactor2) trueNum++;
-        if (influenceFactor3) trueNum++;
-        if (trueNum >= 2) {
-          culList[i].riskRate = 3;
-        } else if (trueNum >= 1 && trueNum < 2) {
-          culList[i].riskRate = 2;
-        } else {
-          culList[i].riskRate = 1;
-        }
-      } else {
-        culList[i].riskRate = 4;
-      }
-    }
-    return culList;
+    return culRiskRateStrategies[1]({ culList, examYear });
   },
   6: ({ culList, examYear }) => {
-    for (let i = 0; i < culList.length; i++) {
-      let currentScoreAndRank = culList[i].scoreAndRank.find(
-        item => item.year === examYear
-      );
-      let oldOneScoreAndRank = culList[i].scoreAndRank.find(
-        item => item.year === examYear - 1
-      );
-      let oldTwoScoreAndRank = culList[i].scoreAndRank.find(
-        item => item.year === examYear - 2
-      );
-      let oldThreeScoreAndRank = culList[i].scoreAndRank.find(
-        item => item.year === examYear - 3
-      );
-      if (
-        oldOneScoreAndRank.rank &&
-        oldTwoScoreAndRank.rank &&
-        oldThreeScoreAndRank.rank &&
-        currentScoreAndRank.enrollment &&
-        oldOneScoreAndRank.enrollment
-      ) {
-        // 三年数值都有
-        let wave1,
-          wave2,
-          influenceFactor1,
-          influenceFactor2,
-          influenceFactor3,
-          changeEnrollment,
-          trueNum = 0;
-        wave1 = Math.abs(oldOneScoreAndRank.rank - oldTwoScoreAndRank.rank);
-        wave2 = Math.abs(oldTwoScoreAndRank.rank - oldThreeScoreAndRank.rank);
-        influenceFactor1 = wave1 + wave2 >= WAVE_THRESHOLD;
-        influenceFactor2 =
-          oldOneScoreAndRank.rank > oldTwoScoreAndRank.rank &&
-          oldTwoScoreAndRank.rank > oldThreeScoreAndRank.rank;
-        changeEnrollment =
-          oldOneScoreAndRank.enrollment - currentScoreAndRank.enrollment;
-        influenceFactor3 =
-          changeEnrollment > 0 &&
-          changeEnrollment / oldOneScoreAndRank.enrollment > PLAN_THRESHOLD;
-        if (influenceFactor1) trueNum++;
-        if (influenceFactor2) trueNum++;
-        if (influenceFactor3) trueNum++;
-        if (trueNum >= 2) {
-          culList[i].riskRate = 3;
-        } else if (trueNum >= 1 && trueNum < 2) {
-          culList[i].riskRate = 2;
-        } else {
-          culList[i].riskRate = 1;
-        }
-      } else {
-        culList[i].riskRate = 4;
-      }
-    }
-    return culList;
+    return culRiskRateStrategies[1]({ culList, examYear });
   },
   7: ({ culList, examYear }) => {
-    for (let i = 0; i < culList.length; i++) {
-      let currentScoreAndRank = culList[i].scoreAndRank.find(
-        item => item.year === examYear
-      );
-      let oldOneScoreAndRank = culList[i].scoreAndRank.find(
-        item => item.year === examYear - 1
-      );
-      let oldTwoScoreAndRank = culList[i].scoreAndRank.find(
-        item => item.year === examYear - 2
-      );
-      let oldThreeScoreAndRank = culList[i].scoreAndRank.find(
-        item => item.year === examYear - 3
-      );
-      if (
-        oldOneScoreAndRank.rank &&
-        oldTwoScoreAndRank.rank &&
-        oldThreeScoreAndRank.rank &&
-        currentScoreAndRank.enrollment &&
-        oldOneScoreAndRank.enrollment
-      ) {
-        // 三年数值都有
-        let wave1,
-          wave2,
-          influenceFactor1,
-          influenceFactor2,
-          influenceFactor3,
-          changeEnrollment,
-          trueNum = 0;
-        wave1 = Math.abs(oldOneScoreAndRank.rank - oldTwoScoreAndRank.rank);
-        wave2 = Math.abs(oldTwoScoreAndRank.rank - oldThreeScoreAndRank.rank);
-        influenceFactor1 = wave1 + wave2 >= WAVE_THRESHOLD;
-        influenceFactor2 =
-          oldOneScoreAndRank.rank > oldTwoScoreAndRank.rank &&
-          oldTwoScoreAndRank.rank > oldThreeScoreAndRank.rank;
-        changeEnrollment =
-          oldOneScoreAndRank.enrollment - currentScoreAndRank.enrollment;
-        influenceFactor3 =
-          changeEnrollment > 0 &&
-          changeEnrollment / oldOneScoreAndRank.enrollment > PLAN_THRESHOLD;
-        if (influenceFactor1) trueNum++;
-        if (influenceFactor2) trueNum++;
-        if (influenceFactor3) trueNum++;
-        if (trueNum >= 2) {
-          culList[i].riskRate = 3;
-        } else if (trueNum >= 1 && trueNum < 2) {
-          culList[i].riskRate = 2;
-        } else {
-          culList[i].riskRate = 1;
-        }
-      } else {
-        culList[i].riskRate = 4;
-      }
-    }
-    return culList;
+    return culRiskRateStrategies[1]({ culList, examYear });
   }
 };
