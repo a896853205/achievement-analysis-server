@@ -306,11 +306,17 @@ export const culEnrollRateStrategies = {
       });
 
       if (!oldOneScoreAndRank || !oldTwoScoreAndRank || !oldThreeScoreAndRank) {
+        culList[i].enrollRate = 4;
+      } else if (
+        !Number.isInteger(oldOneScoreAndRank.rank) ||
+        !Number.isInteger(oldTwoScoreAndRank.rank) ||
+        !Number.isInteger(oldThreeScoreAndRank.rank)
+      ) {
         // 如果全没有就是未知
         if (
-          !oldOneScoreAndRank &&
-          !oldTwoScoreAndRank &&
-          !oldThreeScoreAndRank
+          !Number.isInteger(oldOneScoreAndRank.rank) &&
+          !Number.isInteger(oldTwoScoreAndRank.rank) &&
+          !Number.isInteger(oldThreeScoreAndRank.rank)
         ) {
           culList[i].enrollRate = 4;
         } else {
@@ -319,17 +325,17 @@ export const culEnrollRateStrategies = {
           // 其他情况为低
           let minRank = Infinity;
           let haveNum = 0;
-          if (oldOneScoreAndRank) {
+          if (Number.isInteger(oldOneScoreAndRank.rank)) {
             minRank = Math.min(minRank, oldOneScoreAndRank.rank);
             haveNum++;
           }
 
-          if (oldTwoScoreAndRank) {
+          if (Number.isInteger(oldTwoScoreAndRank.rank)) {
             minRank = Math.min(minRank, oldTwoScoreAndRank.rank);
             haveNum++;
           }
 
-          if (oldThreeScoreAndRank) {
+          if (Number.isInteger(oldThreeScoreAndRank.rank)) {
             minRank = Math.min(minRank, oldThreeScoreAndRank.rank);
             haveNum++;
           }
@@ -519,6 +525,9 @@ export const culRiskRateStrategies = {
         // 如果都没有返回未知
         culList[i].riskRate = 4;
       } else {
+        if (culList[i].enrollment_id === 7709) {
+          console.log(oldOneDiffer, oldTwoDiffer, oldThreeDiffer);
+        }
         // 如有一到两个
         let influenceFactor3;
 
@@ -538,8 +547,8 @@ export const culRiskRateStrategies = {
           culList[i].riskRate = 2;
         } else {
           if (
-            !Number.isInteger(oldOneDiffer) ||
-            !Number.isInteger(oldTwoDiffer)
+            Number.isInteger(oldOneDiffer) &&
+            Number.isInteger(oldTwoDiffer)
           ) {
             // 最近两年有
             if (Math.abs(oldOneDiffer - oldTwoDiffer) >= WAVE_THRESHOLD / 2) {
@@ -548,8 +557,8 @@ export const culRiskRateStrategies = {
               culList[i].riskRate = 1;
             }
           } else if (
-            !Number.isInteger(oldThreeDiffer) ||
-            !Number.isInteger(oldOneDiffer)
+            Number.isInteger(oldThreeDiffer) &&
+            Number.isInteger(oldOneDiffer)
           ) {
             // 最近一年和远的一年有
             if (Math.abs(oldThreeDiffer - oldOneDiffer) >= WAVE_THRESHOLD / 2) {
@@ -558,8 +567,8 @@ export const culRiskRateStrategies = {
               culList[i].riskRate = 1;
             }
           } else if (
-            !Number.isInteger(oldThreeDiffer) ||
-            !Number.isInteger(oldTwoDiffer)
+            Number.isInteger(oldThreeDiffer) &&
+            Number.isInteger(oldTwoDiffer)
           ) {
             // 最远两年有
             if (Math.abs(oldThreeDiffer - oldTwoDiffer) >= WAVE_THRESHOLD / 2) {
