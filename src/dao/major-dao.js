@@ -16,41 +16,54 @@ export default {
     return await db.query(new SqlObject(majorMapper.queryMajorCategory));
   },
   selectMajorNameById: async id => {
-    return (await db.query(
-      new SqlObject(majorMapper.selectMajorNameById, [id])
-    ))[0];
+    return (
+      await db.query(new SqlObject(majorMapper.selectMajorNameById, [id]))
+    )[0];
   },
   selectMajorLevelOneByCode: async id => {
-    return (await db.query(
-      new SqlObject(majorMapper.selectMajorLevelOneByCode, [id])
-    ))[0];
+    return (
+      await db.query(new SqlObject(majorMapper.selectMajorLevelOneByCode, [id]))
+    )[0];
   },
   selectMajorCategoryByCode: async id => {
-    return (await db.query(
-      new SqlObject(majorMapper.selectMajorCategoryByCode, [id])
-    ))[0];
+    return (
+      await db.query(new SqlObject(majorMapper.selectMajorCategoryByCode, [id]))
+    )[0];
   },
   selectMajorIntroById: async id => {
-    return (await db.query(
-      new SqlObject(majorMapper.selectMajorIntroById, [id])
-    ))[0];
+    return (
+      await db.query(new SqlObject(majorMapper.selectMajorIntroById, [id]))
+    )[0];
   },
   selectMajorSystemById: async id => {
-    return (await db.query(
-      new SqlObject(majorMapper.selectMajorSystemById, [id])
-    ))[0];
+    return (
+      await db.query(new SqlObject(majorMapper.selectMajorSystemById, [id]))
+    )[0];
   },
   queryHotMajors: async () => {
     return await db.query(new SqlObject(majorMapper.queryHotMajors));
   },
   selectMajorEnrollmentId: async id => {
-    return (await db.query(
-      new SqlObject(majorMapper.selectMajorEnrollmentId, [id])
-    ))[0];
+    return (
+      await db.query(new SqlObject(majorMapper.selectMajorEnrollmentId, [id]))
+    )[0];
   },
   selectHotMajorDetail: async id => {
-    return (await db.query(
-      new SqlObject(majorMapper.selectHotMajorDetail, [id])
-    ))[0];
+    return (
+      await db.query(new SqlObject(majorMapper.selectHotMajorDetail, [id]))
+    )[0];
+  },
+  querySchoolMajor: async id => {
+    return await db.query(new SqlObject(majorMapper.querySchoolMajor, [id]));
+  },
+  selectSchoolName: async id => {
+    return (
+      await db.query(new SqlObject(majorMapper.selectSchoolName, [id]))
+    )[0];
+  },
+  selectSchoolLots: async id => {
+    return (
+      await db.query(new SqlObject(majorMapper.selectSchoolLots, [id]))
+    )[0];
   }
 };

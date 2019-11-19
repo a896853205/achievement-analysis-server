@@ -16,9 +16,7 @@ router.post('/getMajorCategory', async ctx => {
 router.post('/getMajorProfile', async ctx => {
   const { majorTwoCode } = ctx.request.body;
 
-  let majorDetail = await majorService.selectMajorDetailByid(
-    majorTwoCode
-  );
+  let majorDetail = await majorService.selectMajorDetailByid(majorTwoCode);
 
   ctx.body = new Result({
     data: majorDetail
@@ -40,6 +38,16 @@ router.post('/getHotMajors', async ctx => {
 
   ctx.body = new Result({
     data: hotMajors
+  });
+});
+
+router.post('/getSchoolMajor', async ctx => {
+  const { fk_school_id } = ctx.request.body;
+
+  let schoolMajor = await majorService.querySchoolMajor(fk_school_id);
+
+  ctx.body = new Result({
+    data: schoolMajor
   });
 });
 export default router;

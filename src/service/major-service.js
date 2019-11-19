@@ -119,5 +119,23 @@ export default {
     }
 
     return HotMajors;
+  },
+
+  querySchoolMajor: async id => {
+    let schoolMajor = await majorDao.querySchoolMajor(id);
+
+    let schoolMajorList = [];
+    for (let schoolItem of schoolMajor) {
+      let [schoolName, schoolLots] = await Promise.all([
+        majorDao.selectSchoolName(schoolItem.fk_major_id),
+        majorDao.selectSchoolLots(schoolItem.fk_lot_id)
+      ]);
+      schoolItem.majorName = schoolName.major_name;
+      schoolItem.comment = schoolName.comment;
+      schoolItem.major_level_two_code = schoolName.major_level_two_code;
+      schoolItem.lotsName = schoolLots.lots_name;
+      schoolMajorList.push(schoolItem);
+    }
+    return schoolMajorList;
   }
 };

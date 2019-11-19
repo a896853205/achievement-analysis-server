@@ -62,7 +62,8 @@ let unlessPathArr = [
   '/major/getMajorCategory',
   '/major/getMajorDetail',
   '/major/getMajorProfile',
-  '/major/getHotMajors'
+  '/major/getHotMajors',
+  'major/getSchoolMajor'
 ];
 
 app.use(

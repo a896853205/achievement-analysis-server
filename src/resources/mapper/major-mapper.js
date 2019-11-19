@@ -95,5 +95,31 @@ export default {
       sys_t_major
       WHERE
        id = ?
-  `
+  `,
+
+  querySchoolMajor: `
+    SELECT
+    enrollment,enrollment_score,enrollment_score_max,fk_lot_id,fk_major_id,year
+    FROM
+    t_major_enrollment_info
+    WHERE
+    fk_school_id = ?
+  
+    `,
+  selectSchoolName: `
+      SELECT
+      major_name,comment,major_level_two_code
+      FROM
+      sys_t_major
+      WHERE
+       id = ?
+    `,
+  selectSchoolLots: `
+      SELECT
+      lots_name
+      FROM
+      sys_t_lots
+      WHERE
+      id = ?
+    `
 };
