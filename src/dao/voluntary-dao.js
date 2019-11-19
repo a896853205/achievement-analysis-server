@@ -74,11 +74,43 @@ export default {
     voluntarieerId,
     majorIndex
   ) => {
-    return (await db.query(
-      new SqlObject(
-        voluntaryMapper.selectVoluntaryResultByVolunteerAndMajorIndex,
-        [voluntarieerId, majorIndex, voluntaryUuid]
+    return (
+      await db.query(
+        new SqlObject(
+          voluntaryMapper.selectVoluntaryResultByVolunteerAndMajorIndex,
+          [voluntarieerId, majorIndex, voluntaryUuid]
+        )
       )
-    ))[0];
+    )[0];
+  },
+
+  saveTempVoluntary: async (voluntaryStr, userUuid) => {
+    let tempVoluntaryArr = await db.query(
+      new SqlObject(voluntaryMapper.selectTempVoluntary, [userUuid])
+    );
+
+    if (!tempVoluntaryArr.length) {
+      await db.query(
+        new SqlObject(voluntaryMapper.insertTempVoluntary, [
+          voluntaryStr,
+          userUuid
+        ])
+      );
+    } else {
+      await db.query(
+        new SqlObject(voluntaryMapper.updateTempVoluntary, [
+          voluntaryStr,
+          userUuid
+        ])
+      );
+    }
+  },
+
+  selectTempVoluntary: async userUuid => {
+    return (
+      await db.query(
+        new SqlObject(voluntaryMapper.selectTempVoluntary, [userUuid])
+      )
+    )[0];
   }
 };

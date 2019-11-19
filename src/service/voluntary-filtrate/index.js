@@ -69,7 +69,10 @@ export const voluntaryCompleteStrategy = {
     return unWriteSchoolArr;
   },
   // 一批B
-  3: voluntaryList => {},
+  3: voluntaryList => {
+    let unWriteSchoolArr = [];
+    return unWriteSchoolArr;
+  },
   // 二批A
   4: voluntaryList => {
     let unWriteSchoolArr = [];
@@ -97,7 +100,10 @@ export const voluntaryCompleteStrategy = {
     return unWriteSchoolArr;
   },
   // 二批B
-  5: voluntaryList => {},
+  5: voluntaryList => {
+    let unWriteSchoolArr = [];
+    return unWriteSchoolArr;
+  },
   // 三批
   6: voluntaryList => {
     let unWriteSchoolArr = [];
@@ -162,34 +168,22 @@ export const voluntaryCompleteStrategy = {
 const _verifyGradeStrategy = {
   1: (voluntaryObj, gatherOption) => {
     if (voluntaryObj.gather === 'd' || voluntaryObj.gather === 'e') {
-      return `${VOLUNTARY_NAME[0]}应选择“冲”类高校，${
-        voluntaryObj.name
-      }不属于“冲”类高校，推荐考生在${gatherOption.a}中选择。`;
+      return `${VOLUNTARY_NAME[0]}应选择“冲”类高校，${voluntaryObj.name}不属于“冲”类高校，推荐考生在${gatherOption.a}中选择。`;
     }
   },
   2: (voluntaryObj, gatherOption) => {
     if (voluntaryObj.gather === 'e') {
-      return `${VOLUNTARY_NAME[1]}应选择“冲”和“稳”类高校，${
-        voluntaryObj.name
-      }不属于“冲”和“稳”类高校，推荐考生在${gatherOption.b}和${
-        gatherOption.c
-      }中选择。`;
+      return `${VOLUNTARY_NAME[1]}应选择“冲”和“稳”类高校，${voluntaryObj.name}不属于“冲”和“稳”类高校，推荐考生在${gatherOption.b}和${gatherOption.c}中选择。`;
     }
   },
   3: (voluntaryObj, gatherOption) => {
     if (voluntaryObj.gather === 'a' || voluntaryObj.gather === 'e') {
-      return `${VOLUNTARY_NAME[2]}应选择“稳”类高校，${
-        voluntaryObj.name
-      }不属于“稳”类高校，推荐考生在${gatherOption.c}中选择。`;
+      return `${VOLUNTARY_NAME[2]}应选择“稳”类高校，${voluntaryObj.name}不属于“稳”类高校，推荐考生在${gatherOption.c}中选择。`;
     }
   },
   4: (voluntaryObj, gatherOption) => {
     if (voluntaryObj.gather === 'a' || voluntaryObj.gather === 'b') {
-      return `${VOLUNTARY_NAME[3]}应选择“保”类高校，${
-        voluntaryObj.name
-      }不属于“保”类高校，推荐考生在${gatherOption.d}和${
-        gatherOption.e
-      }中选择。`;
+      return `${VOLUNTARY_NAME[3]}应选择“保”类高校，${voluntaryObj.name}不属于“保”类高校，推荐考生在${gatherOption.d}和${gatherOption.e}中选择。`;
     }
   },
   5: (voluntaryObj, gatherOption) => {
@@ -199,9 +193,7 @@ const _verifyGradeStrategy = {
       voluntaryObj.gather === 'd' ||
       voluntaryObj.gather === 'c'
     ) {
-      return `${VOLUNTARY_NAME[4]}应选择“保”类高校中最为保底的，${
-        voluntaryObj.name
-      }不属于“保”类高校，推荐考生在${gatherOption.e}中选择。`;
+      return `${VOLUNTARY_NAME[4]}应选择“保”类高校中最为保底的，${voluntaryObj.name}不属于“保”类高校，推荐考生在${gatherOption.e}中选择。`;
     }
   }
 };
@@ -816,6 +808,6 @@ export const culDeepId = (arrangement, nature, type, property, rank) => {
   return useDeepRule(schoolDeepString);
 };
 
-export const findDeepFatherId = (analysisId) => {
+export const findDeepFatherId = analysisId => {
   return DEEP_FATHER[analysisId];
-}
+};
