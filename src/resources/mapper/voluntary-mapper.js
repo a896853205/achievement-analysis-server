@@ -134,5 +134,12 @@ export default {
     t_voluntary_temp
   WHERE
     userUuid = ?
+  `,
+  deleteTempVoluntary: `
+  DELETE
+  FROM
+    t_voluntary_temp
+  WHERE
+    userUuid = ?
   `
 };

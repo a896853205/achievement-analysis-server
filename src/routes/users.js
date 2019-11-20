@@ -60,24 +60,30 @@ router.post('/setUserInfo', async ctx => {
     user = ctx.state.data;
 
   if (user.scoreAlterTime > 0) {
-    let result = await userService.setUserInfo({
-      nickname,
-      gender,
-      phone,
-      email,
-      score,
-      accountCategory,
-      address,
-      examYear,
-      uuid: user.uuid,
-      scoreAlterTime: user.scoreAlterTime - 1,
-      highSchool
-    });
 
-    if (result) {
+    const [basicResult, importResult] = await Promise.all([
+      userService.setUserBasicInfo({
+        nickname,
+        phone,
+        email,
+        address,
+        uuid: user.uuid,
+        highSchool
+      }),
+      userService.setUserImportInfo({
+        examYear,
+        gender,
+        accountCategory,
+        score,
+        scoreAlterTime: user.scoreAlterTime - 1,
+        uuid: user.uuid,
+      })
+    ]);
+
+    if (basicResult && importResult) {
       ctx.body = new Result({
         msg: '已更新基本用户信息',
-        data: result
+        data: importResult
       });
     } else {
       ctx.body = new Result({

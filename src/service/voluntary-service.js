@@ -290,9 +290,11 @@ export default {
 
   selectTempVoluntary: async userUuid => {
     let voluntaryObj = await voluntaryDao.selectTempVoluntary(userUuid);
+
     if (voluntaryObj) {
       return JSON.parse(voluntaryObj.voluntaryStr);
-    }
-    return;
+    } else {
+      return null;
+    }    
   }
 };
