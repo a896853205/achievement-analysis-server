@@ -7,7 +7,7 @@ export const SAP_CONTROL = ENVIRONMENT.DEV;     // 开发环境
 
 
 // 项目版本号
-export const kAppVersion = 'v0.0.7';
+export const kAppVersion = 'v0.0.8';
 
 /*
     项目内部版本号
@@ -15,4 +15,4 @@ export const kAppVersion = 'v0.0.7';
          99.99.99 版本为   999999000
          后三位为打包测试时使用 每打包一次+1
  */
-export const kAPPInfo_Appversion = '00000007';
+export const kAPPInfo_Appversion = '00000008';
