@@ -106,13 +106,13 @@ export default {
     fk_school_id = ?
   
     `,
-  selectSchoolName: `
-      SELECT
+  selectMajorName: `
+    SELECT
       major_name,comment,major_level_two_code
-      FROM
+    FROM
       sys_t_major
-      WHERE
-       id = ?
+    WHERE
+      id = ?
     `,
   selectSchoolLots: `
       SELECT

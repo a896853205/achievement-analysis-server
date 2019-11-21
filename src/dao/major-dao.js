@@ -56,9 +56,9 @@ export default {
   querySchoolMajor: async id => {
     return await db.query(new SqlObject(majorMapper.querySchoolMajor, [id]));
   },
-  selectSchoolName: async id => {
+  selectMajorName: async id => {
     return (
-      await db.query(new SqlObject(majorMapper.selectSchoolName, [id]))
+      await db.query(new SqlObject(majorMapper.selectMajorName, [id]))
     )[0];
   },
   selectSchoolLots: async id => {

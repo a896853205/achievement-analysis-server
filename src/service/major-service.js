@@ -1,4 +1,5 @@
 import majorDao from '../dao/major-dao';
+import systemDao from '../dao/system-dao';
 
 export default {
   queryMajorCategory: async () => {
@@ -122,43 +123,47 @@ export default {
   },
 
   querySchoolMajor: async schoolId => {
-    let schoolMajor = await majorDao.querySchoolMajor(schoolId);
+    let [schoolMajor, lotsNameArr] = await Promise.all([
+        majorDao.querySchoolMajor(schoolId),
+        systemDao.queryLots()
+      ]),
+      lotsName = new Map(),
+      schoolMajorList = [],
+      daoArr = [];
 
-    let lotsName = new Map();
-    lotsName.set(1, '提前批');
-    lotsName.set(2, '一批A');
-    lotsName.set(3, '一批B');
-    lotsName.set(4, '二批A');
-    lotsName.set(5, '二批B');
-    lotsName.set(6, '三批');
-    lotsName.set(7, '专科');
-
-    let schoolMajorList = [];
-    let lots_name = '';
+    for (let { id, lots_name } of lotsNameArr) {
+      lotsName.set(id, lots_name);
+    }
 
     for (let schoolItem of schoolMajor) {
+      let lots_name = '';
+
       for (let key of lotsName.keys()) {
         if (key === schoolItem.fk_lot_id) {
           lots_name = lotsName.get(key);
-          console.log(lots_name);
           break;
         }
       }
-      let {
-        major_name,
-        comment,
-        major_level_two_code
-      } = await majorDao.selectSchoolName(schoolItem.fk_major_id);
+
+      daoArr.push(majorDao.selectMajorName(schoolItem.fk_major_id));
+
       schoolMajorList.push({
         enrollment: schoolItem.enrollment,
-        enrollment_score: schoolItem.enrollment_score,
-        enrollment_score_max: schoolItem.enrollment_score_max,
+        enrollmentScore: schoolItem.enrollment_score,
+        enrollmentScoreMax: schoolItem.enrollment_score_max,
         year: schoolItem.year,
-        major_name,
-        comment,
-        major_level_two_code,
-        lots_name
+        lotsName: lots_name
       });
+    }
+
+    let marjoNameArr = await Promise.all(daoArr);
+
+    for (let i = 0; i < marjoNameArr.length; i++) {
+      const { major_name, comment, major_level_two_code } = marjoNameArr[i];
+
+      schoolMajorList[i].majorName = major_name;
+      schoolMajorList[i].comment = comment;
+      schoolMajorList[i].majorLevelTwoCode = major_level_two_code;
     }
 
     return schoolMajorList;
