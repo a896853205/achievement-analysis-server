@@ -121,8 +121,8 @@ export default {
     return HotMajors;
   },
 
-  querySchoolMajor: async id => {
-    let schoolMajor = await majorDao.querySchoolMajor(id);
+  querySchoolMajor: async schoolId => {
+    let schoolMajor = await majorDao.querySchoolMajor(schoolId);
 
     let schoolMajorList = [];
     for (let schoolItem of schoolMajor) {
