@@ -102,5 +102,44 @@ export default {
   AND
     t_user_voluntary_result.uuid = ?
   AND
-    t_user_voluntary_result.year = merge_school_lots.year`
-}
+    t_user_voluntary_result.year = merge_school_lots.year`,
+  insertTempVoluntary: `
+  INSERT
+  INTO
+    t_voluntary_temp
+    (voluntaryStr, userUuid)
+  VALUES
+    (?, ?)
+  `,
+  selectTempVoluntary: `
+  SELECT
+    *
+  FROM
+    t_voluntary_temp
+  WHERE
+    userUuid = ?
+  `,
+  updateTempVoluntary: `
+  UPDATE
+    t_voluntary_temp
+  SET
+    voluntaryStr = ?
+  WHERE
+    userUuid = ?
+  `,
+  selectTempVoluntary: `
+  SELECT
+    voluntaryStr
+  FROM
+    t_voluntary_temp
+  WHERE
+    userUuid = ?
+  `,
+  deleteTempVoluntary: `
+  DELETE
+  FROM
+    t_voluntary_temp
+  WHERE
+    userUuid = ?
+  `
+};

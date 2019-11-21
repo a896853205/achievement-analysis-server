@@ -233,7 +233,9 @@ export default {
 
     let analysisId = culDeepId(arrangement, nature, type, property, rank);
 
-    let unitSatisfactionObj = await systemDao.selectUnitSatisfaction(analysisId);
+    let unitSatisfactionObj = await systemDao.selectUnitSatisfaction(
+      analysisId
+    );
 
     let disciplineCode = await schoolDao.selectDisciplineCodeByVoluntaryInfo({
       uuid: voluntaryUuid,
@@ -244,7 +246,7 @@ export default {
     if (!disciplineCode) {
       return {
         unitSatisfactionObj
-      }
+      };
     }
 
     // 专业的id找专业优化code, 这个专业优化code和deepId一起查询派遣库的数据
@@ -277,5 +279,22 @@ export default {
   // 通过志愿表的uuid查询志愿情况
   queryVoluntaryListByVoluntaryUuid: async voluntaryUuid => {
     return await voluntaryDao.queryVoluntaryListByVoluntaryUuid(voluntaryUuid);
+  },
+
+  saveTempVoluntary: async (voluntary, userUuid) => {
+    return await voluntaryDao.saveTempVoluntary(
+      JSON.stringify(voluntary),
+      userUuid
+    );
+  },
+
+  selectTempVoluntary: async userUuid => {
+    let voluntaryObj = await voluntaryDao.selectTempVoluntary(userUuid);
+
+    if (voluntaryObj) {
+      return JSON.parse(voluntaryObj.voluntaryStr);
+    } else {
+      return null;
+    }    
   }
 };

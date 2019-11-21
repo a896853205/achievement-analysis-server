@@ -52,12 +52,14 @@ router.post('/getVoluntaryResult', async ctx => {
 router.post('/getVoluntaryListOption', async ctx => {
   let { voluntaryUuid } = ctx.request.body;
 
-  let voluntaryList = await voluntaryService.queryVoluntaryListByVoluntaryUuid(voluntaryUuid);
+  let voluntaryList = await voluntaryService.queryVoluntaryListByVoluntaryUuid(
+    voluntaryUuid
+  );
 
   ctx.body = new Result({
     data: voluntaryList
   });
-})
+});
 
 // 获取深度分析报告
 router.post('/getVoluntaryDeepResult', async ctx => {
@@ -83,6 +85,33 @@ router.post('/getMyVoluntary', async ctx => {
 
   ctx.body = new Result({
     data: voluntaryList
+  });
+});
+
+/**
+ * 暂存我的志愿表
+ */
+router.post('/saveTempVoluntary', async ctx => {
+  let user = ctx.state.data,
+    { voluntary } = ctx.request.body;
+
+  await voluntaryService.saveTempVoluntary(voluntary, user.uuid);
+
+  ctx.body = new Result({
+    msg: '暂存成功'
+  });
+});
+
+/**
+ * 查询我的暂存志愿表
+ */
+router.post('/getTempVoluntary', async ctx => {
+  let user = ctx.state.data;
+
+  let voluntary = await voluntaryService.selectTempVoluntary(user.uuid);
+
+  ctx.body = new Result({
+    data: voluntary
   });
 });
 

@@ -3,6 +3,7 @@ import { db, SqlObject } from '../resources/db-connect';
 
 // 数据库语句
 import userMapper from '../resources/mapper/user-mapper';
+import voluntaryMapper from '../resources/mapper/voluntary-mapper';
 
 export default {
   // 通过uuid查询用户
@@ -63,7 +64,14 @@ export default {
     }
   },
 
-  updateUserBasic: async ({ nickname, phone, email, address, uuid, highSchool }) => {
+  updateUserBasic: async ({
+    nickname,
+    phone,
+    email,
+    address,
+    uuid,
+    highSchool
+  }) => {
     let [provinceCode, cityCode, areaCode] = address;
     await db.query(
       new SqlObject(userMapper.updateBasicInfo, [
@@ -91,7 +99,8 @@ export default {
     scoreAlterTime,
     uuid
   }) => {
-    await db.query(
+    // 更新重要信息时需要删除当前暂存志愿表
+    await db.transactions([
       new SqlObject(userMapper.updateImportInfo, [
         examYear,
         gender,
@@ -99,8 +108,9 @@ export default {
         score,
         scoreAlterTime,
         uuid
-      ])
-    );
+      ]),
+      new SqlObject(voluntaryMapper.deleteTempVoluntary, [uuid])
+    ]);
 
     let user = await db.query(new SqlObject(userMapper.selectByUuid, [uuid]));
 

@@ -28,56 +28,15 @@ export default {
       user
     };
   },
-  setUserInfo: async ({
+
+  setUserBasicInfo: async ({
     nickname,
-    gender,
-    score,
-    accountCategory,
-    address,
-    examYear,
-    uuid,
     phone,
     email,
-    scoreAlterTime,
+    address,
+    uuid,
     highSchool
   }) => {
-    if (
-      nickname === undefined ||
-      nickname === null ||
-      gender === undefined ||
-      gender === null ||
-      score === undefined ||
-      score === null ||
-      accountCategory === undefined ||
-      accountCategory === null ||
-      address === undefined ||
-      address === null ||
-      phone === null ||
-      phone === undefined
-    ) {
-      return;
-    } else {
-      // 判断修改分数的次数 > 0 才继续往下进行
-      // 可以修改个人信息
-      let result = await userDao.updateUser({
-        nickname,
-        gender,
-        score,
-        accountCategory,
-        address,
-        examYear,
-        uuid,
-        phone,
-        email,
-        scoreAlterTime,
-        highSchool
-      });
-
-      return result;
-    }
-  },
-
-  setUserBasicInfo: async ({ nickname, phone, email, address, uuid, highSchool }) => {
     let result = await userDao.updateUserBasic({
       nickname,
       phone,
