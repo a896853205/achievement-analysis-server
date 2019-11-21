@@ -124,18 +124,43 @@ export default {
   querySchoolMajor: async schoolId => {
     let schoolMajor = await majorDao.querySchoolMajor(schoolId);
 
+    let lotsName = new Map();
+    lotsName.set(1, '提前批');
+    lotsName.set(2, '一批A');
+    lotsName.set(3, '一批B');
+    lotsName.set(4, '二批A');
+    lotsName.set(5, '二批B');
+    lotsName.set(6, '三批');
+    lotsName.set(7, '专科');
+
     let schoolMajorList = [];
+    let lots_name = '';
+
     for (let schoolItem of schoolMajor) {
-      let [schoolName, schoolLots] = await Promise.all([
-        majorDao.selectSchoolName(schoolItem.fk_major_id),
-        majorDao.selectSchoolLots(schoolItem.fk_lot_id)
-      ]);
-      schoolItem.majorName = schoolName.major_name;
-      schoolItem.comment = schoolName.comment;
-      schoolItem.major_level_two_code = schoolName.major_level_two_code;
-      schoolItem.lotsName = schoolLots.lots_name;
-      schoolMajorList.push(schoolItem);
+      for (let key of lotsName.keys()) {
+        if (key === schoolItem.fk_lot_id) {
+          lots_name = lotsName.get(key);
+          console.log(lots_name);
+          break;
+        }
+      }
+      let {
+        major_name,
+        comment,
+        major_level_two_code
+      } = await majorDao.selectSchoolName(schoolItem.fk_major_id);
+      schoolMajorList.push({
+        enrollment: schoolItem.enrollment,
+        enrollment_score: schoolItem.enrollment_score,
+        enrollment_score_max: schoolItem.enrollment_score_max,
+        year: schoolItem.year,
+        major_name,
+        comment,
+        major_level_two_code,
+        lots_name
+      });
     }
+
     return schoolMajorList;
   }
 };
