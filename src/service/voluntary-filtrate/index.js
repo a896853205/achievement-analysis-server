@@ -221,6 +221,7 @@ export const voluntaryGradedStrategy = {
     for (let item of voluntaryList) {
       gatherNum[item.gather]++;
     }
+
     for (let key in gatherNum) {
       if (gatherNum[key] === 5) {
         let schoolName = [];
@@ -232,13 +233,15 @@ export const voluntaryGradedStrategy = {
         );
       }
     }
-
+    
     // 第二步判断合理性
     // 将学校去重
     let schoolArr = [];
+    
     for (let item of voluntaryList) {
       schoolArr[item.fk_five_volunteer_id - 1] = item;
     }
+
     for (let item of schoolArr) {
       if (item) {
         let detailMsg = _verifyGradeStrategy[item.fk_five_volunteer_id](
@@ -804,7 +807,6 @@ export const culDeepId = (arrangement, nature, type, property, rank) => {
     schoolDeepString += '__';
   }
 
-  console.log(schoolDeepString);
   return useDeepRule(schoolDeepString);
 };
 

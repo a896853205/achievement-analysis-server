@@ -23,30 +23,32 @@ export default {
       let allParam = [];
 
       for (let schoolOption of voluntary) {
-        schoolOption.major.forEach((majorOption, majorIndex) => {
-          if (majorOption.majorId) {
-            let param = [];
+        if (schoolOption && schoolOption.major) {
+          schoolOption.major.forEach((majorOption, majorIndex) => {
+            if (majorOption.majorId) {
+              let param = [];
 
-            param.push(
-              voluntaryUuid,
-              schoolOption.five_volunteer_id,
-              schoolOption.schoolId,
-              majorOption.majorId,
-              majorIndex,
-              new Date(),
-              lotId,
-              user.uuid,
-              schoolOption.gender,
-              // 因为查询的是年份的year
-              user.examYear,
-              // user.poverty,
-              schoolOption.gather,
-              reportType
-            );
+              param.push(
+                voluntaryUuid,
+                schoolOption.five_volunteer_id,
+                schoolOption.schoolId,
+                majorOption.majorId,
+                majorIndex,
+                new Date(),
+                lotId,
+                user.uuid,
+                schoolOption.gender,
+                // 因为查询的是年份的year
+                user.examYear,
+                // user.poverty,
+                schoolOption.gather,
+                reportType
+              );
 
-            allParam.push(param);
-          }
-        });
+              allParam.push(param);
+            }
+          });
+        }
       }
 
       // 没有填写志愿

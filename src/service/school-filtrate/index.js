@@ -525,9 +525,6 @@ export const culRiskRateStrategies = {
         // 如果都没有返回未知
         culList[i].riskRate = 4;
       } else {
-        if (culList[i].enrollment_id === 7709) {
-          console.log(oldOneDiffer, oldTwoDiffer, oldThreeDiffer);
-        }
         // 如有一到两个
         let influenceFactor3;
 
