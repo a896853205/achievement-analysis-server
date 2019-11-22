@@ -194,7 +194,7 @@ router.post('/miniAppGetSchool', async ctx => {
     accountCategory
   } = ctx.request.body;
 
-  let schoolList = await schoolService.getSchoolListByLotsScore({
+  let { schoolList } = await schoolService.getSchoolListByLotsScore({
     lotId,
     natureValues: [],
     propertyValues: [],
@@ -208,7 +208,7 @@ router.post('/miniAppGetSchool', async ctx => {
   });
 
   ctx.body = new Result({
-    data: schoolList.slice(2)
+    data: schoolList ? schoolList.slice(2) : []
   });
 });
 
