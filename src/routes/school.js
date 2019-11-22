@@ -1,15 +1,15 @@
 // service
-import schoolService from "../service/school-service";
-import userService from "../service/user-service";
+import schoolService from '../service/school-service';
+import userService from '../service/user-service';
 // 返回前台的对象
-import Result from "../../util/response";
+import Result from '../../util/response';
 
-const router = require("koa-router")();
+const router = require('koa-router')();
 
-router.prefix("/school");
+router.prefix('/school');
 
 // 获得学校
-router.post("/getSchool", async ctx => {
+router.post('/getSchool', async ctx => {
   // type 1院校优先
   //      2专业优先
   //      3指定院校
@@ -73,7 +73,7 @@ router.post("/getSchool", async ctx => {
 });
 
 // 获得专业
-router.post("/getMajor", async ctx => {
+router.post('/getMajor', async ctx => {
   let { schoolId, lotId } = ctx.request.body,
     user = ctx.state.data,
     majorList = [];
@@ -92,7 +92,7 @@ router.post("/getMajor", async ctx => {
   });
 });
 
-router.post("/getSchoolDetail", async ctx => {
+router.post('/getSchoolDetail', async ctx => {
   let { schoolId } = ctx.request.body;
 
   let schoolDetail = await schoolService.getSchoolDetail(schoolId);
@@ -102,7 +102,7 @@ router.post("/getSchoolDetail", async ctx => {
   });
 });
 
-router.post("/searchSchool", async ctx => {
+router.post('/searchSchool', async ctx => {
   let {
     natureValues,
     propertyValues,
@@ -126,7 +126,7 @@ router.post("/searchSchool", async ctx => {
   });
 });
 
-router.post("/getSchoolScoreList", async ctx => {
+router.post('/getSchoolScoreList', async ctx => {
   const { schoolId, accountCategory } = ctx.request.body;
 
   let schoolScoreList = await schoolService.getSchoolScores(
@@ -142,7 +142,7 @@ router.post("/getSchoolScoreList", async ctx => {
 /**
  * 根据学校id查询招生简章等信息
  */
-router.post("/getEnrollmentGuideNews", async ctx => {
+router.post('/getEnrollmentGuideNews', async ctx => {
   const { schoolId } = ctx.request.body;
 
   let schoolEnrollment = await schoolService.selectSchoolEnrollmentGuideNewsById(
@@ -157,7 +157,7 @@ router.post("/getEnrollmentGuideNews", async ctx => {
 /**
  * 根据招生简章的uuid查询招生简章
  */
-router.post("/getEnrollmentGuideNewsDetail", async ctx => {
+router.post('/getEnrollmentGuideNewsDetail', async ctx => {
   const { uuid } = ctx.request.body;
 
   let enrollmentGuideNewsDetail = await schoolService.selectEnrollmentGuideNewsDetail(
@@ -172,13 +172,43 @@ router.post("/getEnrollmentGuideNewsDetail", async ctx => {
 /**
  * 根据id查询学校排名
  */
-router.post("/getSchoolRank", async ctx => {
+router.post('/getSchoolRank', async ctx => {
   const { schoolId } = ctx.request.body;
 
   let schoolRank = await schoolService.selectSchoolRankById(schoolId);
 
   ctx.body = new Result({
     data: schoolRank
+  });
+});
+
+/**
+ * 小程序获取学校列表
+ */
+router.post('/miniAppGetSchool', async ctx => {
+  let {
+    lotId,
+    gatherValue,
+    examYear,
+    score,
+    accountCategory
+  } = ctx.request.body;
+
+  let schoolList = await schoolService.getSchoolListByLotsScore({
+    lotId,
+    natureValues: [],
+    propertyValues: [],
+    typeValues: [],
+    areaFeatureValues: [],
+    provinceListValues: [],
+    gatherValue,
+    accountCategory,
+    examYear,
+    score
+  });
+
+  ctx.body = new Result({
+    data: schoolList.slice(2)
   });
 });
 

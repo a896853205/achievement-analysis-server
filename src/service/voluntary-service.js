@@ -295,6 +295,6 @@ export default {
       return JSON.parse(voluntaryObj.voluntaryStr);
     } else {
       return null;
-    }    
+    }
   }
 };
