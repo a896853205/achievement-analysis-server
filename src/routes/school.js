@@ -208,7 +208,7 @@ router.post('/miniAppGetSchool', async ctx => {
   });
 
   ctx.body = new Result({
-    data: schoolList ? schoolList.slice(2) : []
+    data: schoolList.slice(0, 3)
   });
 });
 
