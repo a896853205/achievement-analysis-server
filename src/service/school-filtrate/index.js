@@ -172,10 +172,10 @@ export const splitSchoolByRange = (
   oldYear
 ) => {
   // score2 = score - scoreRange.down_score_2,
-  // score3 = score - scoreRange.down_score_3,
 
   // 最下限
   let score1 = score - scoreRange.down_score_1,
+    score3 = score - scoreRange.down_score_3,
     score4 = score,
     score5 = score + scoreRange.up_score_4,
     score6 = score + scoreRange.up_score_5,
@@ -198,15 +198,22 @@ export const splitSchoolByRange = (
 
       // 开始筛选集合
       if (currentSchool.score >= score4 && currentSchool.score < score5) {
-        schoolItem.gather = "b";
+        schoolItem.gather = 'b';
         schoolListB.push(schoolItem);
         continue;
       } else if (
         currentSchool.score >= score5 &&
         currentSchool.score < score6
       ) {
-        schoolItem.gather = "a";
+        schoolItem.gather = 'a';
         schoolListA.push(schoolItem);
+        continue;
+      } else if (
+        currentSchool.score >= score3 &&
+        currentSchool.score < score4
+      ) {
+        schoolItem.gather = 'c';
+        schoolListC.push(schoolItem);
         continue;
       } else {
         // 不是ab集合需要判断其专业的分数情况
@@ -222,62 +229,42 @@ export const splitSchoolByRange = (
           return item.major_score;
         });
 
-        // 如果没有专业分的学校则是c集合
-        if (!majorArr.length) {
-          schoolItem.gather = "c";
-          schoolListC.push(schoolItem);
-          continue;
-        }
-
         // 分数降序排列
         majorArr.sort((prep, next) => {
           return next.major_score - prep.major_score;
         });
 
+        // 如果没有专业分的学校则是d集合
+        if (!majorArr.length) {
+          schoolItem.gather = 'd';
+          schoolListD.push(schoolItem);
+          continue;
+        }
+
         // 判断分数是否比专业最高的高,如果高则是e集合
         if (score > majorArr[0].major_score) {
-          schoolItem.gather = "e";
+          schoolItem.gather = 'e';
           schoolListE.push(schoolItem);
           continue;
         }
 
-        // 取中位数的major,大于中位数的是d集合
-        let majorLength = majorArr.length;
-        if (majorLength & 1) {
-          // 奇数
-          if (score > majorArr[(majorLength + 1) / 2 - 1].major_score) {
-            schoolItem.gather = "d";
-            schoolListD.push(schoolItem);
-            continue;
-          }
-        } else {
-          // 偶数
-          let prepMajor = majorArr[majorLength / 2 - 1];
-          let nextMajor = majorArr[majorLength / 2];
-          if (score > (prepMajor.major_score + nextMajor.major_score) / 2) {
-            schoolItem.gather = "d";
-            schoolListD.push(schoolItem);
-            continue;
-          }
-        }
-
-        // 其他的都是c集合
-        schoolItem.gather = "c";
-        schoolListC.push(schoolItem);
+        // 其他的都是d集合
+        schoolItem.gather = 'd';
+        schoolListD.push(schoolItem);
       }
     }
   }
 
   switch (gatherValue) {
-    case "a":
+    case 'a':
       return schoolListA;
-    case "b":
+    case 'b':
       return schoolListB;
-    case "c":
+    case 'c':
       return schoolListC;
-    case "d":
+    case 'd':
       return schoolListD;
-    case "e":
+    case 'e':
       return schoolListE;
     default:
       return [
