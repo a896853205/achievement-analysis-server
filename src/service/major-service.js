@@ -145,25 +145,22 @@ export default {
         }
       }
 
-      daoArr.push(majorDao.selectMajorName(schoolItem.fk_major_id));
+      let {
+        major_name,
+        comment,
+        major_level_two_code
+      } = await majorDao.selectMajorName(schoolItem.fk_major_id);
 
       schoolMajorList.push({
         enrollment: schoolItem.enrollment,
         enrollmentScore: schoolItem.enrollment_score,
         enrollmentScoreMax: schoolItem.enrollment_score_max,
         year: schoolItem.year,
-        lotsName: lots_name
+        lotsName: lots_name,
+        majorName: major_name,
+        comment,
+        majorLevelTwoCode: major_level_two_code
       });
-    }
-
-    let marjoNameArr = await Promise.all(daoArr);
-
-    for (let i = 0; i < marjoNameArr.length; i++) {
-      const { major_name, comment, major_level_two_code } = marjoNameArr[i];
-
-      schoolMajorList[i].majorName = major_name;
-      schoolMajorList[i].comment = comment;
-      schoolMajorList[i].majorLevelTwoCode = major_level_two_code;
     }
 
     return schoolMajorList;
