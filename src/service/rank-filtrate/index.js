@@ -59,14 +59,11 @@ export const computeLotsScoreDifferMsg = (score, lotsScoreList) => {
     return score >= item.score;
   });
 
-  if (!lotsScoreObj || lotsScoreObj.fk_lots_id > 5) {
-    // 分数小于二本线
-    lotsScoreObj = lotsScoreList.find(item => {
-      return item.fk_lots_id === 5;
-    });
-    lotsScoreDifferMsg = lotsStrategy[5](score, lotsScoreObj);
+  if (!lotsScoreObj) {
+    // 如果不存在就比专科线还低
+    lotsScoreDifferMsg = '比专科线低';
   } else {
-    // 分数大于二本线
+    // 如果存在调用对应的批次
     lotsScoreDifferMsg = lotsStrategy[lotsScoreObj.fk_lots_id](
       score,
       lotsScoreObj
@@ -121,12 +118,28 @@ let lotsStrategy = {
     let differ = score - lotsScoreObj.score;
     if (differ > 0) {
       return `高出二本线${differ}分`;
-    } else if (!differ) {
+    } else {
       return `与二本线分数恰好相同`;
-    } else if (differ < 0) {
-      return `低于二本线${-differ}分`;
     }
-  }
+  },
+  // 三本
+  6: (score, lotsScoreObj) => {
+    let differ = score - lotsScoreObj.score;
+    if (differ > 0) {
+      return `高出三本线${differ}分`;
+    } else {
+      return `与三本线分数恰好相同`;
+    }
+  },
+  // 专科
+  7: (score, lotsScoreObj) => {
+    let differ = score - lotsScoreObj.score;
+    if (differ > 0) {
+      return `高出专科线${differ}分`;
+    } else {
+      return `与专科线分数恰好相同`;
+    }
+  },
 };
 
 // 计算三年的线差
