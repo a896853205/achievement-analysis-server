@@ -77,6 +77,7 @@ router.post('/setUserInfo', async ctx => {
         score,
         scoreAlterTime: user.scoreAlterTime - 1,
         uuid: user.uuid,
+        userRole: user.roleCode
       })
     ]);
 
@@ -136,7 +137,8 @@ router.post('/setUserImportInfo', async ctx => {
       accountCategory,
       score,
       scoreAlterTime: user.scoreAlterTime - 1,
-      uuid: user.uuid
+      uuid: user.uuid,
+      userRole: user.roleCode
     });
 
     if (result) {

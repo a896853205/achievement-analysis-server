@@ -55,8 +55,12 @@ export default {
     accountCategory,
     score,
     scoreAlterTime,
-    uuid
+    uuid,
+    userRole = 1
   }) => {
+    // 查询权限表userRole
+    let role = await systemDao.selectRoleByCode(userRole);
+
     // 这里判断次数,如果小于返回-1,如果还有次数就update
     let result = await userDao.updateUserImport({
       examYear,
@@ -64,7 +68,9 @@ export default {
       accountCategory,
       score,
       scoreAlterTime,
-      uuid
+      uuid,
+      reportAlterTime: role.reportAlterTime,
+      deepAlterTime: role.deepAlterTime
     });
 
     return result;

@@ -97,7 +97,9 @@ export default {
     accountCategory,
     score,
     scoreAlterTime,
-    uuid
+    uuid,
+    reportAlterTime,
+    deepAlterTime
   }) => {
     // 更新重要信息时需要删除当前暂存志愿表
     await db.transactions([
@@ -107,6 +109,8 @@ export default {
         accountCategory,
         score,
         scoreAlterTime,
+        reportAlterTime,
+        deepAlterTime,
         uuid
       ]),
       new SqlObject(voluntaryMapper.deleteTempVoluntary, [uuid])

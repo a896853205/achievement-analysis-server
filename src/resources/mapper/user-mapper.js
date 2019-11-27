@@ -14,11 +14,11 @@ export default {
   `,
   updateImportInfo: `
     UPDATE
-    t_user
+      t_user
     SET
-    examYear = ?, gender = ?, accountCategory = ?, score = ?, scoreAlterTime = ?
+      examYear = ?, gender = ?, accountCategory = ?, score = ?, scoreAlterTime = ?, reportAlterTime = ?, deepAlterTime = ?
     WHERE
-    uuid = ?
+      uuid = ?
   `,
   selectByUuid: `
   SELECT
