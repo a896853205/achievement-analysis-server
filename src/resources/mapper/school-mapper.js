@@ -282,6 +282,8 @@ a.accountCategory = ?;
 	a.fk_lot_id =?
 	AND
 	(a.year = ? OR a.year = ? OR a.year = ? OR a.year = ?)
+	AND
+	a.accountCategory = ?
 	;
 	`,
   // 带有major_category_id表

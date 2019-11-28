@@ -410,7 +410,7 @@ export default {
       { currentRank, oldRank, oldTwoRank, oldThreeRank },
       { currentLotsScore, oldOneLotsScore, oldTwoLotsScore, oldThreeLotsScore }
     ] = await Promise.all([
-      schoolDao.queryMajorBySchoolId(schoolId, lotId, examYear),
+      schoolDao.queryMajorBySchoolId(schoolId, lotId, examYear, accountCategory),
       schoolDao.queryScoreRankByCategoryAndYear(accountCategory, examYear),
       schoolDao.queryLotsScore(examYear, accountCategory)
     ]);

@@ -70,7 +70,7 @@ export default {
   },
 
   // 通过学校id和当前年份获取学校
-  queryMajorBySchoolId: async (schoolId, lotId, examYear) => {
+  queryMajorBySchoolId: async (schoolId, lotId, examYear, accountCategory) => {
     let majorList = await db.query(
       new SqlObject(schoolMapper.getMajorBySchoolId, [
         schoolId,
@@ -78,7 +78,8 @@ export default {
         examYear,
         examYear - 1,
         examYear - 2,
-        examYear - 3
+        examYear - 3,
+        accountCategory
       ])
     );
 
