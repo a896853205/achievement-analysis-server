@@ -13,6 +13,8 @@ router.post('/getSchool', async ctx => {
   // type 1院校优先
   //      2专业优先
   //      3指定院校
+  let startTime = new Date();
+
   let {
       type,
       lotId,
@@ -66,6 +68,8 @@ router.post('/getSchool', async ctx => {
       examYear: user.examYear
     });
   }
+
+  console.log('路由总使用时间为:', (new Date() - startTime));
 
   ctx.body = new Result({
     data: schoolList
