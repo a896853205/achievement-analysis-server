@@ -56,7 +56,8 @@ router.post('/getSchool', async ctx => {
       majorName,
       score: user.score,
       accountCategory: user.accountCategory,
-      examYear: user.examYear
+      examYear: user.examYear,
+      gatherValue
     });
   } else if (type === 3) {
     // 指定院校
@@ -68,8 +69,6 @@ router.post('/getSchool', async ctx => {
       examYear: user.examYear
     });
   }
-
-  console.log('路由总使用时间为:', (new Date() - startTime));
 
   ctx.body = new Result({
     data: schoolList

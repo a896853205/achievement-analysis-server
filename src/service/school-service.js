@@ -260,7 +260,8 @@ export default {
     propertyValues,
     typeValues,
     areaFeatureValues,
-    provinceListValues
+    provinceListValues,
+    gatherValue
   }) => {
     let [
       resultSchoolList,
@@ -323,7 +324,7 @@ export default {
       oldOneScoreAndRank.score,
       scoreRange,
       resultSchoolList,
-      undefined,
+      gatherValue,
       examYear - 1
     );
 

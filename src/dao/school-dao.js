@@ -15,8 +15,6 @@ export default {
     accountCategory,
     examYear
   ) => {
-    let startTime = new Date();
-
     let schoolList = await db.query(
       new SqlObject(schoolMapper.querySchoolByLotIdAndAccountCategory, [
         lotId,
@@ -27,8 +25,6 @@ export default {
         examYear - 3
       ])
     );
-
-    console.log('查询数据库使用时间为:', (new Date() - startTime));
 
     return initSchool(schoolList);
   },
