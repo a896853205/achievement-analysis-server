@@ -13,8 +13,6 @@ router.post('/getSchool', async ctx => {
   // type 1院校优先
   //      2专业优先
   //      3指定院校
-  let startTime = new Date();
-
   let {
       type,
       lotId,
@@ -70,9 +68,18 @@ router.post('/getSchool', async ctx => {
     });
   }
 
-  ctx.body = new Result({
-    data: schoolList
-  });
+  if (schoolList.schoolList.length > 0) {
+    ctx.body = new Result({
+      data: schoolList
+    });
+  } else {
+    ctx.body = new Result({
+      data: schoolList,
+      status: 1,
+      msg: '没有符合筛选条件的学校'
+    });
+  }
+  
 });
 
 // 获得专业
