@@ -180,13 +180,17 @@ export default {
       }
 
       // 第三项判断大计划性
-
       result.planResult.planDetailArr = voluntaryPlanStrategy[
         voluntaryList[0].fk_lots_id
       ](voluntaryList);
-      if (result.planResult.planDetailArr) {
+
+      if (result.planResult.planDetailArr.length) {
         result.planResult.reasonable = false;
         result.planResult.describe = `请考生谨慎选择，以免造成退档或滑档情况！`;
+      } else {
+        result.planResult.describe =
+          '志愿大计划选择合理性,如果您另外的条件均合理,则恭喜您可以按照该志愿填报了,祝您金榜题名!';
+        result.planResult.reasonable = true;
       }
     }
 
