@@ -61,7 +61,8 @@ export default {
 	on a.id = f.school_id
 	WHERE
 	a.name LIKE ?
-	
+	ORDER BY
+	province_code
 	`,
 
   querySchoolByLotIdAndAccountCategory: `
