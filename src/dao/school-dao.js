@@ -215,23 +215,27 @@ export default {
     fk_five_volunteer_id,
     major_index
   }) => {
-    return (await db.query(
-      new SqlObject(schoolMapper.selectDisciplineCodeByVoluntaryInfo, [
-        uuid,
-        fk_five_volunteer_id,
-        major_index
-      ])
-    ))[0];
+    return (
+      await db.query(
+        new SqlObject(schoolMapper.selectDisciplineCodeByVoluntaryInfo, [
+          uuid,
+          fk_five_volunteer_id,
+          major_index
+        ])
+      )
+    )[0];
   },
 
   // 查询专业未来前景
   selectMajorFuture: async ({ analysisId, disciplineCode }) => {
-    return (await db.query(
-      new SqlObject(schoolMapper.selectMajorFuture, [
-        analysisId,
-        disciplineCode
-      ])
-    ))[0];
+    return (
+      await db.query(
+        new SqlObject(schoolMapper.selectMajorFuture, [
+          analysisId,
+          disciplineCode
+        ])
+      )
+    )[0];
   },
 
   querySchoolScores: async (fk_school_id, accountCategory) => {
@@ -258,26 +262,30 @@ export default {
    * 根据id查询学校排名
    */
   selectSchoolRankById: async id => {
-    return (await db.query(
-      new SqlObject(schoolMapper.selectSchoolRankById, [id])
-    ))[0];
+    return (
+      await db.query(new SqlObject(schoolMapper.selectSchoolRankById, [id]))
+    )[0];
   },
   /**
    * 通过
    */
   selectEnrollmentGuideNewsDetail: async guideNewsUuid => {
-    return (await db.query(
-      new SqlObject(schoolMapper.selectEnrollmentGuideNewsDetail, [
-        guideNewsUuid
-      ])
-    ))[0];
+    return (
+      await db.query(
+        new SqlObject(schoolMapper.selectEnrollmentGuideNewsDetail, [
+          guideNewsUuid
+        ])
+      )
+    )[0];
   },
   updateAddEnrollmentGuideViews: async enrollmentGuideNewsUuid => {
-    return (await db.query(
-      new SqlObject(schoolMapper.updateAddEnrollmentGuideViews, [
-        enrollmentGuideNewsUuid
-      ])
-    ))[0];
+    return (
+      await db.query(
+        new SqlObject(schoolMapper.updateAddEnrollmentGuideViews, [
+          enrollmentGuideNewsUuid
+        ])
+      )
+    )[0];
   },
 
   querySchoolAll: async schoolName => {
@@ -296,5 +304,8 @@ export default {
   },
   selectSchoolNature: async () => {
     return await db.query(new SqlObject(schoolMapper.selectSchoolNatureById));
+  },
+  querySchoolRecommend: async () => {
+    return await db.query(new SqlObject(schoolMapper.querySchoolRecommend));
   }
 };

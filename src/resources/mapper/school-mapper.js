@@ -663,5 +663,11 @@ a.accountCategory = ?;
 			FROM
 			sys_t_school_nature
 		
+	`,
+	querySchoolRecommend: `
+		SELECT
+			*
+		FROM
+		  t_school_recommend
 	`
 };

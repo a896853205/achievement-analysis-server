@@ -1,7 +1,7 @@
 // dao
-import schoolDao from "../dao/school-dao";
-import controlScoreRangeDao from "../dao/control-score-range-dao";
-import { PAGE_SCHOOL } from "../constants/api-constants";
+import schoolDao from '../dao/school-dao';
+import controlScoreRangeDao from '../dao/control-score-range-dao';
+import { PAGE_SCHOOL } from '../constants/api-constants';
 // 筛选算法
 import {
   filtrateNatureSchool,
@@ -13,14 +13,14 @@ import {
   splitSchoolByRange,
   culEnrollRateStrategies,
   culRiskRateStrategies
-} from "./school-filtrate";
+} from './school-filtrate';
 
 import {
   proxyParseToOldScore,
   culLineDifferStrategies,
   bindScoreAndRank,
   calScoreTransformRank
-} from "./rank-filtrate";
+} from './rank-filtrate';
 
 /**
  * 学校例子
@@ -411,7 +411,12 @@ export default {
       { currentRank, oldRank, oldTwoRank, oldThreeRank },
       { currentLotsScore, oldOneLotsScore, oldTwoLotsScore, oldThreeLotsScore }
     ] = await Promise.all([
-      schoolDao.queryMajorBySchoolId(schoolId, lotId, examYear, accountCategory),
+      schoolDao.queryMajorBySchoolId(
+        schoolId,
+        lotId,
+        examYear,
+        accountCategory
+      ),
       schoolDao.queryScoreRankByCategoryAndYear(accountCategory, examYear),
       schoolDao.queryLotsScore(examYear, accountCategory)
     ]);
@@ -539,5 +544,8 @@ export default {
     }
 
     return guideNewsDetail;
+  },
+  querySchoolRecommend: async () => {
+    return await schoolDao.querySchoolRecommend();
   }
 };

@@ -79,7 +79,6 @@ router.post('/getSchool', async ctx => {
       msg: '没有符合筛选条件的学校'
     });
   }
-  
 });
 
 // 获得专业
@@ -219,6 +218,15 @@ router.post('/miniAppGetSchool', async ctx => {
 
   ctx.body = new Result({
     data: schoolList.slice(0, 3)
+  });
+});
+
+// 学校推荐列表
+router.post('/getSchoolRecommendList', async ctx => {
+  let schoolRecommendList = await schoolService.querySchoolRecommend();
+
+  ctx.body = new Result({
+    data: schoolRecommendList
   });
 });
 
