@@ -216,7 +216,7 @@ export const splitSchoolByRange = (
         schoolListC.push(schoolItem);
         continue;
       } else {
-        // 不是ab集合需要判断其专业的分数情况
+        // 不是abc集合需要判断其专业的分数情况
         let majorArr = schoolItem.major;
 
         // 筛选年份
