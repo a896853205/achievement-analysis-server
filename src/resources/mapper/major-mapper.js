@@ -99,12 +99,11 @@ export default {
 
   querySchoolMajor: `
     SELECT
-    enrollment,enrollment_score,enrollment_score_max,fk_lot_id,fk_major_id,year
+    enrollment,enrollment_score,enrollment_score_max,fk_lot_id,fk_major_id,year,accountCategory
     FROM
     t_major_enrollment_info
     WHERE
     fk_school_id = ?
-  
     `,
   selectMajorName: `
     SELECT

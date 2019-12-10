@@ -128,8 +128,7 @@ export default {
         systemDao.queryLots()
       ]),
       lotsName = new Map(),
-      schoolMajorList = [],
-      daoArr = [];
+      schoolMajorList = [];
 
     for (let { id, lots_name } of lotsNameArr) {
       lotsName.set(id, lots_name);
@@ -159,7 +158,8 @@ export default {
         lotsName: lots_name,
         majorName: major_name,
         comment,
-        majorLevelTwoCode: major_level_two_code
+        majorLevelTwoCode: major_level_two_code,
+        accountCategory: schoolItem.accountCategory
       });
     }
 
