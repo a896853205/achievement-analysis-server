@@ -42,9 +42,9 @@ router.post('/getHotMajors', async ctx => {
 });
 
 router.post('/getSchoolMajor', async ctx => {
-  const { schoolId } = ctx.request.body;
+  const { schoolId, accountCategory } = ctx.request.body;
 
-  let schoolMajor = await majorService.querySchoolMajor(schoolId);
+  let schoolMajor = await majorService.querySchoolMajor(schoolId, accountCategory);
 
   ctx.body = new Result({
     data: schoolMajor

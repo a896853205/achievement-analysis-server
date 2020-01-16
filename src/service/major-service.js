@@ -122,9 +122,9 @@ export default {
     return HotMajors;
   },
 
-  querySchoolMajor: async schoolId => {
+  querySchoolMajor: async (schoolId, accountCategory) => {
     let [schoolMajor, lotsNameArr] = await Promise.all([
-        majorDao.querySchoolMajor(schoolId),
+        majorDao.querySchoolMajor(schoolId, accountCategory),
         systemDao.queryLots()
       ]),
       lotsName = new Map(),

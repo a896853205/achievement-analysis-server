@@ -103,7 +103,7 @@ export default {
     FROM
     t_major_enrollment_info
     WHERE
-    fk_school_id = ?
+    fk_school_id = ? and accountCategory = ?
     `,
   selectMajorName: `
     SELECT
