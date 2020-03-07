@@ -285,6 +285,8 @@ a.accountCategory = ?;
 	(a.year = ? OR a.year = ? OR a.year = ? OR a.year = ?)
 	AND
 	a.accountCategory = ?
+	ORDER BY
+	a.year desc
 	;
 	`,
   // 带有major_category_id表

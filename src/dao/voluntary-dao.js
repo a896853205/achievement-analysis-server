@@ -53,7 +53,6 @@ export default {
     let voluntaryList = await db.query(
       new SqlObject(voluntaryMapper.queryVoluntaryByUserUuid, [userUuid])
     );
-
     // 去重进行处理
     let unique = new Map();
     return voluntaryList.filter(o => !unique.has(o.uuid) && unique.set(o.uuid));

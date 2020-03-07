@@ -19,6 +19,7 @@ export const parseCurrentScore = (score, currentRank = [], oldRank = []) => {
   }
 
   for (let oldItem of oldRank) {
+    // FIXME 这里有问题
     if (oldItem.rank >= fitCurrent.rank) {
       fitOld = oldItem;
     }
