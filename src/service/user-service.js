@@ -149,7 +149,16 @@ export default {
   },
 
   saveVerifyCode: async username => {
-    let code = parseInt(Math.random() * 9999, 10);
+    const strNumRandom = () => {
+        return Math.floor(Math.random() * 10);
+      },
+      codeLength = 4;
+
+    let code = '';
+
+    for (let i = 0; i < codeLength; i++) {
+      code += strNumRandom();
+    }
 
     let client = new Core({
       accessKeyId: ACCESS_KEY_ID,
