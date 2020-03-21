@@ -48,6 +48,7 @@ app.use(async (ctx, next) => {
 
 let unlessPathArr = [
   '/users/register',
+  '/users/saveVerifyCode',
   '/users/login',
   /^\/system/,
   /^\/news/,

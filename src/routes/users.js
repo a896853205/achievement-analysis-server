@@ -60,7 +60,6 @@ router.post('/setUserInfo', async ctx => {
     user = ctx.state.data;
 
   if (user.scoreAlterTime > 0) {
-
     const [basicResult, importResult] = await Promise.all([
       userService.setUserBasicInfo({
         nickname,
@@ -202,6 +201,17 @@ router.post('/register', async ctx => {
       msg: '注册成功'
     });
   }
+});
+
+// 注册获取手机验证码
+router.post('/saveVerifyCode', async ctx => {
+  let { username } = ctx.request.body;
+
+  await userService.saveVerifyCode(username);
+
+  ctx.body = new Result({
+    msg: '已发送验证码'
+  });
 });
 
 // 获取当年的位次和对应去年的分数和位次

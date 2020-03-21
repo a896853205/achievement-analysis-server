@@ -2,11 +2,14 @@
 import userDao from '../dao/user-dao';
 import schoolDao from '../dao/school-dao';
 import systemDao from '../dao/system-dao';
+import Core from '@alicloud/pop-core';
 
 // 算法函数
 import { parseCurrentScore, computeLotsScoreDifferMsg } from './rank-filtrate';
 
 import webToken from '../../util/token';
+
+import { ACCESS_KEY_ID, ACCESS_KEY_SECRET } from '../constants/keys';
 
 export default {
   // 登录
@@ -143,5 +146,31 @@ export default {
       currentLotsScoreDifferMsg,
       lotsScoreDifferMsg
     };
+  },
+
+  saveVerifyCode: async username => {
+    let code = parseInt(Math.random() * 9999, 10);
+
+    let client = new Core({
+      accessKeyId: ACCESS_KEY_ID,
+      accessKeySecret: ACCESS_KEY_SECRET,
+      endpoint: 'https://dysmsapi.aliyuncs.com',
+      apiVersion: '2017-05-25'
+    });
+
+    let param = {
+      RegionId: 'cn-beijing',
+      TemplateCode: 'SMS_186576082',
+      PhoneNumbers: username,
+      TemplateParam: code
+    };
+
+    let requestOption = {
+      method: 'POST'
+    };
+
+    let result = await client.request('SendSms', param, requestOption);
+
+    console.log(result);
   }
 };
