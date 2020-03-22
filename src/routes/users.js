@@ -184,21 +184,28 @@ router.post('/alterPassword', async ctx => {
 
 // 注册路由
 router.post('/register', async ctx => {
-  let { username, password } = ctx.request.body,
+  let { username, password, code } = ctx.request.body,
     // 判断用户名是否存在
-    findResult = await userService.checkUser(username);
+    findResult = await userService.checkUser(username),
+    // 判断验证码是否正确
+    codeResult = await userService.checkPhoneCode(username, code);
   if (findResult) {
     ctx.body = new Result({
       status: 0,
       msg: '用户名已存在'
     });
-  } else {
+  } else if (codeResult === 'success') {
     // 插入数据
     // 生成一个唯一的uuid
     let userUuid = uuidV1().replace(/-/g, '');
     await userService.saveUser(username, password, userUuid);
     ctx.body = new Result({
       msg: '注册成功'
+    });
+  } else {
+    ctx.body = new Result({
+      status: 0,
+      msg: codeResult
     });
   }
 });
@@ -207,11 +214,18 @@ router.post('/register', async ctx => {
 router.post('/saveVerifyCode', async ctx => {
   let { username } = ctx.request.body;
 
-  await userService.saveVerifyCode(username);
+  let msg = await userService.saveVerifyCode(username);
 
-  ctx.body = new Result({
-    msg: '已发送验证码'
-  });
+  if (msg === 'success') {
+    ctx.body = new Result({
+      msg: '已发送验证码'
+    });
+  } else {
+    ctx.body = new Result({
+      status: 0,
+      msg
+    });
+  }
 });
 
 // 获取当年的位次和对应去年的分数和位次

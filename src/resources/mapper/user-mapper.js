@@ -74,11 +74,35 @@ export default {
   `,
   // query: 'select * from equip where importance > 0 order by importance desc',
   saveUser: `
-  INSERT
-  INTO
-  t_user
-  ( username, password, uuid, roleCode, scoreAlterTime, reportAlterTime, deepAlterTime )
-  VALUES
-  ( ?, ?, ?, ?, ?, ?, ? )
-`
+    INSERT
+    INTO
+    t_user
+    ( username, password, uuid, roleCode, scoreAlterTime, reportAlterTime, deepAlterTime )
+    VALUES
+    ( ?, ?, ?, ?, ?, ?, ? )
+`,
+  selectUserCode: `
+    SELECT
+    phone, code
+    FROM
+    t_user_phone_code
+    WHERE
+    phone = ?
+  `,
+  updateUserCode: `
+    UPDATE
+    t_user_phone_code
+    SET
+    code = ?
+    WHERE
+    phone = ?
+  `,
+  insertUserCode: `
+    INSERT
+    INTO
+    t_user_phone_code
+    (phone, code)
+    VALUES
+    (?, ?)
+  `
 };

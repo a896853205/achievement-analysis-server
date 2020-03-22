@@ -149,5 +149,19 @@ export default {
         deepAlterTime
       ])
     );
+  },
+
+  savePhoneCode: async ({ phone, code }) => {
+    let res = await db.query(new SqlObject(userMapper.selectUserCode, [phone]));
+
+    if (res && res.length) {
+      await db.query(new SqlObject(userMapper.updateUserCode, [code, phone]));
+    } else {
+      await db.query(new SqlObject(userMapper.insertUserCode, [phone, code]));
+    }
+  },
+
+  selectUserCode: async ({ phone }) => {
+    return await db.query(new SqlObject(userMapper.selectUserCode, [phone]));
   }
 };

@@ -170,16 +170,53 @@ export default {
     let param = {
       RegionId: 'cn-beijing',
       TemplateCode: 'SMS_186576082',
-      PhoneNumbers: username,
-      TemplateParam: code
+      PhoneNumbers: `${username}`,
+      TemplateParam: `{code:${code}}`,
+      SignName: '智赢学业规划网'
     };
 
     let requestOption = {
       method: 'POST'
     };
 
-    let result = await client.request('SendSms', param, requestOption);
+    let result = null;
+    try {
+      result = await client.request('SendSms', param, requestOption);
+    } catch (error) {
+      console.log(error.code);
 
-    console.log(result);
+      if (error.code === 'isv.BUSINESS_LIMIT_CONTROL') {
+        return '短时间内发送短信过多,请稍后再试';
+      } else if (error.code === 'isv.MOBILE_NUMBER_ILLEGAL') {
+        return '电话号码不正确';
+      } else {
+        return '错误';
+      }
+    }
+
+    if (result && result.Code === 'OK') {
+      // save username和code
+      await userDao.savePhoneCode({
+        phone: username,
+        code
+      });
+    }
+
+    return 'success';
+  },
+
+  checkPhoneCode: async (username, code) => {
+    let res = await userDao.selectUserCode({ phone: username });
+
+    if (res && res.length) {
+      console.log(res, code);
+      if (res[0].code === code) {
+        return 'success';
+      } else {
+        return '验证码错误';
+      }
+    } else {
+      return '请获取验证码';
+    }
   }
 };
