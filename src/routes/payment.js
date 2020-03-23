@@ -29,7 +29,7 @@ router.post('/signPayment', async ctx => {
   const res = await paymentService.signPayment(postData);
 
   console.log('res', res);
-  ctx.send(res);
+  ctx.body = res;
 });
 
 export default router;
