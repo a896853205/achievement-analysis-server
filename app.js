@@ -17,6 +17,8 @@ import voluntary from './src/routes/voluntary';
 import news from './src/routes/news';
 import indexData from './src/routes/index-data';
 import major from './src/routes/major';
+import payment from './src/routes/payment';
+
 // key
 import { TOKEN_KEY } from './src/constants/keys';
 
@@ -50,6 +52,7 @@ let unlessPathArr = [
   '/users/register',
   '/users/saveVerifyCode',
   '/users/login',
+  '/payment/signPayment',
   /^\/system/,
   /^\/news/,
   /^\/index/,
@@ -110,9 +113,10 @@ app.use(entryScore.routes(), entryScore.allowedMethods());
 app.use(school.routes(), school.allowedMethods());
 app.use(questionnaire.routes(), questionnaire.allowedMethods());
 app.use(voluntary.routes(), voluntary.allowedMethods());
-app.use(news.routes(), voluntary.allowedMethods());
-app.use(indexData.routes(), voluntary.allowedMethods());
-app.use(major.routes(), voluntary.allowedMethods());
+app.use(news.routes(), news.allowedMethods());
+app.use(indexData.routes(), indexData.allowedMethods());
+app.use(major.routes(), major.allowedMethods());
+app.use(payment.routes(), payment.allowedMethods());
 
 app.use(sslify());
 // error-handling

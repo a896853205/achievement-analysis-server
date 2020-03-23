@@ -3,7 +3,7 @@ import userService from '../service/user-service';
 // 返回前台的对象
 import Result from '../../util/response';
 
-//uuid
+// uuid
 import uuidV1 from 'uuid/v1';
 
 const router = require('koa-router')();
