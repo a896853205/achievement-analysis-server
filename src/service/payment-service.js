@@ -28,7 +28,7 @@ export default {
       body: `使用功能：学业测评、查数据、智能填报、志愿合理分析、就业前景分析等。
       适用对象：普通类文理科考生（自主招生、专科及艺术体育类考生暂不适用）。
       使用时效：有效期截止到用户自行选择高考年的9月1日为止。`,
-      userUuid: user.uuid
+      passback_params: JSON.stringify({ userUuid: user.uuid })
     });
 
     const result = await alipaySdk.exec(
@@ -50,7 +50,7 @@ export default {
 
     console.log('postData', postData);
 
-    let isSuccess = alipaySdk.checkNotifySign(postData.sign);
+    let isSuccess = alipaySdk.checkNotifySign(postData);
 
     console.log('isSuccess', isSuccess);
     if (isSuccess) {
