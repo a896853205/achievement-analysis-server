@@ -3,6 +3,7 @@ import AlipayFormData from 'alipay-sdk/lib/form';
 import uuid from 'uuid';
 import systemDao from '../dao/system-dao';
 import userDao from '../dao/user-dao';
+import paymentDao from '../dao/payment-dao';
 
 export default {
   getAlipayPaymentUrl: async user => {
