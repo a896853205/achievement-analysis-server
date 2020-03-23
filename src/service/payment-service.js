@@ -48,7 +48,7 @@ export default {
 
     console.log('postData', postData);
 
-    let isSuccess = alipaySdk.checkNotifySign(postData);
+    let isSuccess = alipaySdk.checkNotifySign(postData.sign);
 
     console.log('isSuccess', isSuccess);
     if (isSuccess) {
