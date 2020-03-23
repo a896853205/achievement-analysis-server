@@ -41,7 +41,7 @@ export default {
 
     const isSuccess = alipaySdk.checkNotifySign(postData);
 
-    const data = JSON.parse(postData);
+    const data = postData;
 
     console.log('isSuccess', isSuccess);
 
