@@ -106,7 +106,7 @@ export default {
     (?, ?)
   `,
   updateUserTimes: `
-    UPDATA
+    UPDATE
     t_user
     SET
     roleCode = ?, scoreAlterTime = ?, reportAlterTime = ?, deepAlterTime = ?
