@@ -1,6 +1,7 @@
 import AlipaySdk from 'alipay-sdk';
 import AlipayFormData from 'alipay-sdk/lib/form';
 import fs from 'fs';
+import uuid from 'uuid';
 
 export default {
   getAlipayPaymentUrl: async user => {
@@ -18,8 +19,9 @@ export default {
       'notifyUrl',
       'https://www.zhiyingguihua.com:7500/payment/signPayment'
     );
+
     formData.addField('bizContent', {
-      outTradeNo: 'out_trade_no',
+      outTradeNo: uuid.v1(),
       productCode: 'FAST_INSTANT_TRADE_PAY',
       totalAmount: '0.01',
       subject: 'VIP志愿卡（黑龙江专用）',
