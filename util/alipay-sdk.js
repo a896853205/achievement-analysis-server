@@ -8,5 +8,9 @@ export default new AlipaySdk({
   privateKey: fs.readFileSync(
     path.resolve(__dirname, '../ssl/alipay-private-key.pem'),
     'ascii'
+  ),
+  alipayPublicKey: fs.readFileSync(
+    path.resolve(__dirname, '../ssl/alipay-public-key.pem'),
+    'ascii'
   )
 });
