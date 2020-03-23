@@ -16,7 +16,7 @@ export default {
 
     formData.addField(
       'notifyUrl',
-      'https://www.zhiyingguihua.com/payment/signPayment'
+      'https://www.zhiyingguihua.com:7500/payment/signPayment'
     );
     formData.addField('bizContent', {
       outTradeNo: 'out_trade_no',
