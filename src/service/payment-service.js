@@ -2,13 +2,17 @@ import AlipaySdk from 'alipay-sdk';
 import AlipayFormData from 'alipay-sdk/lib/form';
 import fs from 'fs';
 import uuid from 'uuid';
+import path from 'path';
 
 export default {
   getAlipayPaymentUrl: async user => {
     const alipaySdk = new AlipaySdk({
       // 参考下方 SDK 配置
       appId: '2019121069819226',
-      privateKey: fs.readFileSync('./ssl/alipay-private-key.pem', 'ascii')
+      privateKey: fs.readFileSync(
+        path.resolve(__dirname, '../../ssl/alipay-private-key.pem'),
+        'ascii'
+      )
     });
 
     const formData = new AlipayFormData();
@@ -45,7 +49,10 @@ export default {
     const alipaySdk = new AlipaySdk({
       // 参考下方 SDK 配置
       appId: '2019121069819226',
-      privateKey: fs.readFileSync('./ssl/alipay-private-key.pem', 'ascii')
+      privateKey: fs.readFileSync(
+        path.resolve(__dirname, '../../ssl/alipay-private-key.pem'),
+        'ascii'
+      )
     });
 
     console.log('postData', postData);
