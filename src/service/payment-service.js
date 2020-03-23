@@ -1,6 +1,8 @@
 import alipaySdk from '../../util/alipay-sdk';
 import AlipayFormData from 'alipay-sdk/lib/form';
 import uuid from 'uuid';
+import systemDao from '../dao/system-dao';
+import userDao from '../dao/user-dao';
 
 export default {
   getAlipayPaymentUrl: async user => {
@@ -37,11 +39,42 @@ export default {
   signPayment: async postData => {
     console.log('postData', postData);
 
-    let isSuccess = alipaySdk.checkNotifySign(postData);
+    const isSuccess = alipaySdk.checkNotifySign(postData);
+
+    const data = JSON.parse(postData);
 
     console.log('isSuccess', isSuccess);
+
+    // 将充值信息存数据库中
+    await paymentDao.insertPayment({
+      gmtCreate: data.gmt_create,
+      gmtPayment: data.gmt_payment,
+      subject: data.subject,
+      buyerId: data.buyer_id,
+      receiptAmount: data.receipt_amount,
+      buyerPayAmount: data.buyer_pay_amount,
+      userUuid: JSON.parse(data.passback_params).userUuid,
+      outTradeNo: data.out_trade_no,
+      totalAmount: data.total_amount,
+      tradeNo: data.trade_no,
+      isSuccess
+    });
+
     if (isSuccess) {
-      // 把信息存到数据库
+      try {
+        // 将用户的等级设置成vip,然后按vip的当前三种次数赋值到user表中
+        const role = await systemDao.selectRoleByCode(2);
+        await userDao.updateUserTimes({
+          userUuid: JSON.parse(data.passback_params).userUuid,
+          roleCode: 2,
+          scoreAlterTime: role.scoreAlterTime,
+          reportAlterTime: role.reportAlterTime,
+          deepAlterTime: role.deepAlterTime
+        });
+      } catch (error) {
+        console.error(error);
+        return 'false';
+      }
       return 'true';
     } else {
       return 'false';

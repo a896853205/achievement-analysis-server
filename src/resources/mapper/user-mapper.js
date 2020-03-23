@@ -104,5 +104,13 @@ export default {
     (phone, code)
     VALUES
     (?, ?)
+  `,
+  updateUserTimes: `
+    UPDATA
+    t_user
+    SET
+    roleCode = ?, scoreAlterTime = ?, reportAlterTime = ?, deepAlterTime = ?
+    WHERE
+    uuid = ?
   `
 };

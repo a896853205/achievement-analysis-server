@@ -161,7 +161,27 @@ export default {
     }
   },
 
+  // 获取手机验证码
   selectUserCode: async ({ phone }) => {
     return await db.query(new SqlObject(userMapper.selectUserCode, [phone]));
+  },
+
+  // 更新用户使用次数
+  updateUserTimes: async ({
+    userUuid,
+    roleCode,
+    scoreAlterTime,
+    reportAlterTime,
+    deepAlterTime
+  }) => {
+    return await db.query(
+      new SqlObject(userMapper.updateUserTimes, [
+        roleCode,
+        scoreAlterTime,
+        reportAlterTime,
+        deepAlterTime,
+        userUuid
+      ])
+    );
   }
 };

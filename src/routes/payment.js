@@ -24,12 +24,16 @@ router.post('/getAlipayPaymentUrl', async ctx => {
 });
 
 router.post('/signPayment', async ctx => {
-  let postData = ctx.request.body;
+  try {
+    let postData = ctx.request.body;
 
-  const res = await paymentService.signPayment(postData);
+    const res = await paymentService.signPayment(postData);
 
-  console.log('res', res);
-  ctx.body = res;
+    ctx.body = res;
+  } catch (error) {
+    console.error(error);
+    ctx.body = 'false';
+  }
 });
 
 export default router;
