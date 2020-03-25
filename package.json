@@ -11,7 +11,7 @@
   "dependencies": {
     "@alicloud/pop-core": "^1.7.9",
     "alipay-sdk": "^3.0.8",
-    "axios": "F:\\laboratory\\achievement-analysis\\achievement-analysis-server>\"C:\\Program Files\\nodejs\\\\node.exe\"  \"C:\\Program Files\\nodejs\\\\node_modules\\npm\\bin\\npm-cli.js\" config get save-prefix \r\n^0.19.2",
+    "axios": "^0.19.2",
     "debug": "^4.1.1",
     "ejs": "~2.3.3",
     "fs": "^0.0.1-security",
@@ -33,7 +33,7 @@
     "md5": "^2.2.1",
     "mysql": "^2.17.1",
     "uuid": "^3.3.3",
-    "xml2js": "F:\\laboratory\\achievement-analysis\\achievement-analysis-server>\"C:\\Program Files\\nodejs\\\\node.exe\"  \"C:\\Program Files\\nodejs\\\\node_modules\\npm\\bin\\npm-cli.js\" config get save-prefix \r\n^0.4.23"
+    "xml2js": "^0.4.23"
   },
   "devDependencies": {
     "babel-core": "^6.26.3",
