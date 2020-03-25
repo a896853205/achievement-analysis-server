@@ -177,9 +177,11 @@ export default {
 
   signWeChatPayment: async postData => {
     try {
-      let res = await xmlParser.parseStringPromise(postData);
+      console.log(postData);
+      // let res = await xmlParser.parseStringPromise(postData);
 
-      let xmlObj = JSON.parse(res);
+      // let xmlObj = JSON.parse(res);
+      let xmlObj = postData;
       console.log('res:', res);
       console.log('xmlObj:', xmlObj);
 
