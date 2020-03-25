@@ -53,6 +53,7 @@ let unlessPathArr = [
   '/users/saveVerifyCode',
   '/users/login',
   '/payment/signPayment',
+  '/payment/signWeChatPayment',
   /^\/system/,
   /^\/news/,
   /^\/index/,
