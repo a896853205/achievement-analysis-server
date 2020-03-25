@@ -36,4 +36,35 @@ router.post('/signPayment', async ctx => {
   }
 });
 
+router.post('/getWechatPaymentQRUrl', async ctx => {
+  try {
+    let user = ctx.state.data;
+
+    const url = await paymentService.getWechatPaymentQRUrl(user);
+
+    ctx.body = new Result({
+      data: url
+    });
+  } catch (error) {
+    console.log(error);
+    ctx.body = new Result({
+      status: 0,
+      msg: '获取微信二维码错误,请稍后再试'
+    });
+  }
+});
+
+router.post('/signWeChatPayment', async ctx => {
+  try {
+    let postData = ctx.request.body;
+
+    const res = await paymentService.signPayment(postData);
+
+    ctx.body = res;
+  } catch (error) {
+    console.error(error);
+    ctx.body = 'FAIL';
+  }
+});
+
 export default router;

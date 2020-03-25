@@ -4,6 +4,11 @@ import uuid from 'uuid';
 import systemDao from '../dao/system-dao';
 import userDao from '../dao/user-dao';
 import paymentDao from '../dao/payment-dao';
+import md5 from 'md5';
+import xml2js from 'xml2js';
+import { WECHAT_KEY } from '../constants/keys';
+import axios from 'axios';
+const xmlParser = new xml2js.Parser();
 
 export default {
   getAlipayPaymentUrl: async user => {
@@ -81,6 +86,142 @@ export default {
       return 'true';
     } else {
       return 'false';
+    }
+  },
+
+  getWechatPaymentQRUrl: async user => {
+    const getTradeId = () => {
+      const time = new Date().getTime().toString();
+      const random = ((0.1 + Math.random()) * 100000 + '').slice(1, 5);
+      return `zygh${time}${random}`;
+    };
+
+    const payNotifyUrl =
+      'https://www.zhiyingguihua.com/payment/signWeChatPayment';
+    const appId = 'wxcb31ae60f6a99cb9';
+    const mchId = '1560899221';
+    const nonceStr = uuid.v1().replace(/-/g, '');
+    const price = 1;
+    const productIntro = 'VIP志愿卡（黑龙江专用）';
+    const attach = user.uuid;
+    const tradeId = getTradeId();
+
+    let stringA =
+      'appid=' +
+      appId +
+      '&attach=' +
+      attach +
+      '&body=' +
+      productIntro +
+      '&mch_id=' +
+      mchId +
+      '&nonce_str=' +
+      nonceStr +
+      '&notify_url=' +
+      payNotifyUrl +
+      '&out_trade_no=' +
+      tradeId +
+      '&total_fee=' +
+      price +
+      '&trade_type=NATIVE';
+    const stringSignTemp = stringA + '&key=' + WECHAT_KEY;
+    const prePaySign = md5(stringSignTemp).toUpperCase();
+
+    const sendData =
+      '<xml>' +
+      '<appid>' +
+      appId +
+      '</appid>' +
+      '<attach>' +
+      attach +
+      '</attach>' +
+      '<body>' +
+      productIntro +
+      '</body>' +
+      '<mch_id>' +
+      mchId +
+      '</mch_id>' +
+      '<nonce_str>' +
+      nonceStr +
+      '</nonce_str>' +
+      '<notify_url>' +
+      payNotifyUrl +
+      '</notify_url>' +
+      '<out_trade_no>' +
+      tradeId +
+      '</out_trade_no>' +
+      '<total_fee>' +
+      price +
+      '</total_fee>' +
+      '<trade_type>NATIVE</trade_type>' +
+      '<sign>' +
+      prePaySign +
+      '</sign>' +
+      '</xml>';
+
+    try {
+      let wxResponse = await axios.post(
+        'https://api.mch.weixin.qq.com/pay/unifiedorder',
+        sendData
+      );
+      let res = await xmlParser.parseStringPromise(wxResponse.data);
+
+      if (res.xml.return_code[0] === 'SUCCESS') {
+        const prepayId = res.xml.prepay_id[0];
+        return res.xml.code_url[0];
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  },
+
+  signWeChatPayment: async postData => {
+    try {
+      let res = await xmlParser.parseStringPromise(postData);
+
+      let xmlObj = JSON.parse(res);
+      console.log('res:', res);
+      console.log('xmlObj:', xmlObj);
+
+      let stringA = '';
+      const keys = Object.keys(xmlObj);
+      keys.sort();
+      keys.forEach(key => {
+        if (xmlObj[key] && key !== 'sign') {
+          stringA = `${stringA}${key}=${xmlObj[key]}&`;
+        }
+      });
+      stringA = `${stringA}key=${WECHAT_KEY}`;
+
+      const localSign = md5(stringA).toUpperCase();
+
+      // 存数据库
+      await paymentDao.insertWeChatPayment({
+        transactionId: xmlObj.transaction_id,
+        totalFee: xmlObj.total_fee,
+        resultCode: xmlObj.result_code,
+        timeEnd: xmlObj.time_end,
+        userUuid: xmlObj.attach
+      });
+
+      if (localSign === xmlObj.sign) {
+        // 修改用户使用次数
+        const role = await systemDao.selectRoleByCode(2);
+        await userDao.updateUserTimes({
+          userUuid: xmlObj.attach,
+          roleCode: 2,
+          scoreAlterTime: role.scoreAlterTime,
+          reportAlterTime: role.reportAlterTime,
+          deepAlterTime: role.deepAlterTime
+        });
+
+        return 'SUCCESS';
+      } else {
+        return 'FAIL';
+      }
+    } catch (error) {
+      console.error(error);
+      return 'FAIL';
     }
   }
 };
