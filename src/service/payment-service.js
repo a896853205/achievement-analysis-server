@@ -101,7 +101,7 @@ export default {
     const appId = 'wxcb31ae60f6a99cb9';
     const mchId = '1560899221';
     const nonceStr = uuid.v1().replace(/-/g, '');
-    const price = 1;
+    const price = 36000;
     const productIntro = 'VIP志愿卡（黑龙江专用）';
     const attach = user.uuid;
     const tradeId = getTradeId();
@@ -177,10 +177,7 @@ export default {
 
   signWeChatPayment: async postData => {
     try {
-      // let xmlObj = JSON.parse(res);
       let xmlObj = postData.xml;
-      // console.log('res:', res);
-      console.log('xmlObj:', xmlObj);
 
       let stringA = '';
       const keys = Object.keys(xmlObj);
@@ -192,11 +189,7 @@ export default {
       });
       stringA = `${stringA}key=${WECHAT_KEY}`;
 
-      console.log(stringA);
-
       const localSign = md5(stringA).toUpperCase();
-
-      console.log(localSign);
       // 存数据库
       await paymentDao.insertWeChatPayment({
         transactionId: xmlObj.transaction_id,
