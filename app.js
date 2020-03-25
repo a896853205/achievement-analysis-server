@@ -2,6 +2,7 @@ import Koa from 'koa';
 import json from 'koa-json';
 import onerror from 'koa-onerror';
 import bodyparser from 'koa-bodyparser';
+import xmlParser from 'koa-xml-body';
 import logger from 'koa-logger';
 
 // 跨域
@@ -83,9 +84,10 @@ app.use(
 // onerror(app);
 
 // middlewares
+app.use(xmlParser());
 app.use(
   bodyparser({
-    enableTypes: ['json', 'form', 'text', 'xml']
+    enableTypes: ['json', 'form', 'text']
   })
 );
 app.use(json());
