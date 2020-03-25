@@ -177,12 +177,9 @@ export default {
 
   signWeChatPayment: async postData => {
     try {
-      console.log(postData);
-      // let res = await xmlParser.parseStringPromise(postData);
-
       // let xmlObj = JSON.parse(res);
-      let xmlObj = postData;
-      console.log('res:', res);
+      let xmlObj = postData.xml;
+      // console.log('res:', res);
       console.log('xmlObj:', xmlObj);
 
       let stringA = '';
@@ -190,7 +187,7 @@ export default {
       keys.sort();
       keys.forEach(key => {
         if (xmlObj[key] && key !== 'sign') {
-          stringA = `${stringA}${key}=${xmlObj[key]}&`;
+          stringA = `${stringA}${key}=${xmlObj[key][0]}&`;
         }
       });
       stringA = `${stringA}key=${WECHAT_KEY}`;
