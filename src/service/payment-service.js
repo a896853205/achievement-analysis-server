@@ -97,7 +97,7 @@ export default {
     };
 
     const payNotifyUrl =
-      'https://www.zhiyingguihua.com/payment/signWeChatPayment';
+      'https://www.zhiyingguihua.com:7500/payment/signWeChatPayment';
     const appId = 'wxcb31ae60f6a99cb9';
     const mchId = '1560899221';
     const nonceStr = uuid.v1().replace(/-/g, '');
