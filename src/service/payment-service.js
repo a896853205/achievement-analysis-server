@@ -192,18 +192,21 @@ export default {
       });
       stringA = `${stringA}key=${WECHAT_KEY}`;
 
+      console.log(stringA);
+
       const localSign = md5(stringA).toUpperCase();
 
+      console.log(localSign);
       // 存数据库
       await paymentDao.insertWeChatPayment({
         transactionId: xmlObj.transaction_id,
         totalFee: xmlObj.total_fee,
-        resultCode: xmlObj.result_code,
+        resultCode: localSign === xmlObj.sign[0],
         timeEnd: xmlObj.time_end,
         userUuid: xmlObj.attach
       });
 
-      if (localSign === xmlObj.sign) {
+      if (localSign === xmlObj.sign[0]) {
         // 修改用户使用次数
         const role = await systemDao.selectRoleByCode(2);
         await userDao.updateUserTimes({
