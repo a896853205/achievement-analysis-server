@@ -58,7 +58,7 @@ router.post('/signWeChatPayment', async ctx => {
   try {
     let postData = ctx.request.body;
 
-    const res = await paymentService.signPayment(postData);
+    const res = await paymentService.signWeChatPayment(postData);
 
     ctx.body = res;
   } catch (error) {
