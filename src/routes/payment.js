@@ -10,11 +10,18 @@ router.post('/getAlipayPaymentUrl', async ctx => {
   try {
     let user = ctx.state.data;
 
-    const url = await paymentService.getAlipayPaymentUrl(user);
+    if (user.roleCode === 2) {
+      ctx.body = new Result({
+        status: 0,
+        msg: '您已经是vip啦,无需再次购买'
+      });
+    } else {
+      const url = await paymentService.getAlipayPaymentUrl(user);
 
-    ctx.body = new Result({
-      data: url
-    });
+      ctx.body = new Result({
+        data: url
+      });
+    }
   } catch (error) {
     ctx.body = new Result({
       status: 0,
@@ -40,11 +47,18 @@ router.post('/getWechatPaymentQRUrl', async ctx => {
   try {
     let user = ctx.state.data;
 
-    const url = await paymentService.getWechatPaymentQRUrl(user);
+    if (user.roleCode === 2) {
+      ctx.body = new Result({
+        status: 0,
+        msg: '您已经是vip啦,无需再次购买'
+      });
+    } else {
+      const url = await paymentService.getWechatPaymentQRUrl(user);
 
-    ctx.body = new Result({
-      data: url
-    });
+      ctx.body = new Result({
+        data: url
+      });
+    }
   } catch (error) {
     console.log(error);
     ctx.body = new Result({
