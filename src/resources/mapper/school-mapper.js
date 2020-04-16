@@ -416,6 +416,8 @@ a.accountCategory = ?;
 	AND
 	a.fk_lots_id = ?
 	AND
+	t_major_enrollment_info.fk_lots_id = a.fk_lots_id
+	AND
 	a.accountCategory = ?;`,
   queryScoreRankByCategoryAndYear: `
 		select
@@ -666,10 +668,10 @@ a.accountCategory = ?;
 			sys_t_school_nature
 		
 	`,
-	querySchoolRecommend: `
+  querySchoolRecommend: `
 		SELECT
 			*
 		FROM
 		  t_school_recommend
-	`
+	`,
 };
