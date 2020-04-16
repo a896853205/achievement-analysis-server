@@ -416,7 +416,7 @@ a.accountCategory = ?;
 	AND
 	a.fk_lots_id = ?
 	AND
-	t_major_enrollment_info.fk_lots_id = a.fk_lots_id
+	t_major_enrollment_info.fk_lot_id = a.fk_lots_id
 	AND
 	a.accountCategory = ?;`,
   queryScoreRankByCategoryAndYear: `
