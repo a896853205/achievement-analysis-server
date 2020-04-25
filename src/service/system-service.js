@@ -2,6 +2,11 @@
 import systemDao from '../dao/system-dao';
 
 export default {
+  //获取首页警示信息
+  getWarningData: async () => {
+    return await systemDao.queryWarningData();
+  },
+
   // 获取系统地址
   getAddressOption: async ({ addressType, code }) => {
     let provinceList = [],

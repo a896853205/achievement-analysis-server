@@ -5,6 +5,12 @@ import { db, SqlObject } from '../resources/db-connect';
 import systemMapper from '../resources/mapper/system-mapper';
 
 export default {
+  // 查询首页警示信息
+  queryWarningData: async () => {
+    let warningData = await db.query(new SqlObject(systemMapper.queryWarningData));
+    return warningData;
+  },
+
   // 查询所有省
   queryProvince: async () => {
     let province = await db.query(new SqlObject(systemMapper.queryProvince));

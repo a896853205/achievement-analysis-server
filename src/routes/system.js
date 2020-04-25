@@ -8,6 +8,15 @@ const router = require('koa-router')();
 
 router.prefix('/system');
 
+// 获得系统首页警示信息
+router.get('/getWarningData', async ctx => {
+  let warningData = await systemService.getWarningData();
+
+  ctx.body = new Result({
+    data: warningData
+  });
+});
+
 // 获得地址选项
 router.get('/getAddressOption', async ctx => {
   let { addressType, code } = ctx.query,

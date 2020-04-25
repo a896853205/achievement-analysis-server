@@ -1,4 +1,5 @@
 export default {
+  queryWarningData: `select * from sys_t_warning`,
   queryProvince: `
   select
   *
