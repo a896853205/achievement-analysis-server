@@ -22,7 +22,7 @@ export default {
         examYear,
         examYear - 1,
         examYear - 2,
-        examYear - 3
+        examYear - 3,
       ])
     );
 
@@ -33,13 +33,18 @@ export default {
   querySchoolByLotIdAndNameAndAccountCategory: async (
     lotId,
     schoolName,
-    accountCategory
+    accountCategory,
+    examYear
   ) => {
     let schoolList = await db.query(
       new SqlObject(schoolMapper.querySchoolByLotIdAndNameAndAccountCategory, [
         lotId,
         `%${schoolName}%`,
-        accountCategory
+        accountCategory,
+        examYear,
+        examYear - 1,
+        examYear - 2,
+        examYear - 3,
       ])
     );
 
@@ -79,7 +84,7 @@ export default {
         examYear - 1,
         examYear - 2,
         examYear - 3,
-        accountCategory
+        accountCategory,
       ])
     );
 
@@ -94,7 +99,7 @@ export default {
           year,
           year - 1,
           year - 2,
-          year - 3
+          year - 3,
         ])
       ),
       currentRank = [],
@@ -119,7 +124,7 @@ export default {
       currentRank,
       oldRank: oldOneRank,
       oldTwoRank,
-      oldThreeRank
+      oldThreeRank,
     };
   },
 
@@ -139,7 +144,7 @@ export default {
           examYear - 1,
           examYear - 2,
           examYear - 3,
-          accountCategory
+          accountCategory,
         ])
       ),
       currentLotsScore = [],
@@ -164,7 +169,7 @@ export default {
       currentLotsScore,
       oldOneLotsScore,
       oldTwoLotsScore,
-      oldThreeLotsScore
+      oldThreeLotsScore,
     };
   },
 
@@ -173,7 +178,7 @@ export default {
     return await db.query(
       new SqlObject(schoolMapper.queryLotsScoreByCurrentYear, [
         year,
-        accountCategory
+        accountCategory,
       ])
     );
   },
@@ -213,14 +218,14 @@ export default {
   selectDisciplineCodeByVoluntaryInfo: async ({
     uuid,
     fk_five_volunteer_id,
-    major_index
+    major_index,
   }) => {
     return (
       await db.query(
         new SqlObject(schoolMapper.selectDisciplineCodeByVoluntaryInfo, [
           uuid,
           fk_five_volunteer_id,
-          major_index
+          major_index,
         ])
       )
     )[0];
@@ -232,7 +237,7 @@ export default {
       await db.query(
         new SqlObject(schoolMapper.selectMajorFuture, [
           analysisId,
-          disciplineCode
+          disciplineCode,
         ])
       )
     )[0];
@@ -242,7 +247,7 @@ export default {
     return await db.query(
       new SqlObject(schoolMapper.querySchoolScores, [
         fk_school_id,
-        accountCategory
+        accountCategory,
       ])
     );
   },
@@ -254,7 +259,7 @@ export default {
   selectSchoolEnrollmentGuideNewsById: async fk_school_id => {
     return await db.query(
       new SqlObject(schoolMapper.selectSchoolEnrollmentGuideNewsById, [
-        fk_school_id
+        fk_school_id,
       ])
     );
   },
@@ -273,7 +278,7 @@ export default {
     return (
       await db.query(
         new SqlObject(schoolMapper.selectEnrollmentGuideNewsDetail, [
-          guideNewsUuid
+          guideNewsUuid,
         ])
       )
     )[0];
@@ -282,7 +287,7 @@ export default {
     return (
       await db.query(
         new SqlObject(schoolMapper.updateAddEnrollmentGuideViews, [
-          enrollmentGuideNewsUuid
+          enrollmentGuideNewsUuid,
         ])
       )
     )[0];
@@ -307,5 +312,5 @@ export default {
   },
   querySchoolRecommend: async () => {
     return await db.query(new SqlObject(schoolMapper.querySchoolRecommend));
-  }
+  },
 };

@@ -12,14 +12,14 @@ import {
   filtrateMajorName,
   splitSchoolByRange,
   culEnrollRateStrategies,
-  culRiskRateStrategies
+  culRiskRateStrategies,
 } from './school-filtrate';
 
 import {
   proxyParseToOldScore,
   culLineDifferStrategies,
   bindScoreAndRank,
-  calScoreTransformRank
+  calScoreTransformRank,
 } from './rank-filtrate';
 
 /**
@@ -81,13 +81,13 @@ export default {
     accountCategory,
     examYear,
     score,
-    gatherValue
+    gatherValue,
   }) => {
     let [
       resultSchoolList,
       { currentRank, oldRank, oldTwoRank, oldThreeRank },
       scoreRange,
-      { currentLotsScore, oldOneLotsScore, oldTwoLotsScore, oldThreeLotsScore }
+      { currentLotsScore, oldOneLotsScore, oldTwoLotsScore, oldThreeLotsScore },
     ] = await Promise.all([
       schoolDao.querySchoolByLotIdAndAccountCategory(
         lotId,
@@ -96,7 +96,7 @@ export default {
       ),
       schoolDao.queryScoreRankByCategoryAndYear(accountCategory, examYear),
       controlScoreRangeDao.queryScoreRangeByLotsId(lotId),
-      schoolDao.queryLotsScore(examYear, accountCategory)
+      schoolDao.queryLotsScore(examYear, accountCategory),
     ]);
 
     // 对办学性质进行筛选
@@ -149,7 +149,7 @@ export default {
       // 计算三年线差
       oldOneLotsScore,
       oldTwoLotsScore,
-      oldThreeLotsScore
+      oldThreeLotsScore,
     });
 
     // 计算提档概率
@@ -157,13 +157,13 @@ export default {
       stuOldOneScoreAndRank: oldOneScoreAndRank,
       culList: resultSchoolList,
       examYear,
-      stuLineDiffer: culLineDifferStrategies[lotId](score, oldOneLotsScore)
+      stuLineDiffer: culLineDifferStrategies[lotId](score, oldOneLotsScore),
     });
 
     // 计算风险系数
     resultSchoolList = culRiskRateStrategies[lotId]({
       culList: resultSchoolList,
-      examYear
+      examYear,
     });
 
     // 删除前端不使用的数据
@@ -172,7 +172,7 @@ export default {
     }
 
     return {
-      schoolList: resultSchoolList
+      schoolList: resultSchoolList,
     };
   },
 
@@ -182,29 +182,32 @@ export default {
     schoolName,
     score,
     accountCategory,
-    examYear
+    examYear,
   }) => {
     let [
       resultSchoolList,
       { currentRank, oldRank, oldTwoRank, oldThreeRank },
       scoreRange,
-      { currentLotsScore, oldOneLotsScore, oldTwoLotsScore, oldThreeLotsScore }
+      { currentLotsScore, oldOneLotsScore, oldTwoLotsScore, oldThreeLotsScore },
     ] = await Promise.all([
       schoolDao.querySchoolByLotIdAndNameAndAccountCategory(
         lotId,
         schoolName,
-        accountCategory
+        accountCategory,
+        examYear
       ),
       schoolDao.queryScoreRankByCategoryAndYear(accountCategory, examYear),
       controlScoreRangeDao.queryScoreRangeByLotsId(lotId),
-      schoolDao.queryLotsScore(examYear, accountCategory)
+      schoolDao.queryLotsScore(examYear, accountCategory),
     ]);
 
     // 将新的成绩转化为去年的成绩,加上集合tag
     let [oldOneScoreAndRank] = proxyParseToOldScore(
       score,
       currentRank,
-      oldRank
+      oldRank,
+      oldTwoRank,
+      oldThreeRank
     );
     resultSchoolList = splitSchoolByRange(
       oldOneScoreAndRank.score,
@@ -227,7 +230,7 @@ export default {
       // 计算三年线差
       oldOneLotsScore,
       oldTwoLotsScore,
-      oldThreeLotsScore
+      oldThreeLotsScore,
     });
 
     // 计算提档概率
@@ -235,17 +238,17 @@ export default {
       stuOldOneScoreAndRank: oldOneScoreAndRank,
       culList: resultSchoolList,
       examYear,
-      stuLineDiffer: culLineDifferStrategies[lotId](score, oldOneLotsScore)
+      stuLineDiffer: culLineDifferStrategies[lotId](score, oldOneLotsScore),
     });
 
     // 计算风险系数
     resultSchoolList = culRiskRateStrategies[lotId]({
       culList: resultSchoolList,
-      examYear
+      examYear,
     });
 
     return {
-      schoolList: resultSchoolList
+      schoolList: resultSchoolList,
     };
   },
 
@@ -261,14 +264,14 @@ export default {
     typeValues,
     areaFeatureValues,
     provinceListValues,
-    gatherValue
+    gatherValue,
   }) => {
     let [
       resultSchoolList,
       originalSchoolList,
       { currentRank, oldRank, oldTwoRank, oldThreeRank },
       scoreRange,
-      { currentLotsScore, oldOneLotsScore, oldTwoLotsScore, oldThreeLotsScore }
+      { currentLotsScore, oldOneLotsScore, oldTwoLotsScore, oldThreeLotsScore },
     ] = await Promise.all([
       schoolDao.querySchoolByLotIdAndAccountCategory(
         lotId,
@@ -281,7 +284,7 @@ export default {
       ),
       schoolDao.queryScoreRankByCategoryAndYear(accountCategory, examYear),
       controlScoreRangeDao.queryScoreRangeByLotsId(lotId),
-      schoolDao.queryLotsScore(examYear, accountCategory)
+      schoolDao.queryLotsScore(examYear, accountCategory),
     ]);
 
     // 对办学性质进行筛选
@@ -309,7 +312,7 @@ export default {
     resultSchoolList = filtrateMajorName({
       originalSchoolList,
       majorName,
-      resultSchoolList
+      resultSchoolList,
     });
 
     // 将新的成绩转化为去年的成绩,加上集合tag
@@ -341,7 +344,7 @@ export default {
       // 计算三年线差
       oldOneLotsScore,
       oldTwoLotsScore,
-      oldThreeLotsScore
+      oldThreeLotsScore,
     });
 
     // 计算提档概率
@@ -349,13 +352,13 @@ export default {
       stuOldOneScoreAndRank: oldOneScoreAndRank,
       culList: resultSchoolList,
       examYear,
-      stuLineDiffer: culLineDifferStrategies[lotId](score, oldOneLotsScore)
+      stuLineDiffer: culLineDifferStrategies[lotId](score, oldOneLotsScore),
     });
 
     // 计算风险系数
     resultSchoolList = culRiskRateStrategies[lotId]({
       culList: resultSchoolList,
-      examYear
+      examYear,
     });
 
     // 删除前端不使用的数据
@@ -364,7 +367,7 @@ export default {
     }
 
     return {
-      schoolList: resultSchoolList
+      schoolList: resultSchoolList,
     };
   },
 
@@ -375,7 +378,7 @@ export default {
     typeValues,
     areaFeatureValues,
     schoolName,
-    page
+    page,
   }) => {
     let resultSchoolList = await schoolDao.querySchool(schoolName);
 
@@ -399,7 +402,7 @@ export default {
         (page - 1) * PAGE_SCHOOL,
         (page - 1) * PAGE_SCHOOL + PAGE_SCHOOL
       ),
-      totalSchool: resultSchoolList.length
+      totalSchool: resultSchoolList.length,
     };
   },
 
@@ -409,7 +412,7 @@ export default {
     let [
       majorList,
       { currentRank, oldRank, oldTwoRank, oldThreeRank },
-      { currentLotsScore, oldOneLotsScore, oldTwoLotsScore, oldThreeLotsScore }
+      { currentLotsScore, oldOneLotsScore, oldTwoLotsScore, oldThreeLotsScore },
     ] = await Promise.all([
       schoolDao.queryMajorBySchoolId(
         schoolId,
@@ -418,7 +421,7 @@ export default {
         accountCategory
       ),
       schoolDao.queryScoreRankByCategoryAndYear(accountCategory, examYear),
-      schoolDao.queryLotsScore(examYear, accountCategory)
+      schoolDao.queryLotsScore(examYear, accountCategory),
     ]);
 
     let [oldOneScoreAndRank] = proxyParseToOldScore(
@@ -442,7 +445,7 @@ export default {
       // 计算三年线差
       oldOneLotsScore,
       oldTwoLotsScore,
-      oldThreeLotsScore
+      oldThreeLotsScore,
     });
 
     // 计算提档概率
@@ -450,17 +453,17 @@ export default {
       stuOldOneScoreAndRank: oldOneScoreAndRank,
       culList: majorList,
       examYear,
-      stuLineDiffer: culLineDifferStrategies[lotId](score, oldOneLotsScore)
+      stuLineDiffer: culLineDifferStrategies[lotId](score, oldOneLotsScore),
     });
 
     // 计算风险系数
     majorList = culRiskRateStrategies[lotId]({
       culList: majorList,
-      examYear
+      examYear,
     });
 
     return {
-      majorList
+      majorList,
     };
   },
 
@@ -473,7 +476,7 @@ export default {
   getSchoolScores: async (fk_school_id, accountCategory) => {
     let [schoolList, lotsList] = await Promise.all([
         schoolDao.querySchoolScores(fk_school_id, accountCategory),
-        schoolDao.selectSchoolLots()
+        schoolDao.selectSchoolLots(),
       ]),
       schoolScoreList = [],
       scoreAndRankDao = [];
@@ -486,7 +489,7 @@ export default {
           gender,
           poverty,
           enrollment,
-          maxScore
+          maxScore,
         } = item,
         { lots_name, gradation } = lotsList.find(
           lotsItem => lotsItem.id === fk_lots_id
@@ -504,7 +507,7 @@ export default {
         enrollment,
         lotsName: lots_name,
         gradation,
-        maxScore
+        maxScore,
       });
     }
 
@@ -547,5 +550,5 @@ export default {
   },
   querySchoolRecommend: async () => {
     return await schoolDao.querySchoolRecommend();
-  }
+  },
 };

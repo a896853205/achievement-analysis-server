@@ -173,7 +173,8 @@ a.gender,
 a.poverty,
 a.enrollment,
 b.lots_name as lot_name,
-c.*
+c.*,
+t_major_enrollment_info.enrollment_score as major_score
 from 
 merge_school_lots a
 left join
@@ -241,12 +242,24 @@ left join
 	on a.id = f.school_id
 ) as c
 on a.fk_school_id = c.school_id
+inner join
+t_major_enrollment_info
+on a.fk_school_id =t_major_enrollment_info.fk_school_id
+inner join
+sys_t_major
+on sys_t_major.id =t_major_enrollment_info.fk_major_id
 where
+a.fk_lots_id =t_major_enrollment_info.fk_lot_id
+	AND	
 a.fk_lots_id = ?
 AND
 school_name LIKE ?
 AND
-a.accountCategory = ?;
+a.accountCategory = ?
+AND
+	a.year = t_major_enrollment_info.year
+AND
+(a.year = ? OR a.year = ? OR a.year = ? OR a.year = ?);
 `,
   getMajorBySchoolId: `
 	-- 批次id和学校id和年 查询专业
