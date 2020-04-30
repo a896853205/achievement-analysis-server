@@ -1,4 +1,23 @@
 export default {
+  queryVoluntarySchoolAndMajorByVoluntaryUuid: ` select a.*,b.* from 
+	(SELECT 
+			fk_five_volunteer_id,
+			t_school.name,
+			major_index,
+			sys_t_major.major_name
+		FROM
+			t_user_voluntary_result, t_school, t_major_enrollment_info, sys_t_major
+		WHERE
+			t_user_voluntary_result.fk_school_id = t_school.id
+		AND
+			fk_enrollment_id = t_major_enrollment_info.id
+		AND
+			t_major_enrollment_info.fk_major_id = sys_t_major.id
+		AND
+			uuid = ?
+	) as a
+join sys_t_five_volunteer as b
+on a.fk_five_volunteer_id = b.id`,
   insertVoluntary: `
     INSERT
     INTO

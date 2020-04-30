@@ -61,6 +61,19 @@ router.post('/getVoluntaryListOption', async ctx => {
   });
 });
 
+// 根据志愿的uuid，获取志愿表上的每一项学校和专业
+router.get('/getVoluntarySchoolAndMajor', async ctx => {
+  console.log(ctx.query);
+  let { voluntaryUuid } = ctx.query,
+  voluntaryData = await voluntaryService.queryVoluntarySchoolAndMajorByVoluntaryUuid(
+    voluntaryUuid
+  );
+
+  ctx.body = new Result({
+    data: voluntaryData
+  });
+});
+
 // 获取深度分析报告
 router.post('/getVoluntaryDeepResult', async ctx => {
   let { voluntaryUuid, voluntarieerId, majorIndex } = ctx.request.body;
