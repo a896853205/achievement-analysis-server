@@ -9,6 +9,13 @@ import userMapper from '../resources/mapper/user-mapper';
 import { initVoluntaryOption } from './voluntary-filtrate';
 
 export default {
+  // ffff
+  queryVoluntarySchoolAndMajorByVoluntaryUuid: async (voluntaryUuid) => {
+    let volunteerData = await db.query(new SqlObject(voluntaryMapper.queryVoluntarySchoolAndMajorByVoluntaryUuid,[
+      voluntaryUuid
+    ]));
+    return volunteerData;
+  },
   saveVoluntary: async (allParam, user, reportType) => {
     // 在这里使用事件处理
     // 插入voluntary 而且 将 用户的测评次数-1

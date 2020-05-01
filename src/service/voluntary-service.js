@@ -15,6 +15,32 @@ import {
 } from './voluntary-filtrate';
 
 export default {
+  // 根据志愿的uuid，获取志愿表上的每一项学校和专业
+  queryVoluntarySchoolAndMajorByVoluntaryUuid: async (voluntaryUuid) => {
+    let tempData = await voluntaryDao.queryVoluntarySchoolAndMajorByVoluntaryUuid(voluntaryUuid);
+
+
+    //处理数据
+    const res = tempData.reduce((pre, item) => {
+      const temp = pre.find((it) => (it.id === item.fk_five_volunteer_id));
+      if (temp) {
+          temp.major[item.major_index] = {index: item.major_index, majorName: item.major_name};
+      } else {
+          const baseMajor = Array(6).fill({index: '', majorName: ''});
+          baseMajor[item.major_index] = {index: item.major_index, majorName: item.major_name};
+          const baseInfo = {
+            fk_five_volunteer_id: item.fk_five_volunteer_id,
+            name: item.name,
+            id: item.id,
+            volunteer_name:item.volunteer_name,
+          }
+          pre.push(Object.assign({}, baseInfo, {major: baseMajor}))
+      }
+      return pre
+    }, []);
+
+    return res;
+  },
   // 保存志愿信息
   saveVoluntary: async (lotId, voluntary, user, reportType) => {
     let voluntaryUuid = uuid();
