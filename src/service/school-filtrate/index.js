@@ -176,14 +176,14 @@ export const splitSchoolByRange = (
   // 最下限
   let score1 = score - scoreRange.down_score_1,
     score3 = score - scoreRange.down_score_3,
-    score4 = score,
-    score5 = score + scoreRange.up_score_4,
-    score6 = score + scoreRange.up_score_5,
-    schoolListA = [],
-    schoolListB = [],
-    schoolListC = [],
-    schoolListD = [],
-    schoolListE = [];
+    score4 = score + scoreRange.up_score_3;
+  (score5 = score + scoreRange.up_score_4),
+    (score6 = score + scoreRange.up_score_5),
+    (schoolListA = []),
+    (schoolListB = []),
+    (schoolListC = []),
+    (schoolListD = []),
+    (schoolListE = []);
 
   for (let schoolItem of schoolList) {
     let currentSchool = schoolItem.scoreAndRank.find(item => {
