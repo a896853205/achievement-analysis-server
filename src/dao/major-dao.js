@@ -53,8 +53,8 @@ export default {
       await db.query(new SqlObject(majorMapper.selectHotMajorDetail, [id]))
     )[0];
   },
-  querySchoolMajor: async (id, accountCategory) => {
-    return await db.query(new SqlObject(majorMapper.querySchoolMajor, [id, accountCategory]));
+  querySchoolMajor: async (id, accountCategory, year) => {
+    return await db.query(new SqlObject(majorMapper.querySchoolMajor, [id, accountCategory, year]));
   },
   selectMajorName: async id => {
     return (
