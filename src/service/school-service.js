@@ -473,9 +473,9 @@ export default {
     return schoolDetail;
   },
   // 通过学校的id和科目类型查询出历年分数
-  getSchoolScores: async (fk_school_id, accountCategory) => {
+  getSchoolScores: async (fk_school_id, accountCategory,year) => {
     let [schoolList, lotsList] = await Promise.all([
-        schoolDao.querySchoolScores(fk_school_id, accountCategory),
+        schoolDao.querySchoolScores(fk_school_id, accountCategory, year),
         schoolDao.selectSchoolLots(),
       ]),
       schoolScoreList = [],

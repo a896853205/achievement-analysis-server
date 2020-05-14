@@ -598,7 +598,7 @@ AND
 			FROM
 			merge_school_lots
 			WHERE
-			fk_school_id = ? AND accountCategory = ?
+			fk_school_id = ? AND accountCategory = ? AND year = ?
 	`,
   selectSchoolLots: `
 			SELECT

@@ -243,11 +243,12 @@ export default {
     )[0];
   },
 
-  querySchoolScores: async (fk_school_id, accountCategory) => {
+  querySchoolScores: async (fk_school_id, accountCategory,year) => {
     return await db.query(
       new SqlObject(schoolMapper.querySchoolScores, [
         fk_school_id,
         accountCategory,
+        year
       ])
     );
   },

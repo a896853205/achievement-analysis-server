@@ -136,11 +136,12 @@ router.post('/searchSchool', async ctx => {
 });
 
 router.post('/getSchoolScoreList', async ctx => {
-  const { schoolId, accountCategory } = ctx.request.body;
+  const { schoolId, accountCategory, year } = ctx.request.body;
 
   let schoolScoreList = await schoolService.getSchoolScores(
     schoolId,
-    accountCategory
+    accountCategory,
+    year
   );
 
   ctx.body = new Result({
