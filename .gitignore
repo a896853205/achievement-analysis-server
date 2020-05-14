@@ -92,3 +92,6 @@ typings/
 
 # ssl
 ssl/
+
+# .idea
+.idea
