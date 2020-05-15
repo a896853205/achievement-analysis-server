@@ -247,7 +247,7 @@ export default {
     return await db.query(
       new SqlObject(schoolMapper.querySchoolScores, [
         fk_school_id,
-        accountCategory,
+        accountCategory
       ])
     );
   },
