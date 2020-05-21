@@ -26,8 +26,8 @@ export default {
     formData.addField('bizContent', {
       outTradeNo: uuid.v1(),
       productCode: 'FAST_INSTANT_TRADE_PAY',
-      // totalAmount: '360',
-      totalAmount: '0.01',
+      totalAmount: '360',
+      // totalAmount: '0.01',
       subject: 'VIP志愿卡（黑龙江专用）',
       body: `使用功能：学业测评、查数据、智能填报、志愿合理分析、就业前景分析等。
       适用对象：普通类文理科考生（自主招生、专科及艺术体育类考生暂不适用）。
@@ -116,8 +116,8 @@ export default {
     const appId = 'wxcb31ae60f6a99cb9';
     const mchId = '1560899221';
     const nonceStr = uuid.v1().replace(/-/g, '');
-    // const price = 36000;
-    const price = 1;
+    const price = 36000;
+    // const price = 1;
     const productIntro = 'VIP志愿卡（黑龙江专用）';
     const attach = user.uuid;
     const tradeId = getTradeId();

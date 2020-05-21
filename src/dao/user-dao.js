@@ -121,6 +121,32 @@ export default {
     return user[0];
   },
 
+    updateUserImport2: async ({
+                                 examYear,
+                                 gender,
+                                 accountCategory,
+                                 score,
+                                 scoreAlterTime,
+                                 uuid
+                             }) => {
+        // 更新重要信息时需要删除当前暂存志愿表
+        await db.transactions([
+            new SqlObject(userMapper.updateImportInfo2, [
+                examYear,
+                gender,
+                accountCategory,
+                score,
+                scoreAlterTime,
+                uuid
+            ]),
+            new SqlObject(voluntaryMapper.deleteTempVoluntary, [uuid])
+        ]);
+
+        let user = await db.query(new SqlObject(userMapper.selectByUuid, [uuid]));
+
+        return user[0];
+    },
+
   // 修改密码
   updateUserPassword: async (newPassword, userUuid) => {
     return await db.query(
