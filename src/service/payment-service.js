@@ -26,6 +26,7 @@ export default {
     formData.addField('bizContent', {
       outTradeNo: uuid.v1(),
       productCode: 'FAST_INSTANT_TRADE_PAY',
+      // totalAmount: '360',
       totalAmount: '0.01',
       subject: 'VIP志愿卡（黑龙江专用）',
       body: `使用功能：学业测评、查数据、智能填报、志愿合理分析、就业前景分析等。
@@ -115,7 +116,8 @@ export default {
     const appId = 'wxcb31ae60f6a99cb9';
     const mchId = '1560899221';
     const nonceStr = uuid.v1().replace(/-/g, '');
-    const price = 36000;
+    // const price = 36000;
+    const price = 1;
     const productIntro = 'VIP志愿卡（黑龙江专用）';
     const attach = user.uuid;
     const tradeId = getTradeId();
@@ -214,16 +216,27 @@ export default {
       });
 
       if (localSign === xmlObj.sign[0]) {
-        // 修改用户使用次数
+        // 获取到vip用户需要设置的次数
         const role = await systemDao.selectRoleByCode(2);
-        await userDao.updateUserTimes({
-          userUuid: xmlObj.attach,
-          roleCode: 2,
-          scoreAlterTime: role.scoreAlterTime,
-          reportAlterTime: role.reportAlterTime,
-          deepAlterTime: role.deepAlterTime
-        });
-
+          // 在这里判断一下，如果已经是VIP了，那就是购买次数，需再之前的基础上把次数累加到一起
+          const user = await userDao.selectByUuid(xmlObj.attach);
+          if(user.roleCode == 1){
+              await userDao.updateUserTimes({
+                  userUuid: xmlObj.attach,
+                  roleCode: 2,
+                  scoreAlterTime: role.scoreAlterTime,
+                  reportAlterTime: role.reportAlterTime,
+                  deepAlterTime: role.deepAlterTime
+              });
+          }else {
+              await userDao.updateUserTimes({
+                  userUuid: xmlObj.attach,
+                  roleCode: 2,
+                  scoreAlterTime: role.scoreAlterTime+user.scoreAlterTime,
+                  reportAlterTime: role.reportAlterTime+user.reportAlterTime,
+                  deepAlterTime: role.deepAlterTime+user.deepAlterTime
+              });
+          }
         return 'SUCCESS';
       } else {
         return 'FAIL';
