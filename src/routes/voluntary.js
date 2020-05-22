@@ -6,6 +6,32 @@ const router = require('koa-router')();
 
 router.prefix('/voluntary');
 
+router.post('/updateReportAlterTimeDrop1', async ctx=> {
+    let user = ctx.state.data;
+    const result = await voluntaryService.updateReportAlterTimeDrop1(
+        user.reportAlterTime - 1,
+        user.uuid
+    );
+    ctx.body = new Result({
+        data: {
+            info:'success'
+        }
+    });
+});
+
+router.post('/updateDeepAlterTimeDrop1', async ctx=> {
+    let user = ctx.state.data;
+    const result = await voluntaryService.updateDeepAlterTimeDrop1(
+        user.deepAlterTime - 1,
+        user.uuid
+    );
+    ctx.body = new Result({
+        data: {
+            info:'success'
+        }
+    });
+});
+
 // 保存志愿信息
 router.post('/saveVoluntary', async ctx => {
   let { lotId, voluntary, reportType } = ctx.request.body,
