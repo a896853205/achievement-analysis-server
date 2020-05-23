@@ -1,4 +1,11 @@
 export default {
+    getAllYear: `
+    SELECT
+     distinct year
+    FROM
+    t_major_enrollment_info
+    ORDER BY year desc
+  `,
   queryMajorLevelTwo: `
     SELECT
     DISTINCT

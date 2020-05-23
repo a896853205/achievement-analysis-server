@@ -50,4 +50,13 @@ router.post('/getSchoolMajor', async ctx => {
     data: schoolMajor
   });
 });
+// 获取专业录取年份
+router.get('/getAllYear', async ctx => {
+
+    let years = await majorService.getAllYear();
+
+    ctx.body = new Result({
+        data: years
+    });
+});
 export default router;

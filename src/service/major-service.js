@@ -164,5 +164,10 @@ export default {
     }
 
     return schoolMajorList;
-  }
+  },
+
+    getAllYear: async () => {
+        let years = await  majorDao.getAllYear();
+        return years;
+    }
 };

@@ -4,6 +4,10 @@ import { db, SqlObject } from '../resources/db-connect';
 import majorMapper from '../resources/mapper/major-mapper';
 
 export default {
+
+    getAllYear: async () => {
+    return await db.query(new SqlObject(majorMapper.getAllYear));
+  },
   queryMajorLevelTwo: async () => {
     return await db.query(new SqlObject(majorMapper.queryMajorLevelTwo));
   },
