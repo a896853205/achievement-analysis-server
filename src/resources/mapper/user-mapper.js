@@ -20,6 +20,14 @@ export default {
     WHERE
       uuid = ?
   `,
+    updateImportInfo2: `
+    UPDATE
+      t_user
+    SET
+      examYear = ?, gender = ?, accountCategory = ?, score = ?, scoreAlterTime = ?
+    WHERE
+      uuid = ?
+  `,
   selectByUuid: `
   SELECT
     t_user.*,

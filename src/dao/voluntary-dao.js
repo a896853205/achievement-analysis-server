@@ -9,6 +9,26 @@ import userMapper from '../resources/mapper/user-mapper';
 import { initVoluntaryOption } from './voluntary-filtrate';
 
 export default {
+    // 将生成报表次数减少1
+    updateReportAlterTimeDrop1: async (reportAlterTime,uuid) => {
+        console.log('aaaaaa',reportAlterTime,uuid);
+        const result = db.query(new SqlObject(userMapper.updateReportAlterTime, [
+            reportAlterTime,
+            uuid
+        ]));
+
+        return result;
+    },
+    // 将深度体验次数减少1
+    updateDeepAlterTimeDrop1: async (deepAlterTime,uuid) => {
+        console.log('bbbbbb',deepAlterTime,uuid);
+        const result = db.query(new SqlObject(userMapper.updateDeepAlterTime, [
+            deepAlterTime,
+            uuid
+        ]));
+
+        return result;
+    },
   // ffff
   queryVoluntarySchoolAndMajorByVoluntaryUuid: async (voluntaryUuid) => {
     let volunteerData = await db.query(new SqlObject(voluntaryMapper.queryVoluntarySchoolAndMajorByVoluntaryUuid,[
@@ -23,11 +43,10 @@ export default {
     // 将好多行的数组放到这行的数组中去.
     let insertVoluntary = new SqlObject(voluntaryMapper.insertVoluntary, [
         allParam
-      ]),
-      updateUserCount;
+      ]);
 
     // 普通报表
-    if (reportType === 1) {
+  /*  if (reportType === 1) {
       updateUserCount = new SqlObject(userMapper.updateReportAlterTime, [
         user.reportAlterTime - 1,
         user.uuid
@@ -38,9 +57,9 @@ export default {
         user.deepAlterTime - 1,
         user.uuid
       ]);
-    }
+    }*/
 
-    await db.transactions([insertVoluntary, updateUserCount]);
+    await db.transactions([insertVoluntary]);
   },
 
   queryVoluntaryResult: async voluntaryUuid => {

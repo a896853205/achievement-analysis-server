@@ -1,4 +1,11 @@
 export default {
+    getAllYear: `
+    SELECT
+     distinct year
+    FROM
+    t_major_enrollment_info
+    ORDER BY year desc
+  `,
   queryMajorLevelTwo: `
     SELECT
     DISTINCT
@@ -103,7 +110,7 @@ export default {
     FROM
     t_major_enrollment_info
     WHERE
-    fk_school_id = ? and accountCategory = ?
+    fk_school_id = ? and accountCategory = ? and year= ?
     `,
   selectMajorName: `
     SELECT

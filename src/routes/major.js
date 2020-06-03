@@ -42,12 +42,21 @@ router.post('/getHotMajors', async ctx => {
 });
 
 router.post('/getSchoolMajor', async ctx => {
-  const { schoolId, accountCategory } = ctx.request.body;
+  const { schoolId, accountCategory, year } = ctx.request.body;
 
-  let schoolMajor = await majorService.querySchoolMajor(schoolId, accountCategory);
+  let schoolMajor = await majorService.querySchoolMajor(schoolId, accountCategory, year);
 
   ctx.body = new Result({
     data: schoolMajor
   });
+});
+// 获取专业录取年份
+router.get('/getAllYear', async ctx => {
+
+    let years = await majorService.getAllYear();
+
+    ctx.body = new Result({
+        data: years
+    });
 });
 export default router;

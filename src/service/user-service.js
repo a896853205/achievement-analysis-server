@@ -62,20 +62,31 @@ export default {
     userRole = 1
   }) => {
     // 查询权限表userRole
-    let role = await systemDao.selectRoleByCode(userRole);
-
-    // 这里判断次数,如果小于返回-1,如果还有次数就update
-    let result = await userDao.updateUserImport({
-      examYear,
-      gender,
-      accountCategory,
-      score,
-      scoreAlterTime,
-      uuid,
-      reportAlterTime: role.reportAlterTime,
-      deepAlterTime: role.deepAlterTime
-    });
-
+      console.log(userRole,9999999999999);
+      let result;
+      // 用户为1的时候 是游客 初始化次数
+      if(userRole == 1){
+          const role = await systemDao.selectRoleByCode(userRole);
+          result = await userDao.updateUserImport({
+              examYear,
+              gender,
+              accountCategory,
+              score,
+              scoreAlterTime,
+              uuid,
+              reportAlterTime: role.reportAlterTime,
+              deepAlterTime: role.deepAlterTime
+          });
+      }else { // 用户是vip的时候，说明生成报表和深度体验的次数已经赋值完毕了，所以这里不需要再修改，只需要更新分数修改次数即可
+          result = await userDao.updateUserImport2({
+              examYear,
+              gender,
+              accountCategory,
+              score,
+              scoreAlterTime,
+              uuid
+          });
+      }
     return result;
   },
 

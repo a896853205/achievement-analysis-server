@@ -15,6 +15,19 @@ import {
 } from './voluntary-filtrate';
 
 export default {
+    // 将生成报表次数减少1
+    updateReportAlterTimeDrop1: async (reportAlterTime,uuid) => {
+        const result = await voluntaryDao.updateReportAlterTimeDrop1(reportAlterTime,uuid);
+
+        return result;
+    },
+    // 将深度体验次数减少1
+    updateDeepAlterTimeDrop1: async (deepAlterTime,uuid) => {
+        const result = await voluntaryDao.updateDeepAlterTimeDrop1(deepAlterTime,uuid);
+
+        return result;
+    },
+
   // 根据志愿的uuid，获取志愿表上的每一项学校和专业
   queryVoluntarySchoolAndMajorByVoluntaryUuid: async (voluntaryUuid) => {
     let tempData = await voluntaryDao.queryVoluntarySchoolAndMajorByVoluntaryUuid(voluntaryUuid);

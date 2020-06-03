@@ -203,7 +203,7 @@ export const splitSchoolByRange = (
         continue;
       } else if (
         currentSchool.score >= score5 &&
-        currentSchool.score < score6
+        currentSchool.score <= score6
       ) {
         schoolItem.gather = 'a';
         schoolListA.push(schoolItem);

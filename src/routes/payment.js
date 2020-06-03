@@ -1,6 +1,7 @@
 import paymentService from '../service/payment-service';
 // 返回前台的对象
 import Result from '../../util/response';
+import userDao from "../dao/user-dao";
 
 const router = require('koa-router')();
 
@@ -10,18 +11,10 @@ router.post('/getAlipayPaymentUrl', async ctx => {
   try {
     let user = ctx.state.data;
 
-    if (user.roleCode === 2) {
-      ctx.body = new Result({
-        status: 0,
-        msg: '您已经是vip啦,无需再次购买'
-      });
-    } else {
       const url = await paymentService.getAlipayPaymentUrl(user);
-
       ctx.body = new Result({
-        data: url
+          data: url
       });
-    }
   } catch (error) {
     ctx.body = new Result({
       status: 0,
@@ -47,18 +40,11 @@ router.post('/getWechatPaymentQRUrl', async ctx => {
   try {
     let user = ctx.state.data;
 
-    if (user.roleCode === 2) {
-      ctx.body = new Result({
-        status: 0,
-        msg: '您已经是vip啦,无需再次购买'
-      });
-    } else {
       const url = await paymentService.getWechatPaymentQRUrl(user);
 
       ctx.body = new Result({
-        data: url
+          data: url
       });
-    }
   } catch (error) {
     console.log(error);
     ctx.body = new Result({
@@ -81,6 +67,16 @@ router.post('/signWeChatPayment', async ctx => {
     console.error(error);
     ctx.body = 'FAIL';
   }
+});
+
+router.post('/test', async ctx => {
+    const user = ctx.state.data;
+    console.log(user.uuid);
+    const user2 = await userDao.selectByUuid(user.uuid);
+    console.log(user2);
+    ctx.body = {
+        data:'test'
+    };
 });
 
 export default router;
