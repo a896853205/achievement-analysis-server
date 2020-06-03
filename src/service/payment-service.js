@@ -31,7 +31,7 @@ export default {
       body: `使用功能：学业测评、查数据、智能填报、志愿合理分析、就业前景分析等。
       适用对象：普通类文理科考生（自主招生、专科及艺术体育类考生暂不适用）。
       使用时效：有效期截止到用户自行选择高考年的9月1日为止。`,
-      passbackParams: JSON.stringify({ userUuid: user.uuid })
+      passbackParams: JSON.stringify({ userUuid: user.uuid }),
     });
 
     const result = await alipaySdk.exec(
@@ -65,7 +65,7 @@ export default {
       outTradeNo: data.out_trade_no,
       totalAmount: data.total_amount,
       tradeNo: data.trade_no,
-      isSuccess
+      isSuccess,
     });
 
     if (isSuccess) {
@@ -77,7 +77,7 @@ export default {
           roleCode: 2,
           scoreAlterTime: role.scoreAlterTime,
           reportAlterTime: role.reportAlterTime,
-          deepAlterTime: role.deepAlterTime
+          deepAlterTime: role.deepAlterTime,
         });
       } catch (error) {
         console.error(error);
@@ -196,7 +196,7 @@ export default {
         totalFee: xmlObj.total_fee,
         resultCode: localSign === xmlObj.sign[0],
         timeEnd: xmlObj.time_end,
-        userUuid: xmlObj.attach
+        userUuid: xmlObj.attach,
       });
 
       if (localSign === xmlObj.sign[0]) {
@@ -207,7 +207,7 @@ export default {
           roleCode: 2,
           scoreAlterTime: role.scoreAlterTime,
           reportAlterTime: role.reportAlterTime,
-          deepAlterTime: role.deepAlterTime
+          deepAlterTime: role.deepAlterTime,
         });
 
         return 'SUCCESS';
@@ -218,5 +218,5 @@ export default {
       console.error(error);
       return 'FAIL';
     }
-  }
+  },
 };
