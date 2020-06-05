@@ -174,13 +174,15 @@ a.poverty,
 a.enrollment,
 b.lots_name as lot_name,
 c.*,
+sys_t_major.id as major_id,
+sys_t_major.major_name,
 t_major_enrollment_info.enrollment_score as major_score
 from 
 merge_school_lots a
-left join
+inner join
 sys_t_lots b
 on a.fk_lots_id =b.id
-left join
+inner join
 (
 	select 
 	a.id as school_id,
