@@ -6,9 +6,9 @@ import Result from '../../util/response';
 import userService from '../service/user-service';
 
 export default async (ctx, next, unlessPathArr) => {
-  // for (let i = 0; i <= 999999; i++) {
-  //   console.log(i);
-  // }
+  for (let i = 0; i <= 999; i++) {
+    console.log(i);
+  }
   for (let i = 0; i < unlessPathArr.length; i++) {
     if (ctx.url.match(unlessPathArr[i])) {
       return true;
