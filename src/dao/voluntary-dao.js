@@ -11,7 +11,6 @@ import { initVoluntaryOption } from './voluntary-filtrate';
 export default {
     // 将生成报表次数减少1
     updateReportAlterTimeDrop1: async (reportAlterTime,uuid) => {
-        console.log('aaaaaa',reportAlterTime,uuid);
         const result = db.query(new SqlObject(userMapper.updateReportAlterTime, [
             reportAlterTime,
             uuid
@@ -21,7 +20,6 @@ export default {
     },
     // 将深度体验次数减少1
     updateDeepAlterTimeDrop1: async (deepAlterTime,uuid) => {
-        console.log('bbbbbb',deepAlterTime,uuid);
         const result = db.query(new SqlObject(userMapper.updateDeepAlterTime, [
             deepAlterTime,
             uuid

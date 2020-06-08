@@ -57,8 +57,6 @@ router.post('/getWechatPaymentQRUrl', async ctx => {
 router.post('/signWeChatPayment', async ctx => {
   try {
     let postData = ctx.request.body;
-    console.log('payment:', ctx.request);
-    console.log('payment:', postData);
 
     const res = await paymentService.signWeChatPayment(postData);
 
@@ -71,9 +69,9 @@ router.post('/signWeChatPayment', async ctx => {
 
 router.post('/test', async ctx => {
     const user = ctx.state.data;
-    console.log(user.uuid);
+    // console.log(user.uuid);
     const user2 = await userDao.selectByUuid(user.uuid);
-    console.log(user2);
+    // console.log(user2);
     ctx.body = {
         data:'test'
     };

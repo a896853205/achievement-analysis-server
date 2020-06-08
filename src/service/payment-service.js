@@ -46,14 +46,10 @@ export default {
   },
 
   signPayment: async postData => {
-    console.log('postData', postData);
 
     const isSuccess = alipaySdk.checkNotifySign(postData);
 
     const data = postData;
-
-    console.log('isSuccess', isSuccess);
-
 
     // 将充值信息存数据库中
     await paymentDao.insertPayment({

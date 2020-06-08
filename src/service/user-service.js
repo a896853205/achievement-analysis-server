@@ -62,7 +62,6 @@ export default {
     userRole = 1
   }) => {
     // 查询权限表userRole
-      console.log(userRole,9999999999999);
       let result;
       // 用户为1的时候 是游客 初始化次数
       if(userRole == 1){
