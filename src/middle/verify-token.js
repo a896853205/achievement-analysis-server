@@ -5,10 +5,10 @@ import Result from '../../util/response';
 // service
 import userService from '../service/user-service';
 
+// let wait = ms => new Promise(resolve => setTimeout(resolve, ms));
+
 export default async (ctx, next, unlessPathArr) => {
-  for (let i = 0; i <= 999; i++) {
-    console.log(i);
-  }
+  // await wait(1500);
   for (let i = 0; i < unlessPathArr.length; i++) {
     if (ctx.url.match(unlessPathArr[i])) {
       return true;
