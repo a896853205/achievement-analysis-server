@@ -34,10 +34,24 @@ export default {
     ]));
     return volunteerData;
   },
+    // ffff
+    getLotIdByVoluntaryUuid: async (voluntaryUuid) => {
+    const lotId = await db.query(new SqlObject(voluntaryMapper.getLotIdByVoluntaryUuid,[
+        voluntaryUuid
+    ]));
+    return lotId;
+  },
   saveVoluntary: async (allParam, user, reportType) => {
     // 在这里使用事件处理
     // 插入voluntary 而且 将 用户的测评次数-1
-
+    //   console.log(allParam[allParam.length - 1], 8888888);
+    //   await allParam.forEach(item => {
+    //       db.query(
+    //           new SqlObject(voluntaryMapper.insertVoluntary2, [
+    //               item[0], item[1], item[2], item[3], item[4], item[5], item[6], item[7], item[8], item[9], item[10], item[11], item[12]
+    //           ])
+    //       );
+    //   });
     // 将好多行的数组放到这行的数组中去.
     let insertVoluntary = new SqlObject(voluntaryMapper.insertVoluntary, [
         allParam
@@ -62,9 +76,12 @@ export default {
 
   queryVoluntaryResult: async voluntaryUuid => {
     let voluntaryList = await db.query(
-      new SqlObject(voluntaryMapper.queryVoluntaryByVoluntaryUuid, [
-        voluntaryUuid
-      ])
+      // new SqlObject(voluntaryMapper.queryVoluntaryByVoluntaryUuid, [
+      //   voluntaryUuid
+      // ])
+        new SqlObject(voluntaryMapper.queryVoluntaryByVoluntaryUuid2, [
+            voluntaryUuid
+        ])
     );
 
     return voluntaryList;

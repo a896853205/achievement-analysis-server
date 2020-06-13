@@ -31,7 +31,8 @@ export default {
   // 根据志愿的uuid，获取志愿表上的每一项学校和专业
   queryVoluntarySchoolAndMajorByVoluntaryUuid: async (voluntaryUuid) => {
     let tempData = await voluntaryDao.queryVoluntarySchoolAndMajorByVoluntaryUuid(voluntaryUuid);
-
+      console.log(tempData, 99999999999999);
+      console.log(voluntaryUuid, 8888888888);
 
     //处理数据
     const res = tempData.reduce((pre, item) => {
@@ -54,10 +55,16 @@ export default {
 
     return res;
   },
+
+    getLotIdByVoluntaryUuid: async ( voluntaryUuid ) => {
+        const data = await voluntaryDao.getLotIdByVoluntaryUuid(voluntaryUuid);
+
+        return data;
+    },
   // 保存志愿信息
   saveVoluntary: async (lotId, voluntary, user, reportType) => {
     let voluntaryUuid = uuid();
-
+      // console.log(voluntary[0], 666666);
     if (user.reportAlterTime > 0) {
       let allParam = [];
 
@@ -81,7 +88,8 @@ export default {
                 user.examYear,
                 // user.poverty,
                 schoolOption.gather,
-                reportType
+                reportType,
+                  user.accountCategory
               );
 
               allParam.push(param);
@@ -95,6 +103,7 @@ export default {
         return -1;
       }
 
+        // console.log(allParam, 4444444444);
       await voluntaryDao.saveVoluntary(allParam, user, reportType);
     } else {
       // 没有次数了
@@ -109,18 +118,20 @@ export default {
     let result = {
       submitTime: undefined,
       lotsName: undefined,
-      // 完整性结果
+      // 完整性结果，志愿选择完备性
       completeResult: {
         reasonable: false,
         describe: '',
         unWriteDetailArr: []
       },
+        // 梯度合理性
       gradedResult: {
         reasonable: false,
         describe: '',
         gradedDetailArr: [],
         schoolScoreArr: []
       },
+        // 大计划合理性
       planResult: {
         reasonable: false,
         describe: '',
@@ -128,10 +139,12 @@ export default {
       }
     };
     // 这里计算结果
+      console.log(voluntaryUuid, 'voluntaryUuid',111111);
     let [voluntaryList, gatherOptionList] = await Promise.all([
       voluntaryDao.queryVoluntaryResult(voluntaryUuid),
       systemDao.queryGatherOption()
     ]);
+      // console.log(voluntaryList, 222222222);
 
     // 对gather进行一下适配处理
     let gatherOption = {};
@@ -182,7 +195,7 @@ export default {
       result.submitTime = voluntaryList[0].submit_time;
       result.lotsName = voluntaryList[0].lots_name;
 
-      // 第一项判断完备性
+      // 第一项判断完备性，判断志愿选择完备性
       let unWriteDetailArr = voluntaryCompleteStrategy[
         voluntaryList[0].fk_lots_id
       ](voluntaryList);
@@ -190,11 +203,11 @@ export default {
       if (unWriteDetailArr.length) {
         result.completeResult.unWriteDetailArr = unWriteDetailArr;
         result.completeResult.describe =
-          '请考生完整填写志愿表，以免造成滑档情况!';
+          '请考生完整填写志愿表，以免造成滑档情况！';
         result.completeResult.reasonable = false;
       } else {
         result.completeResult.describe =
-          '志愿完备性合理,如果您另外的条件均合理,则恭喜您可以按照该志愿填报了,祝您金榜题名!';
+          '志愿完备性合理，如果您另外的条件均合理，则恭喜您可以按照该志愿填报了，祝您金榜题名！';
         result.completeResult.reasonable = true;
       }
 
@@ -210,11 +223,11 @@ export default {
       if (gradedDetailArr.length) {
         result.gradedResult.gradedDetailArr = gradedDetailArr;
         result.gradedResult.describe =
-          '如按此方式填报会造成滑档情况,考生请谨慎选择!';
+          '如按此方式填报会造成滑档情况，考生请谨慎选择！';
         result.gradedResult.reasonable = false;
       } else {
         result.gradedResult.describe =
-          '志愿梯度性合理,如果您另外的条件均合理,则恭喜您可以按照该志愿填报了,祝您金榜题名!';
+          '志愿梯度性合理,如果您另外的条件均合理，则恭喜您可以按照该志愿填报了，祝您金榜题名！';
         result.gradedResult.reasonable = true;
       }
 
@@ -228,7 +241,7 @@ export default {
         result.planResult.describe = `请考生谨慎选择，以免造成退档或滑档情况！`;
       } else {
         result.planResult.describe =
-          '志愿大计划选择合理性,如果您另外的条件均合理,则恭喜您可以按照该志愿填报了,祝您金榜题名!';
+          '志愿大计划选择合理性，如果您另外的条件均合理，则恭喜您可以按照该志愿填报了，祝您金榜题名！';
         result.planResult.reasonable = true;
       }
     }

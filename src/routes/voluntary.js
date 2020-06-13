@@ -36,6 +36,9 @@ router.post('/updateDeepAlterTimeDrop1', async ctx=> {
 router.post('/saveVoluntary', async ctx => {
   let { lotId, voluntary, reportType } = ctx.request.body,
     user = ctx.state.data;
+    for (let i = 0; i < 5; i++) {
+        console.log(voluntary[i], i);
+    }
 
   let voluntaryUuid = await voluntaryService.saveVoluntary(
     lotId,
@@ -97,6 +100,17 @@ router.get('/getVoluntarySchoolAndMajor', async ctx => {
   ctx.body = new Result({
     data: voluntaryData
   });
+});
+
+router.get('/getLotIdByVoluntaryUuid', async ctx => {
+    const { voluntaryUuid } = ctx.query;
+    console.log(voluntaryUuid, 666666);
+
+    const data = await voluntaryService.getLotIdByVoluntaryUuid( voluntaryUuid );
+
+    ctx.body = new Result({
+        data: data[0].fk_lots_id
+    });
 });
 
 // 获取深度分析报告

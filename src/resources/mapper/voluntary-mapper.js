@@ -18,13 +18,23 @@ export default {
 	) as a
 join sys_t_five_volunteer as b
 on a.fk_five_volunteer_id = b.id`,
+    getLotIdByVoluntaryUuid: `
+        select * from t_user_voluntary_result where uuid = ?;
+    `,
   insertVoluntary: `
     INSERT
     INTO
     t_user_voluntary_result
-    (uuid, fk_five_volunteer_id, fk_school_id, fk_enrollment_id, major_index, submit_time, fk_lots_id, fk_user_uuid, gender, year, gather, reportType)
+    (uuid, fk_five_volunteer_id, fk_school_id, fk_enrollment_id, major_index, submit_time, fk_lots_id, fk_user_uuid, gender, year, gather, reportType, accountCategory)
     VALUES
     ?`,
+    insertVoluntary2: `
+    INSERT
+    INTO
+    t_user_voluntary_result
+    (uuid, fk_five_volunteer_id, fk_school_id, fk_enrollment_id, major_index, submit_time, fk_lots_id, fk_user_uuid, gender, year, gather, reportType, accountCategory)
+    VALUES
+    (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
   queryVoluntaryByVoluntaryUuid: `
   SELECT 
     t_user_voluntary_result.uuid, 
@@ -72,6 +82,40 @@ on a.fk_five_volunteer_id = b.id`,
   AND
     t_user_voluntary_result.gender = merge_school_lots.gender;
   `,
+    queryVoluntaryByVoluntaryUuid2: `
+        select
+            a.uuid,
+            a.fk_five_volunteer_id,
+            b.volunteer_name,
+            a.fk_school_id,
+            c.name,
+            d.fk_major_id,
+            e.major_name,
+            a.major_index,
+            a.submit_time,
+            a.fk_lots_id,
+            a.year,
+            f.lots_name,
+            a.gather,
+            d.enrollment,
+            g.score,
+            g.enrollment as enrollment1
+        from t_user_voluntary_result a
+        join sys_t_five_volunteer b
+        on a.fk_five_volunteer_id = b.id
+        join t_school c
+        on a.fk_school_id = c.id
+        join t_major_enrollment_info as d
+        on a.fk_enrollment_id = d.id
+        join sys_t_major as e
+        on d.fk_major_id = e.id
+        join sys_t_lots f
+        on a.fk_lots_id = f.id
+        join merge_school_lots g
+        on a.fk_school_id = g.fk_school_id and a.year = g.year and a.accountCategory = g.accountCategory
+        where a.uuid = ?
+        order by a.fk_five_volunteer_id; 
+    `,
   // 通过用户uuid查询志愿表
   queryVoluntaryByUserUuid: `
   SELECT 
