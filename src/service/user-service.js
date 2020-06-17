@@ -160,7 +160,11 @@ export default {
 
   saveVerifyCode: async username => {
     const strNumRandom = () => {
-        return Math.floor(Math.random() * 10);
+        let radomNum = Math.floor(Math.random() * 10);
+            if (radomNum === 0) {
+                radomNum++;
+            }
+        return radomNum;
       },
       codeLength = 4;
 
