@@ -112,7 +112,7 @@ on a.fk_five_volunteer_id = b.id`,
         join sys_t_lots f
         on a.fk_lots_id = f.id
         join merge_school_lots g
-        on a.fk_school_id = g.fk_school_id and a.year = g.year and a.accountCategory = g.accountCategory
+        on a.fk_school_id = g.fk_school_id and a.year-1 = g.year and a.accountCategory = g.accountCategory
         where a.uuid = ?
         order by a.fk_five_volunteer_id; 
     `,
