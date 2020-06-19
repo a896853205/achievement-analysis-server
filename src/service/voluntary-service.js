@@ -81,7 +81,7 @@ export default {
                 majorOption.majorId,
                 majorIndex,
                 new Date(),
-                lotId,
+                  schoolOption.lot_id,
                 user.uuid,
                 schoolOption.gender,
                 // 因为查询的是年份的year

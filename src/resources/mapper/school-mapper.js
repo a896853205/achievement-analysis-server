@@ -297,7 +297,7 @@ AND
 	and
 	a.fk_lot_id =?
 	AND
-	(a.year = ? OR a.year = ? OR a.year = ? OR a.year = ?)
+	(a.year = ? OR a.year = ? OR a.year = ?)
 	AND
 	a.accountCategory = ?
 	ORDER BY

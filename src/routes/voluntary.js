@@ -39,7 +39,7 @@ router.post('/saveVoluntary', async ctx => {
     for (let i = 0; i < 5; i++) {
         console.log(voluntary[i], i);
     }
-
+    console.log('=====================================================');
   let voluntaryUuid = await voluntaryService.saveVoluntary(
     lotId,
     voluntary,
