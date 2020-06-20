@@ -1,3 +1,5 @@
+import {objectHelper} from "../../../util/object-helper";
+
 const VOLUNTARY_NAME = ['志愿A', '志愿B', '志愿C', '志愿D', '志愿E','志愿F', '志愿G', '志愿H', '志愿I', '志愿J'];
 
 // 判断6个志愿是不是完整了
@@ -142,7 +144,7 @@ export const voluntaryCompleteStrategy = {
         -1
       ) {
         // 如果没找到
-        unWriteSchoolArr.push(`未填写${VOLUNTARY_NAME[i]}`);
+        unWriteSchoolArr.push(`未填写${VOLUNTARY_NAME[i]}      `);
       } else {
         let unWriteMajorArr = verifyMajor(
           voluntaryList.filter(item => item.fk_five_volunteer_id === i + 1)
@@ -150,7 +152,7 @@ export const voluntaryCompleteStrategy = {
 
         if (unWriteMajorArr.length) {
           unWriteSchoolArr.push(
-            `${VOLUNTARY_NAME[i]}的${unWriteMajorArr}未填写`
+            `${VOLUNTARY_NAME[i]}的${unWriteMajorArr}未填写     `
           );
         }
       }
@@ -261,61 +263,145 @@ const _verifyGradeStrategy = {
     }
 };
 
+/*
+* 对选择的集合，进一步判断合理性
+*     只有（A，B）不行，
+*     只有（A，C）不行，
+*     只有（A，D）不行，
+*     只有（A，E）不行，
+*     只有（B，C）不行，
+*     （B，D）先算合理，
+*     只有（B，E）不行，
+*     只有（A，B，C）不行
+* */
+const _verifyGradeStrategy2 = {
+    1: () => {
+
+    },
+    // 一批A进来的方法
+    2: (gatherNum, gatherOption) => {
+        // 只有（A，B）不行，
+        if(gatherNum['c']+gatherNum['d']+gatherNum['e'] === 0) {
+            return `所选的志愿只包含“${gatherOption['a']}”和“${gatherOption['b']}”，不合理，建议按照推荐集合进行报考，避免滑档。    `;
+        }
+        // 只有（A，C）不行，
+        if(gatherNum['b']+gatherNum['d']+gatherNum['e'] === 0) {
+            return `所选的志愿只包含“${gatherOption['a']}”和“${gatherOption['c']}”，不合理，建议按照推荐集合进行报考，避免滑档。    `;
+        }
+        // 只有（A，D）不行，
+        if(gatherNum['b']+gatherNum['c']+gatherNum['e'] === 0) {
+            return `所选的志愿只包含“${gatherOption['a']}”和“${gatherOption['d']}”，不合理，建议按照推荐集合进行报考，避免滑档。    `;
+        }
+        // 只有（A，E）不行，
+        if(gatherNum['b']+gatherNum['c']+gatherNum['d'] === 0) {
+            return `所选的志愿只包含“${gatherOption['a']}”和“${gatherOption['e']}”，不合理，建议按照推荐集合进行报考，避免滑档。    `;
+        }
+        // 只有（B，C）不行，
+        if(gatherNum['a']+gatherNum['d']+gatherNum['e'] === 0) {
+            return `所选的志愿只包含“${gatherOption['b']}”和“${gatherOption['c']}”，不合理，建议按照推荐集合进行报考，避免滑档。    `;
+        }
+        // （B，D）先算合理，
+        // if(gatherNum['a']+gatherNum['c']+gatherNum['e'] === 0) {
+        //     return `所选的志愿只包含“${gatherOption['b']}”和“${gatherOption['d']}”，不合理，建议按照推荐集合进行报考，避免滑档。    `;
+        // }
+        // 只有（B，E）不行，
+        if(gatherNum['a']+gatherNum['c']+gatherNum['d'] === 0) {
+            return `所选的志愿只包含“${gatherOption['b']}”和“${gatherOption['e']}”，不合理，建议按照推荐集合进行报考，避免滑档。    `;
+        }
+        // 只有（A，B，C）不行
+        if(gatherNum['d']+gatherNum['e'] === 0) {
+            return `所选的志愿只包含“${gatherOption['a']}”、“${gatherOption['b']}”和“${gatherOption['c']}”，不合理，建议按照推荐集合进行报考，避免滑档。    `;
+        }
+    }
+};
+
 export const voluntaryGradedStrategy = {
   // 提前批
   1: (voluntaryList, gatherOption) => {
     return [];
   },
   // 一批A
-  2: (voluntaryList, gatherOption) => {
+  2: (voluntaryList, gatherOption,volunteerCount) => {
     // 判断不能志愿都一样
     let gradeDetailArr = [];
+      console.log(gatherOption,'gatherOption');
+      // 处理数据，便于计算
+      let tempGather = [];
+      voluntaryList.forEach(item => {
+          let obj = {};
+          obj['fk_five_volunteer_id'] = item.fk_five_volunteer_id;
+          obj['volunteer_name'] = item.volunteer_name;
+          obj['fk_school_id'] = item.fk_school_id;
+          obj['name'] = item.name;
+          obj['fk_lots_id'] = item.fk_lots_id;
+          obj['lots_name'] = item.lots_name;
+          obj['gather'] = item.gather;
+          obj['score'] = item.score;
+          obj['enrollment1'] = item.enrollment1;
+          tempGather.push(obj);
+      });
+      let uniqueTempGather = objectHelper.uniqueArrayObj(tempGather);
+      console.log(uniqueTempGather, 'uniqueTempGather');
 
-    // 第一步判断一下是不是从一个集合里选出来的
-    // 记录集合个数
-    let gatherNum = {
-      a: 0,
-      b: 0,
-      c: 0,
-      d: 0,
-      e: 0
-    };
+      // 不同风险的志愿都填了几个
+      let gatherNum = {
+          a: 0,
+          b: 0,
+          c: 0,
+          d: 0,
+          e: 0
+      };
+      // 五个志愿都填了哪个
+      let fiveVolunteer = {
+          1: 0,
+          2: 0,
+          3: 0,
+          4: 0,
+          5: 0
+      };
 
-    for (let item of voluntaryList) {
-      gatherNum[item.gather]++;
-    }
-
-    for (let key in gatherNum) {
-      if (gatherNum[key] === 5) {
-        let schoolName = [];
-        for (let item of voluntaryList) {
-          schoolName.push(item.name);
-        }
-        gradeDetailArr.push(
-          `${schoolName}输入筛选集合${gatherOption[key]}，如按此方式填报会造成浪费志愿情况，考生请谨慎选择！`
-        );
+      for (let item of uniqueTempGather) {
+          gatherNum[item.gather]++;
+          fiveVolunteer[item.fk_five_volunteer_id]++;
       }
-    }
 
-    // 第二步判断合理性
-    // 将学校去重
-    let schoolArr = [];
+      console.log(gatherNum, 'gatherNum');
+      console.log(fiveVolunteer, 'fiveVolunteer');
 
-    for (let item of voluntaryList) {
-      schoolArr[item.fk_five_volunteer_id - 1] = item;
-    }
+      // 首先判断是否志愿数是否是5个，5个则合理，否则不合理。
+      let isEnough = true;
+      for ( let key in fiveVolunteer) {
+          if(fiveVolunteer[key] === 0){
+              isEnough = false;
+              gradeDetailArr.push(`${VOLUNTARY_NAME[key-1]}未填写； `);
+          }
+      }
+      if(!isEnough) {
+          gradeDetailArr.unshift(`志愿选择不完备：`);
+      }
+      // 判断是不是从一个集合理选出来的
+      for (let key in gatherNum) {
+          if (gatherNum[key] === volunteerCount) {
+              gradeDetailArr.push(`您所有的志愿都是从“${gatherOption[key]}”中选取的，这样不合理。     `);
+          }
+      }
 
-    for (let item of schoolArr) {
-      if (item) {
-        let detailMsg = _verifyGradeStrategy[item.fk_five_volunteer_id](
-          item,
+      /*
+      * 对选择的集合，进一步判断合理性
+      *     只有（A，B）不行，
+      *     只有（A，C）不行，
+      *     只有（A，D）不行，
+      *     只有（A，E）不行，
+      *     只有（B，C）不行，
+      *     只有（B，D）不行，
+      *     只有（B，E）不行，
+      *     只有（A，B，C）不行
+      * */
+      let msg = _verifyGradeStrategy2[uniqueTempGather[0].fk_lots_id === 6 ? 4 : uniqueTempGather[0].fk_lots_id](
+          gatherNum,
           gatherOption
-        );
-        if (detailMsg) {
-          gradeDetailArr.push(detailMsg);
-        }
-      }
-    }
+      );
+      gradeDetailArr.push(msg);
 
     return gradeDetailArr;
   },

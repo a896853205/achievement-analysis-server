@@ -74,6 +74,7 @@ export default {
   FROM
   sys_t_gather
   `,
+    queryVolunteerCountByLotId: `select count(*) as volunteer_count from sys_merge_lots_volunteer where fk_lot_id =?;`,
   // 查询权限表
   selectRoleByCode: `
   SELECT

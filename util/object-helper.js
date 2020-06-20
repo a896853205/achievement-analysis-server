@@ -25,3 +25,20 @@ objectHelper.deepCopy = obj => {
     return newObj;
   }
 }
+
+objectHelper.uniqueArrayObj = arr => {
+    let tempArr = [];
+    arr.forEach(item => {
+        tempArr.push(JSON.stringify(item));
+    });
+    let tempArr2 = tempArr.reduce(function (prev, cur) {
+        prev.indexOf(cur) === -1 && prev.push(cur);
+        return prev;
+    }, []);
+    let tempArr3 = [];
+    tempArr2.forEach(item => {
+        tempArr3.push(JSON.parse(item));
+    });
+
+    return tempArr3;
+};

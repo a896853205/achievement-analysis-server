@@ -95,6 +95,12 @@ export default {
 
     return gatherOption;
   },
+  // 根据lotId获得志愿的个数
+    queryVolunteerCountByLotId: async (lotId) => {
+    return (await db.query(
+      new SqlObject(systemMapper.queryVolunteerCountByLotId, [lotId])
+    ))[0].volunteer_count;
+  },
 
   // 查询权限
   selectRoleByCode: async roleCode => {

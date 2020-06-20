@@ -144,7 +144,9 @@ export default {
       voluntaryDao.queryVoluntaryResult(voluntaryUuid),
       systemDao.queryGatherOption()
     ]);
-      // console.log(voluntaryList, 222222222);
+      let volunteerCount = await systemDao.queryVolunteerCountByLotId(voluntaryList[0].fk_lots_id === 6 ? 4 : voluntaryList[0].fk_lots_id);
+
+      console.log(volunteerCount, 'volunteerCount');
 
     // 对gather进行一下适配处理
     let gatherOption = {};
@@ -193,11 +195,11 @@ export default {
       // 如果有志愿
       // 将志愿的基本信息保存到返回对象中
       result.submitTime = voluntaryList[0].submit_time;
-      result.lotsName = voluntaryList[0].lots_name;
+      result.lotsName = voluntaryList[0].lots_name === '三批' ? '二批A': voluntaryList[0].lots_name;
 
       // 第一项判断完备性，判断志愿选择完备性
       let unWriteDetailArr = voluntaryCompleteStrategy[
-        voluntaryList[0].fk_lots_id
+        voluntaryList[0].fk_lots_id === 6 ? 4: voluntaryList[0].fk_lots_id
       ](voluntaryList);
 
       if (unWriteDetailArr.length) {
@@ -213,11 +215,11 @@ export default {
 
       // 第二项判断梯度性
       let gradedDetailArr = voluntaryGradedStrategy[
-        voluntaryList[0].fk_lots_id
-      ](voluntaryList, gatherOption);
+        voluntaryList[0].fk_lots_id === 6 ? 4: voluntaryList[0].fk_lots_id
+      ](voluntaryList, gatherOption,volunteerCount);
 
       result.gradedResult.schoolScoreArr = voluntaryScoreStrategy[
-        voluntaryList[0].fk_lots_id
+          voluntaryList[0].fk_lots_id === 6 ? 4: voluntaryList[0].fk_lots_id
       ](voluntaryList);
 
       if (gradedDetailArr.length) {
