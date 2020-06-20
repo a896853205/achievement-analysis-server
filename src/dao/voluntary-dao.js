@@ -92,7 +92,7 @@ export default {
    */
   queryVoluntaryByUserUuid: async userUuid => {
     let voluntaryList = await db.query(
-      new SqlObject(voluntaryMapper.queryVoluntaryByUserUuid, [userUuid])
+      new SqlObject(voluntaryMapper.queryVoluntaryByUserUuid2, [userUuid])
     );
     // 去重进行处理
     let unique = new Map();

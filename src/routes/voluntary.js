@@ -134,6 +134,7 @@ router.post('/getVoluntaryDeepResult', async ctx => {
 router.post('/getMyVoluntary', async ctx => {
   let user = ctx.state.data,
     voluntaryList = await voluntaryService.queryVoluntaryList(user.uuid);
+    console.log(user.uuid,'user.uuid');
 
   ctx.body = new Result({
     data: voluntaryList

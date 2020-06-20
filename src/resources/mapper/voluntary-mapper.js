@@ -136,6 +136,21 @@ on a.fk_five_volunteer_id = b.id`,
   AND
     t_user_voluntary_result.year = t_major_enrollment_info.year;
   `,
+    // 通过用户uuid查询志愿表
+    queryVoluntaryByUserUuid2:`
+select 
+\ta.uuid,
+\ta.submit_time,
+\ta.fk_lots_id,
+\ta.year,
+\tb.lots_name,
+\ta.reportType
+from t_user_voluntary_result as a
+join sys_t_lots as b
+on a.fk_lots_id = b.id
+where a.fk_user_uuid =?
+order by submit_time desc;
+    `,
   queryVoluntaryListByVoluntaryUuid: `
   SELECT 
     fk_five_volunteer_id,
