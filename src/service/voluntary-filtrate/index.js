@@ -315,6 +315,39 @@ const _verifyGradeStrategy2 = {
     }
 };
 
+/*
+* 分数梯度合理性判断，ABCD集合持续递减则合理,否则不合理.
+* */
+const scoreGradedRationality = {
+    1: () => {
+
+    },
+    // 分数梯度合理性判断，ABCD集合持续递减则合理,否则不合理.
+    2: schoolScoreArr => {
+        let msgArr = [];
+        // undefined的数据不去比较，先拿有值的索引
+        let indexArr = [];
+        schoolScoreArr.forEach((item, index) => {
+            if (index !== schoolScoreArr.length-1 && item !== undefined) {
+                indexArr.push(index);
+            }
+        });
+        console.log(indexArr, 'indexArr');
+        if (indexArr.length > 0) {
+            for (let i = 0; i < indexArr.length; i++) {
+                if (schoolScoreArr[indexArr[i]] < schoolScoreArr[indexArr[i + 1]]) {
+                    msgArr.push(`“${VOLUNTARY_NAME[indexArr[i]]}”的分数不应该小于“${VOLUNTARY_NAME[indexArr[i + 1]]}”的分数；`);
+                }
+            }
+        }
+
+        if (msgArr.length > 0) {
+            msgArr.unshift(`整体录取分数梯度不合理：前${schoolScoreArr.length - 1}个志愿里院校录取分应呈递减趋势，`);
+        }
+        return msgArr;
+    }
+};
+
 export const voluntaryGradedStrategy = {
   // 提前批
   1: (voluntaryList, gatherOption) => {
@@ -403,7 +436,23 @@ export const voluntaryGradedStrategy = {
       );
       gradeDetailArr.push(msg);
 
-    return gradeDetailArr;
+      // 判断选择的5个学校分数，ABCD集合持续递减则合理,否则不合理.
+      let schoolScoreArr = voluntaryScoreStrategy[
+          uniqueTempGather[0].fk_lots_id === 6 ? 4 : uniqueTempGather[0].fk_lots_id
+          ](uniqueTempGather);
+
+      console.log(schoolScoreArr, 'schoolScoreArr'); // 如果没有数据对应位置会赋值undefined
+      console.log(VOLUNTARY_NAME, 'VOLUNTARY_NAME');
+
+      let scoreMsgArr = scoreGradedRationality[
+          uniqueTempGather[0].fk_lots_id === 6 ? 4 : uniqueTempGather[0].fk_lots_id](schoolScoreArr);
+      gradeDetailArr.push(...scoreMsgArr);
+
+
+    return {
+        gradeDetailArr: gradeDetailArr,
+        schoolScoreArr: schoolScoreArr
+    };
   },
   // 一批B
   3: (voluntaryList, gatherOption) => {

@@ -192,60 +192,58 @@ export default {
 		 * 
 		 */
     if (voluntaryList.length) {
-      // 如果有志愿
-      // 将志愿的基本信息保存到返回对象中
-      result.submitTime = voluntaryList[0].submit_time;
-      result.lotsName = voluntaryList[0].lots_name === '三批' ? '二批A': voluntaryList[0].lots_name;
+        // 如果有志愿
+        // 将志愿的基本信息保存到返回对象中
+        result.submitTime = voluntaryList[0].submit_time;
+        result.lotsName = voluntaryList[0].lots_name === '三批' ? '二批A' : voluntaryList[0].lots_name;
 
-      // 第一项判断完备性，判断志愿选择完备性
-      let unWriteDetailArr = voluntaryCompleteStrategy[
-        voluntaryList[0].fk_lots_id === 6 ? 4: voluntaryList[0].fk_lots_id
-      ](voluntaryList);
+        // 第一项判断完备性，判断志愿选择完备性
+        let unWriteDetailArr = voluntaryCompleteStrategy[
+            voluntaryList[0].fk_lots_id === 6 ? 4 : voluntaryList[0].fk_lots_id
+            ](voluntaryList);
 
-      if (unWriteDetailArr.length) {
-        result.completeResult.unWriteDetailArr = unWriteDetailArr;
-        result.completeResult.describe =
-          '请考生完整填写志愿表，以免造成滑档情况！';
-        result.completeResult.reasonable = false;
-      } else {
-        result.completeResult.describe =
-          '志愿完备性合理，如果您另外的条件均合理，则恭喜您可以按照该志愿填报了，祝您金榜题名！';
-        result.completeResult.reasonable = true;
-      }
+        if (unWriteDetailArr.length) {
+            result.completeResult.unWriteDetailArr = unWriteDetailArr;
+            result.completeResult.describe =
+                '请考生完整填写志愿表，以免造成滑档情况！';
+            result.completeResult.reasonable = false;
+        } else {
+            result.completeResult.describe =
+                '志愿完备性合理，如果您另外的条件均合理，则恭喜您可以按照该志愿填报了，祝您金榜题名！';
+            result.completeResult.reasonable = true;
+        }
 
-      // 第二项判断梯度性
-      let gradedDetailArr = voluntaryGradedStrategy[
-        voluntaryList[0].fk_lots_id === 6 ? 4: voluntaryList[0].fk_lots_id
-      ](voluntaryList, gatherOption,volunteerCount);
+        // 第二项判断梯度性
+        let gradedAnalyzeResult = voluntaryGradedStrategy[
+            voluntaryList[0].fk_lots_id === 6 ? 4 : voluntaryList[0].fk_lots_id
+            ](voluntaryList, gatherOption, volunteerCount);
 
-      result.gradedResult.schoolScoreArr = voluntaryScoreStrategy[
-          voluntaryList[0].fk_lots_id === 6 ? 4: voluntaryList[0].fk_lots_id
-      ](voluntaryList);
+        result.gradedResult.schoolScoreArr = gradedAnalyzeResult.schoolScoreArr;
 
-      if (gradedDetailArr.length) {
-        result.gradedResult.gradedDetailArr = gradedDetailArr;
-        result.gradedResult.describe =
-          '如按此方式填报会造成滑档情况，考生请谨慎选择！';
-        result.gradedResult.reasonable = false;
-      } else {
-        result.gradedResult.describe =
-          '志愿梯度性合理,如果您另外的条件均合理，则恭喜您可以按照该志愿填报了，祝您金榜题名！';
-        result.gradedResult.reasonable = true;
-      }
+        if (gradedAnalyzeResult.gradeDetailArr.length) {
+            result.gradedResult.gradedDetailArr = gradedAnalyzeResult.gradeDetailArr;
+            result.gradedResult.describe =
+                '如按此方式填报会造成滑档情况，考生请谨慎选择！';
+            result.gradedResult.reasonable = false;
+        } else {
+            result.gradedResult.describe =
+                '志愿梯度性合理,如果您另外的条件均合理，则恭喜您可以按照该志愿填报了，祝您金榜题名！';
+            result.gradedResult.reasonable = true;
+        }
 
-      // 第三项判断大计划性
-      result.planResult.planDetailArr = voluntaryPlanStrategy[
-        voluntaryList[0].fk_lots_id
-      ](voluntaryList);
+        // 第三项判断大计划性
+        result.planResult.planDetailArr = voluntaryPlanStrategy[
+            voluntaryList[0].fk_lots_id
+            ](voluntaryList);
 
-      if (result.planResult.planDetailArr.length) {
-        result.planResult.reasonable = false;
-        result.planResult.describe = `请考生谨慎选择，以免造成退档或滑档情况！`;
-      } else {
-        result.planResult.describe =
-          '志愿大计划选择合理性，如果您另外的条件均合理，则恭喜您可以按照该志愿填报了，祝您金榜题名！';
-        result.planResult.reasonable = true;
-      }
+        if (result.planResult.planDetailArr.length) {
+            result.planResult.reasonable = false;
+            result.planResult.describe = `请考生谨慎选择，以免造成退档或滑档情况！`;
+        } else {
+            result.planResult.describe =
+                '志愿大计划选择合理性，如果您另外的条件均合理，则恭喜您可以按照该志愿填报了，祝您金榜题名！';
+            result.planResult.reasonable = true;
+        }
     }
 
     return result;
