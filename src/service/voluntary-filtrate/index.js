@@ -282,23 +282,23 @@ const _verifyGradeStrategy2 = {
     2: (gatherNum, gatherOption) => {
         // 只有（A，B）不行，
         if(gatherNum['c']+gatherNum['d']+gatherNum['e'] === 0) {
-            return `所选的志愿只包含“${gatherOption['a']}”和“${gatherOption['b']}”，不合理，建议按照推荐集合进行报考，避免滑档。    `;
+            return `所选的志愿只包含“A-${gatherOption['a']}”和“B-${gatherOption['b']}”，不合理，建议按照推荐集合进行报考，避免滑档。    `;
         }
         // 只有（A，C）不行，
         if(gatherNum['b']+gatherNum['d']+gatherNum['e'] === 0) {
-            return `所选的志愿只包含“${gatherOption['a']}”和“${gatherOption['c']}”，不合理，建议按照推荐集合进行报考，避免滑档。    `;
+            return `所选的志愿只包含“A-${gatherOption['a']}”和“C-${gatherOption['c']}”，不合理，建议按照推荐集合进行报考，避免滑档。    `;
         }
         // 只有（A，D）不行，
         if(gatherNum['b']+gatherNum['c']+gatherNum['e'] === 0) {
-            return `所选的志愿只包含“${gatherOption['a']}”和“${gatherOption['d']}”，不合理，建议按照推荐集合进行报考，避免滑档。    `;
+            return `所选的志愿只包含“A-${gatherOption['a']}”和“D-${gatherOption['d']}”，不合理，建议按照推荐集合进行报考，避免滑档。    `;
         }
         // 只有（A，E）不行，
         if(gatherNum['b']+gatherNum['c']+gatherNum['d'] === 0) {
-            return `所选的志愿只包含“${gatherOption['a']}”和“${gatherOption['e']}”，不合理，建议按照推荐集合进行报考，避免滑档。    `;
+            return `所选的志愿只包含“A-${gatherOption['a']}”和“E-${gatherOption['e']}”，不合理，建议按照推荐集合进行报考，避免滑档。    `;
         }
         // 只有（B，C）不行，
         if(gatherNum['a']+gatherNum['d']+gatherNum['e'] === 0) {
-            return `所选的志愿只包含“${gatherOption['b']}”和“${gatherOption['c']}”，不合理，建议按照推荐集合进行报考，避免滑档。    `;
+            return `所选的志愿只包含“B-${gatherOption['b']}”和“C-${gatherOption['c']}”，不合理，建议按照推荐集合进行报考，避免滑档。    `;
         }
         // （B，D）先算合理，
         // if(gatherNum['a']+gatherNum['c']+gatherNum['e'] === 0) {
@@ -306,11 +306,11 @@ const _verifyGradeStrategy2 = {
         // }
         // 只有（B，E）不行，
         if(gatherNum['a']+gatherNum['c']+gatherNum['d'] === 0) {
-            return `所选的志愿只包含“${gatherOption['b']}”和“${gatherOption['e']}”，不合理，建议按照推荐集合进行报考，避免滑档。    `;
+            return `所选的志愿只包含“B-${gatherOption['b']}”和“E-${gatherOption['e']}”，不合理，建议按照推荐集合进行报考，避免滑档。    `;
         }
         // 只有（A，B，C）不行
         if(gatherNum['d']+gatherNum['e'] === 0) {
-            return `所选的志愿只包含“${gatherOption['a']}”、“${gatherOption['b']}”和“${gatherOption['c']}”，不合理，建议按照推荐集合进行报考，避免滑档。    `;
+            return `所选的志愿只包含“A-${gatherOption['a']}”、“B-${gatherOption['b']}”和“C-${gatherOption['c']}”，不合理，建议按照推荐集合进行报考，避免滑档。    `;
         }
     }
 };
@@ -434,7 +434,9 @@ export const voluntaryGradedStrategy = {
           gatherNum,
           gatherOption
       );
-      gradeDetailArr.push(msg);
+      if (msg) {
+          gradeDetailArr.push(msg);
+      }
 
       // 判断选择的5个学校分数，ABCD集合持续递减则合理,否则不合理.
       let schoolScoreArr = voluntaryScoreStrategy[
@@ -446,8 +448,9 @@ export const voluntaryGradedStrategy = {
 
       let scoreMsgArr = scoreGradedRationality[
           uniqueTempGather[0].fk_lots_id === 6 ? 4 : uniqueTempGather[0].fk_lots_id](schoolScoreArr);
-      gradeDetailArr.push(...scoreMsgArr);
-
+      if (scoreMsgArr.length > 0) {
+          gradeDetailArr.push(...scoreMsgArr);
+      }
 
     return {
         gradeDetailArr: gradeDetailArr,
@@ -694,43 +697,73 @@ export const voluntaryScoreStrategy = {
     return schoolScoreArr;
   }
 };
+/*
+    一批A:
+    判断选择学校的专业入学人数是否小于30而且在d或e集合
+    如果是则不符合大计划合理性
+    如果不是则符合大计划合理性
 
+    二批A:
+    判断选择学校的专业入学人数是否小于30而且在d或e集合
+    如果是则不符合大计划合理性
+    如果不是则符合大计划合理性
+
+    专科:
+    判断选择学校的专业入学人数是否小于30而且在d或e集合
+    如果是则不符合大计划合理性
+    如果不是则符合大计划合理性
+*/
 export const voluntaryPlanStrategy = {
-  1: voluntaryList => {
-    let planDetailArr = [];
-    // 开始弄专业入学人数
-    let schoolArr = [];
+    //提前批
+    1: voluntaryList => {
+        return null;
+    },
 
-    for (let item of voluntaryList) {
-      schoolArr[item.fk_five_volunteer_id - 1] = item;
+    // 一批A
+    2: voluntaryList => {
+        let planDetailArr = [];
+        // 开始弄专业入学人数
+        let schoolArr = [];
+
+        for (let item of voluntaryList) {
+            schoolArr[item.fk_five_volunteer_id - 1] = item;
+        }
+
+        schoolArr.forEach(item => {
+
+            console.log(item.name, item.enrollment1, 'enrollment1');
+            if (item.enrollment1 && item.enrollment1 < 30 && (item.gather === 'd' || item.gather === 'e')) {
+                planDetailArr.push(`"${item.name}"${item.year - 1}的计划招生人数较少，${item.accountCategory === 1 ? '理科':'文科'}只招了${item.enrollment1}人。   `);
+            }
+        });
+
+        return planDetailArr;
+    },
+
+    // 一批B
+    3: voluntaryList => {
+        return null;
+    },
+
+    // 二批A
+    4: voluntaryList => {
+        return voluntaryPlanStrategy[2](voluntaryList);
+    },
+
+    // 二批B
+    5: voluntaryList => {
+        return null;
+    },
+
+    // 三批
+    6: voluntaryList => {
+        return null;
+    },
+
+    // 专科
+    7: voluntaryList => {
+        return voluntaryPlanStrategy[2](voluntaryList);
     }
-
-    schoolArr.forEach(item => {
-      if (item.enrollment && item.enrollment < 30 && item.gather === 'e') {
-        planDetailArr.push(`${item.name}计划招生人数较少。   `);
-      }
-    });
-
-    return planDetailArr;
-  },
-  2: voluntaryList => {
-    return voluntaryPlanStrategy[1](voluntaryList);
-  },
-  3: voluntaryList => {
-    return voluntaryPlanStrategy[1](voluntaryList);
-  },
-  4: voluntaryList => {
-    return voluntaryPlanStrategy[1](voluntaryList);
-  },
-  5: voluntaryList => {
-    return voluntaryPlanStrategy[1](voluntaryList);
-  },
-  6: voluntaryList => {
-    return voluntaryPlanStrategy[1](voluntaryList);
-  },
-  7: voluntaryList => {
-    return voluntaryPlanStrategy[1](voluntaryList);
-  }
 };
 
 /**

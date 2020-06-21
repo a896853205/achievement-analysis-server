@@ -154,43 +154,6 @@ export default {
       gatherOption[item.value] = item.name;
     });
 
-    /**
-		 * [ RowDataPacket {
-     *    uuid: '9a07e380-e29a-11e9-9298-0160416baceb',
-          fk_five_volunteer_id: 1,
-          volunteer_name: 'A志愿',
-          fk_school_id: 1,
-          name: '哈理工',
-          fk_major_id: 520,
-          major_name: '地球信息科学与技术',
-          major_index: 0,
-          submit_time: '2019-09-29 17:22:04.857',
-          fk_lots_id: 1,
-          year: 2019,
-          lots_name: '提前批',
-          gather: 'a',
-          score: 590,
-          enrollment: 12
-        },
-        RowDataPacket {
-          uuid: '9a07e380-e29a-11e9-9298-0160416baceb',
-          fk_five_volunteer_id: 1,
-          volunteer_name: 'A志愿',
-          fk_school_id: 1,
-          name: '哈理工',
-          fk_major_id: 310,
-          major_name: '通信工程',
-          major_index: 5,
-          submit_time: '2019-09-29 17:22:04.857',
-          fk_lots_id: 1,
-          year: 2019,
-          lots_name: '提前批',
-          gather: 'a',
-          score: 590,
-          enrollment: 10
-        } ]
-		 * 
-		 */
     if (voluntaryList.length) {
         // 如果有志愿
         // 将志愿的基本信息保存到返回对象中
@@ -227,13 +190,13 @@ export default {
             result.gradedResult.reasonable = false;
         } else {
             result.gradedResult.describe =
-                '志愿梯度性合理,如果您另外的条件均合理，则恭喜您可以按照该志愿填报了，祝您金榜题名！';
+                '志愿梯度性合理，如果您另外的条件均合理，则恭喜您可以按照该志愿填报了，祝您金榜题名！';
             result.gradedResult.reasonable = true;
         }
 
         // 第三项判断大计划性
         result.planResult.planDetailArr = voluntaryPlanStrategy[
-            voluntaryList[0].fk_lots_id
+            voluntaryList[0].fk_lots_id === 6 ? 4 : voluntaryList[0].fk_lots_id
             ](voluntaryList);
 
         if (result.planResult.planDetailArr.length) {
