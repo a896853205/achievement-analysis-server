@@ -161,7 +161,7 @@ export default {
 	AND
 	a.year = t_major_enrollment_info.year
 	AND
-	(a.year = ? OR a.year = ? OR a.year = ? OR a.year = ?);
+	(a.year = ? OR a.year = ? OR a.year = ?);
 	
 `,
   querySchoolByLotIdAndNameAndAccountCategory: `

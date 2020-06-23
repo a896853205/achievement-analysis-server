@@ -19,7 +19,6 @@ export default {
       new SqlObject(schoolMapper.querySchoolByLotIdAndAccountCategory, [
         lotId,
         accountCategory,
-        examYear,
         examYear - 1,
         examYear - 2,
         examYear - 3,
