@@ -114,104 +114,107 @@ export default {
     return voluntaryUuid;
   },
 
-  culVoluntaryResult: async voluntaryUuid => {
-    let result = {
-      submitTime: undefined,
-      lotsName: undefined,
-      // 完整性结果，志愿选择完备性
-      completeResult: {
-        reasonable: false,
-        describe: '',
-        unWriteDetailArr: []
-      },
-        // 梯度合理性
-      gradedResult: {
-        reasonable: false,
-        describe: '',
-        gradedDetailArr: [],
-        schoolScoreArr: []
-      },
-        // 大计划合理性
-      planResult: {
-        reasonable: false,
-        describe: '',
-        planDetailArr: []
-      }
-    };
-    // 这里计算结果
-      console.log(voluntaryUuid, 'voluntaryUuid',111111);
-    let [voluntaryList, gatherOptionList] = await Promise.all([
-      voluntaryDao.queryVoluntaryResult(voluntaryUuid),
-      systemDao.queryGatherOption()
-    ]);
-      let volunteerCount = await systemDao.queryVolunteerCountByLotId(voluntaryList[0].fk_lots_id === 6 ? 4 : voluntaryList[0].fk_lots_id);
+    culVoluntaryResult: async voluntaryUuid => {
+        let result = {
+            submitTime: undefined,
+            lotsName: undefined,
+            // 完整性结果，志愿选择完备性
+            completeResult: {
+                reasonable: false,
+                describe: '',
+                unWriteDetailArr: []
+            },
+            // 梯度合理性
+            gradedResult: {
+                reasonable: false,
+                describe: '',
+                gradedDetailArr: [],
+                schoolScoreArr: [],
+                maxAndMin: {}
 
-      console.log(volunteerCount, 'volunteerCount');
+            },
+            // 大计划合理性
+            planResult: {
+                reasonable: false,
+                describe: '',
+                planDetailArr: []
+            }
+        };
+        // 这里计算结果
+        console.log(voluntaryUuid, 'voluntaryUuid', 111111);
+        let [voluntaryList, gatherOptionList] = await Promise.all([
+            voluntaryDao.queryVoluntaryResult(voluntaryUuid),
+            systemDao.queryGatherOption()
+        ]);
+        let volunteerCount = await systemDao.queryVolunteerCountByLotId(voluntaryList[0].fk_lots_id === 6 ? 4 : voluntaryList[0].fk_lots_id);
 
-    // 对gather进行一下适配处理
-    let gatherOption = {};
-    gatherOptionList.forEach(item => {
-      gatherOption[item.value] = item.name;
-    });
+        console.log(volunteerCount, 'volunteerCount');
 
-    if (voluntaryList.length) {
-        // 如果有志愿
-        // 将志愿的基本信息保存到返回对象中
-        result.submitTime = voluntaryList[0].submit_time;
-        result.lotsName = voluntaryList[0].lots_name === '三批' ? '二批A' : voluntaryList[0].lots_name;
+        // 对gather进行一下适配处理
+        let gatherOption = {};
+        gatherOptionList.forEach(item => {
+            gatherOption[item.value] = item.name;
+        });
 
-        console.log(voluntaryList[0].fk_lots_id, 'voluntaryList[0].fk_lots_id');
-        // 第一项判断完备性，判断志愿选择完备性
-        let unWriteDetailArr = voluntaryCompleteStrategy[
-            voluntaryList[0].fk_lots_id === 6 ? 4 : voluntaryList[0].fk_lots_id
-            ](voluntaryList);
+        if (voluntaryList.length) {
+            // 如果有志愿
+            // 将志愿的基本信息保存到返回对象中
+            result.submitTime = voluntaryList[0].submit_time;
+            result.lotsName = voluntaryList[0].lots_name === '三批' ? '二批A' : voluntaryList[0].lots_name;
 
-        if (unWriteDetailArr.length) {
-            result.completeResult.unWriteDetailArr = unWriteDetailArr;
-            result.completeResult.describe =
-                '请考生完整填写志愿表，以免造成滑档情况！';
-            result.completeResult.reasonable = false;
-        } else {
-            result.completeResult.describe =
-                '志愿完备性合理，如果您另外的条件均合理，则恭喜您可以按照该志愿填报了，祝您金榜题名！';
-            result.completeResult.reasonable = true;
+            console.log(voluntaryList[0].fk_lots_id, 'voluntaryList[0].fk_lots_id');
+            // 第一项判断完备性，判断志愿选择完备性
+            let unWriteDetailArr = voluntaryCompleteStrategy[
+                voluntaryList[0].fk_lots_id === 6 ? 4 : voluntaryList[0].fk_lots_id
+                ](voluntaryList);
+
+            if (unWriteDetailArr.length) {
+                result.completeResult.unWriteDetailArr = unWriteDetailArr;
+                result.completeResult.describe =
+                    '请考生完整填写志愿表，以免造成滑档情况！';
+                result.completeResult.reasonable = false;
+            } else {
+                result.completeResult.describe =
+                    '志愿完备性合理，如果您另外的条件均合理，则恭喜您可以按照该志愿填报了，祝您金榜题名！';
+                result.completeResult.reasonable = true;
+            }
+
+            // 第二项判断梯度合理性
+            let gradedAnalyzeResult = voluntaryGradedStrategy[
+                voluntaryList[0].fk_lots_id === 6 ? 4 : voluntaryList[0].fk_lots_id
+                ](voluntaryList, gatherOption, volunteerCount);
+
+            result.gradedResult.schoolScoreArr = gradedAnalyzeResult.schoolScoreArr;
+            result.gradedResult.maxAndMin = gradedAnalyzeResult.maxAndMin;
+
+            if (gradedAnalyzeResult.gradeDetailArr.length) {
+                result.gradedResult.gradedDetailArr = gradedAnalyzeResult.gradeDetailArr;
+                result.gradedResult.describe =
+                    '如按此方式填报会造成滑档情况，考生请谨慎选择！';
+                result.gradedResult.reasonable = false;
+            } else {
+                result.gradedResult.describe =
+                    '志愿梯度性合理，如果您另外的条件均合理，则恭喜您可以按照该志愿填报了，祝您金榜题名！';
+                result.gradedResult.reasonable = true;
+            }
+
+            // 第三项判断大计划性
+            result.planResult.planDetailArr = voluntaryPlanStrategy[
+                voluntaryList[0].fk_lots_id === 6 ? 4 : voluntaryList[0].fk_lots_id
+                ](voluntaryList);
+
+            if (result.planResult.planDetailArr.length) {
+                result.planResult.reasonable = false;
+                result.planResult.describe = `请考生谨慎选择，以免造成退档或滑档情况！`;
+            } else {
+                result.planResult.describe =
+                    '志愿大计划选择合理性，如果您另外的条件均合理，则恭喜您可以按照该志愿填报了，祝您金榜题名！';
+                result.planResult.reasonable = true;
+            }
         }
 
-        // 第二项判断梯度合理性
-        let gradedAnalyzeResult = voluntaryGradedStrategy[
-            voluntaryList[0].fk_lots_id === 6 ? 4 : voluntaryList[0].fk_lots_id
-            ](voluntaryList, gatherOption, volunteerCount);
-
-        result.gradedResult.schoolScoreArr = gradedAnalyzeResult.schoolScoreArr;
-
-        if (gradedAnalyzeResult.gradeDetailArr.length) {
-            result.gradedResult.gradedDetailArr = gradedAnalyzeResult.gradeDetailArr;
-            result.gradedResult.describe =
-                '如按此方式填报会造成滑档情况，考生请谨慎选择！';
-            result.gradedResult.reasonable = false;
-        } else {
-            result.gradedResult.describe =
-                '志愿梯度性合理，如果您另外的条件均合理，则恭喜您可以按照该志愿填报了，祝您金榜题名！';
-            result.gradedResult.reasonable = true;
-        }
-
-        // 第三项判断大计划性
-        result.planResult.planDetailArr = voluntaryPlanStrategy[
-            voluntaryList[0].fk_lots_id === 6 ? 4 : voluntaryList[0].fk_lots_id
-            ](voluntaryList);
-
-        if (result.planResult.planDetailArr.length) {
-            result.planResult.reasonable = false;
-            result.planResult.describe = `请考生谨慎选择，以免造成退档或滑档情况！`;
-        } else {
-            result.planResult.describe =
-                '志愿大计划选择合理性，如果您另外的条件均合理，则恭喜您可以按照该志愿填报了，祝您金榜题名！';
-            result.planResult.reasonable = true;
-        }
-    }
-
-    return result;
-  },
+        return result;
+    },
 
   /**
    * 计算深度体验报告

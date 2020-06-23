@@ -521,6 +521,27 @@ const scoreGradedRationality = {
     }
 };
 
+const getMaxAndMinScore = schoolScoreArr => {
+    let tempArr = [];
+    schoolScoreArr.forEach(item => {
+        if (item !== null) {
+            tempArr.push(item);
+        }
+    });
+    if (tempArr.length > 0) {
+        return {
+            max: Math.max(...tempArr),
+            min: Math.min(...tempArr)
+        }
+    }else {
+        return {
+            max: 750,
+            min: 0
+        }
+    }
+
+};
+
 export const voluntaryGradedStrategy = {
 
     // 提前批，两个志愿
@@ -590,7 +611,8 @@ export const voluntaryGradedStrategy = {
 
         return {
             gradeDetailArr: gradeDetailArr,
-            schoolScoreArr: schoolScoreArr
+            schoolScoreArr: schoolScoreArr,
+            maxAndMin: getMaxAndMinScore(schoolScoreArr)
         };
     },
     // 一批A，五个志愿
@@ -681,7 +703,8 @@ export const voluntaryGradedStrategy = {
         let schoolScoreArr = voluntaryScoreStrategy[
             uniqueTempGather[0].fk_lots_id === 6 ? 4 : uniqueTempGather[0].fk_lots_id
             ](uniqueTempGather);
-
+        console.log(getMaxAndMinScore(schoolScoreArr), 'getMaxAndMinScore');
+        // let testArr = [null, null, null, null, null];
         console.log(schoolScoreArr, 'schoolScoreArr'); // 如果没有数据对应位置会赋值undefined
         console.log(VOLUNTARY_NAME, 'VOLUNTARY_NAME');
 
@@ -693,7 +716,8 @@ export const voluntaryGradedStrategy = {
 
         return {
             gradeDetailArr: gradeDetailArr,
-            schoolScoreArr: schoolScoreArr
+            schoolScoreArr: schoolScoreArr,
+            maxAndMin: getMaxAndMinScore(schoolScoreArr)
         };
     },
     // 一批B，一个志愿
@@ -734,7 +758,8 @@ export const voluntaryGradedStrategy = {
 
         return {
             gradeDetailArr: gradeDetailArr,
-            schoolScoreArr: schoolScoreArr
+            schoolScoreArr: schoolScoreArr,
+            maxAndMin: getMaxAndMinScore(schoolScoreArr)
         };
     },
     // 二批A，十个志愿
@@ -843,7 +868,8 @@ export const voluntaryGradedStrategy = {
 
         return {
             gradeDetailArr: gradeDetailArr,
-            schoolScoreArr: schoolScoreArr
+            schoolScoreArr: schoolScoreArr,
+            maxAndMin: getMaxAndMinScore(schoolScoreArr)
         };
     },
     // 二批B，一个志愿
@@ -854,7 +880,8 @@ export const voluntaryGradedStrategy = {
     6: (voluntaryList, gatherOption, volunteerCount) => {
         return {
             gradeDetailArr: [],
-            schoolScoreArr: []
+            schoolScoreArr: [],
+            maxAndMin: []
         };
     },
     // 专科，五个志愿
