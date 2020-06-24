@@ -170,18 +170,16 @@ order by submit_time desc;
     uuid = ?
   `,
   selectVoluntaryResultByVolunteerAndMajorIndex: `
-  SELECT 
+SELECT 
     *
   FROM 
-    t_user_voluntary_result,merge_school_lots
+    t_user_voluntary_result
   WHERE
-    t_user_voluntary_result.fk_five_volunteer_id = ?
+    fk_five_volunteer_id =?
   AND
-    t_user_voluntary_result.major_index = ?
+    major_index =?
   AND
-    t_user_voluntary_result.uuid = ?
-  AND
-    t_user_voluntary_result.year = merge_school_lots.year`,
+    uuid =?`,
   insertTempVoluntary: `
   INSERT
   INTO
@@ -203,14 +201,6 @@ order by submit_time desc;
     t_voluntary_temp
   SET
     voluntaryStr = ?
-  WHERE
-    userUuid = ?
-  `,
-  selectTempVoluntary: `
-  SELECT
-    voluntaryStr
-  FROM
-    t_voluntary_temp
   WHERE
     userUuid = ?
   `,

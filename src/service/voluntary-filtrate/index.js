@@ -1159,69 +1159,69 @@ const useDeepRule = schoolDeepString => {
  * @param {Number} rank 排名
  */
 export const culDeepId = (arrangement, nature, type, property, rank) => {
-  let schoolDeepString = '';
+    let schoolDeepString = '';
 
-  // 层次化成字符串参数
-  switch (arrangement) {
-    case '本科':
-      schoolDeepString += 'b';
-      break;
-    case '专科':
-      schoolDeepString += 'z';
-      break;
-    default:
-      schoolDeepString += '_';
-  }
-
-  // 类别化成字符串参数
-  if (nature) {
-    schoolDeepString += nature;
-  } else {
-    schoolDeepString += '_';
-  }
-
-  // 类型化成字符串参数
-  if (type) {
-    if (type < 10) {
-      type = '0' + type;
+    // 层次化成字符串参数
+    switch (arrangement) {
+        case '本科':
+            schoolDeepString += 'b';
+            break;
+        case '专科':
+            schoolDeepString += 'z';
+            break;
+        default:
+            schoolDeepString += '_';
     }
-    schoolDeepString += type;
-  } else {
-    schoolDeepString += '__';
-  }
 
-  // 属性化成字符串参数
-  if (property) {
-    schoolDeepString += property;
-  } else {
-    schoolDeepString += '_';
-  }
-
-  // 将第一段分数化成字符串参数
-  if (rank) {
-    if (rank > 0 && rank <= 300) {
-      schoolDeepString += 'L3';
+    // 类别化成字符串参数
+    if (nature) {
+        schoolDeepString += nature;
     } else {
-      schoolDeepString += 'B3';
+        schoolDeepString += '_';
     }
-  } else {
-    schoolDeepString += '__';
-  }
 
-  // 将第二段分数化成字符串参数
-  if (rank) {
-    if (rank > 0 && rank <= 200) {
-      schoolDeepString += 'L2';
-    } else if (rank > 200 && rank <= 400) {
-      schoolDeepString += 'L4';
+    // 类型化成字符串参数
+    if (type) {
+        if (type < 10) {
+            type = '0' + type;
+        }
+        schoolDeepString += type;
     } else {
-      schoolDeepString += 'B4';
+        schoolDeepString += '__';
     }
-  } else {
-    schoolDeepString += '__';
-  }
 
-  return useDeepRule(schoolDeepString);
+    // 属性化成字符串参数
+    if (property) {
+        schoolDeepString += property;
+    } else {
+        schoolDeepString += '_';
+    }
+
+    // 将第一段分数化成字符串参数
+    if (rank) {
+        if (rank > 0 && rank <= 300) {
+            schoolDeepString += 'L3';
+        } else {
+            schoolDeepString += 'B3';
+        }
+    } else {
+        schoolDeepString += '__';
+    }
+
+    // 将第二段分数化成字符串参数
+    if (rank) {
+        if (rank > 0 && rank <= 200) {
+            schoolDeepString += 'L2';
+        } else if (rank > 200 && rank <= 400) {
+            schoolDeepString += 'L4';
+        } else {
+            schoolDeepString += 'B4';
+        }
+    } else {
+        schoolDeepString += '__';
+    }
+    
+    return useDeepRule(schoolDeepString);
 };
 
 export const findDeepFatherId = analysisId => {

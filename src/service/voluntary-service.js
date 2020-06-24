@@ -216,74 +216,81 @@ export default {
         return result;
     },
 
-  /**
-   * 计算深度体验报告
-   */
-  culVoluntaryDeepResult: async (voluntaryUuid, voluntarieerId, majorIndex) => {
-    // 查询school_id
-    let voluntary = await voluntaryDao.selectVoluntaryResultByVolunteerAndMajorIndex(
-      voluntaryUuid,
-      voluntarieerId,
-      majorIndex
-    );
-    // 通过voluntary查询 层次,类别,类型,属性,排名
-    let [
-      lotData,
-      schoolTypeData,
-      schoolPropertyData,
-      schoolInfo
-    ] = await Promise.all([
-      systemDao.selectLotById(voluntary.fk_lots_id),
-      schoolDao.selectSchoolType(voluntary.fk_school_id),
-      schoolDao.selectSchoolProperty(voluntary.fk_school_id),
-      schoolDao.selectSchoolBasicInfo(voluntary.fk_school_id)
-    ]);
+    /**
+     * 计算深度体验报告
+     */
+    culVoluntaryDeepResult: async (voluntaryUuid, voluntarieerId, majorIndex) => {
+        // 查询school_id
+        let voluntary = await voluntaryDao.selectVoluntaryResultByVolunteerAndMajorIndex(
+            voluntaryUuid,
+            voluntarieerId,
+            majorIndex
+        );
+        // 通过voluntary查询 层次,类别,类型,属性,排名
+        let [
+            lotData,
+            schoolTypeData,
+            schoolPropertyData,
+            schoolInfo
+        ] = await Promise.all([
+            systemDao.selectLotById(voluntary.fk_lots_id),
+            schoolDao.selectSchoolType(voluntary.fk_school_id),
+            schoolDao.selectSchoolProperty(voluntary.fk_school_id),
+            schoolDao.selectSchoolBasicInfo(voluntary.fk_school_id)
+        ]);
 
-    let arrangement, nature, type, property, rank;
+        let arrangement, nature, type, property, rank;
+        console.log(lotData, 'lotData');
+        console.log(schoolTypeData, 'schoolTypeData');
+        console.log(schoolPropertyData, 'schoolPropertyData');
+        console.log(schoolInfo, 'schoolInfo');
 
-    if (lotData) arrangement = lotData.gradation;
-    if (schoolInfo) nature = +schoolInfo.fk_nature_id;
-    if (schoolTypeData) type = +schoolTypeData.id;
-    if (schoolPropertyData) property = +schoolPropertyData.id;
-    if (schoolInfo) rank = +schoolInfo.rank;
+        if (lotData) arrangement = lotData.gradation;
+        if (schoolInfo) nature = +schoolInfo.fk_nature_id;
+        if (schoolTypeData) type = +schoolTypeData.id;
+        if (schoolPropertyData) property = +schoolPropertyData.id;
+        if (schoolInfo) rank = +schoolInfo.rank;
 
-    let analysisId = culDeepId(arrangement, nature, type, property, rank);
+        console.log(arrangement, nature, type, property, rank, 'arrangement, nature, type, property, rank');
+        let analysisId = culDeepId(arrangement, nature, type, property, rank);
+        console.log(analysisId, 'analysisId');
+        let unitSatisfactionObj = await systemDao.selectUnitSatisfaction(
+            analysisId
+        );
+        console.log(unitSatisfactionObj, 'unitSatisfactionObj');
 
-    let unitSatisfactionObj = await systemDao.selectUnitSatisfaction(
-      analysisId
-    );
+        let disciplineCode = await schoolDao.selectDisciplineCodeByVoluntaryInfo({
+            uuid: voluntaryUuid,
+            fk_five_volunteer_id: voluntarieerId,
+            major_index: majorIndex
+        });
+        console.log(disciplineCode, 'disciplineCode');
 
-    let disciplineCode = await schoolDao.selectDisciplineCodeByVoluntaryInfo({
-      uuid: voluntaryUuid,
-      fk_five_volunteer_id: voluntarieerId,
-      major_index: majorIndex
-    });
+        if (!disciplineCode) {
+            return {
+                unitSatisfactionObj
+            };
+        }
 
-    if (!disciplineCode) {
-      return {
-        unitSatisfactionObj
-      };
-    }
+        // 专业的id找专业优化code, 这个专业优化code和deepId一起查询派遣库的数据
+        let majorFutureObj = null;
+        do {
+            majorFutureObj = await schoolDao.selectMajorFuture({
+                analysisId,
+                disciplineCode: disciplineCode.code
+            });
 
-    // 专业的id找专业优化code, 这个专业优化code和deepId一起查询派遣库的数据
-    let majorFutureObj = null;
-    do {
-      majorFutureObj = await schoolDao.selectMajorFuture({
-        analysisId,
-        disciplineCode: disciplineCode.code
-      });
+            // 查找父级id
+            analysisId = findDeepFatherId(analysisId);
+        } while (!majorFutureObj);
 
-      // 查找父级id
-      analysisId = findDeepFatherId(analysisId);
-    } while (!majorFutureObj);
-
-    // 没有code数据就不查
-    // 使用deepId查询两张表查出对应数据发给前台
-    return {
-      unitSatisfactionObj,
-      majorFutureObj
-    };
-  },
+        // 没有code数据就不查
+        // 使用deepId查询两张表查出对应数据发给前台
+        return {
+            unitSatisfactionObj,
+            majorFutureObj
+        };
+    },
 
   /**
    * 通过用户uuid查询志愿情况
