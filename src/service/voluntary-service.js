@@ -31,9 +31,6 @@ export default {
   // 根据志愿的uuid，获取志愿表上的每一项学校和专业
   queryVoluntarySchoolAndMajorByVoluntaryUuid: async (voluntaryUuid) => {
     let tempData = await voluntaryDao.queryVoluntarySchoolAndMajorByVoluntaryUuid(voluntaryUuid);
-      console.log(tempData, 99999999999999);
-      console.log(voluntaryUuid, 8888888888);
-
     //处理数据
     const res = tempData.reduce((pre, item) => {
       const temp = pre.find((it) => (it.id === item.fk_five_volunteer_id));
@@ -141,14 +138,11 @@ export default {
             }
         };
         // 这里计算结果
-        console.log(voluntaryUuid, 'voluntaryUuid', 111111);
         let [voluntaryList, gatherOptionList] = await Promise.all([
             voluntaryDao.queryVoluntaryResult(voluntaryUuid),
             systemDao.queryGatherOption()
         ]);
         let volunteerCount = await systemDao.queryVolunteerCountByLotId(voluntaryList[0].fk_lots_id === 6 ? 4 : voluntaryList[0].fk_lots_id);
-
-        console.log(volunteerCount, 'volunteerCount');
 
         // 对gather进行一下适配处理
         let gatherOption = {};
@@ -162,7 +156,6 @@ export default {
             result.submitTime = voluntaryList[0].submit_time;
             result.lotsName = voluntaryList[0].lots_name === '三批' ? '二批A' : voluntaryList[0].lots_name;
 
-            console.log(voluntaryList[0].fk_lots_id, 'voluntaryList[0].fk_lots_id');
             // 第一项判断完备性，判断志愿选择完备性
             let unWriteDetailArr = voluntaryCompleteStrategy[
                 voluntaryList[0].fk_lots_id === 6 ? 4 : voluntaryList[0].fk_lots_id
@@ -240,10 +233,6 @@ export default {
         ]);
 
         let arrangement, nature, type, property, rank;
-        console.log(lotData, 'lotData');
-        console.log(schoolTypeData, 'schoolTypeData');
-        console.log(schoolPropertyData, 'schoolPropertyData');
-        console.log(schoolInfo, 'schoolInfo');
 
         if (lotData) arrangement = lotData.gradation;
         if (schoolInfo) nature = +schoolInfo.fk_nature_id;
@@ -251,20 +240,16 @@ export default {
         if (schoolPropertyData) property = +schoolPropertyData.id;
         if (schoolInfo) rank = +schoolInfo.rank;
 
-        console.log(arrangement, nature, type, property, rank, 'arrangement, nature, type, property, rank');
         let analysisId = culDeepId(arrangement, nature, type, property, rank);
-        console.log(analysisId, 'analysisId');
         let unitSatisfactionObj = await systemDao.selectUnitSatisfaction(
             analysisId
         );
-        console.log(unitSatisfactionObj, 'unitSatisfactionObj');
 
         let disciplineCode = await schoolDao.selectDisciplineCodeByVoluntaryInfo({
             uuid: voluntaryUuid,
             fk_five_volunteer_id: voluntarieerId,
             major_index: majorIndex
         });
-        console.log(disciplineCode, 'disciplineCode');
 
         if (!disciplineCode) {
             return {

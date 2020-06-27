@@ -416,7 +416,6 @@ const scoreGradedRationality = {
                 indexArr.push(index);
             }
         });
-        console.log(indexArr, 'indexArr');
         if (indexArr.length > 0) {
             for (let i = 0; i < indexArr.length; i++) {
                 if (schoolScoreArr[indexArr[i]] < schoolScoreArr[indexArr[i + 1]]) {
@@ -440,7 +439,6 @@ const scoreGradedRationality = {
                 indexArr.push(index);
             }
         });
-        console.log(indexArr, 'indexArr');
         if (indexArr.length > 0) {
             for (let i = 0; i < indexArr.length; i++) {
                 if (schoolScoreArr[indexArr[i]] < schoolScoreArr[indexArr[i + 1]]) {
@@ -474,7 +472,6 @@ const scoreGradedRationality = {
                 indexArr.push(index);
             }
         });
-        console.log(indexArr, 'indexArr');
         if (indexArr.length > 0) {
             for (let i = 0; i < indexArr.length; i++) {
                 if (newSchoolScoreArr[indexArr[i]] < newSchoolScoreArr[indexArr[i + 1]]) {
@@ -505,7 +502,6 @@ const scoreGradedRationality = {
                 indexArr.push(index);
             }
         });
-        console.log(indexArr, 'indexArr');
         if (indexArr.length > 0) {
             for (let i = 0; i < indexArr.length; i++) {
                 if (schoolScoreArr[indexArr[i]] < schoolScoreArr[indexArr[i + 1]]) {
@@ -548,7 +544,6 @@ export const voluntaryGradedStrategy = {
     1: (voluntaryList, gatherOption, volunteerCount) => {
         // 判断不能志愿都一样
         let gradeDetailArr = [];
-        console.log(gatherOption, 'gatherOption');
         // 处理数据，便于计算
         let tempGather = [];
         voluntaryList.forEach(item => {
@@ -565,8 +560,6 @@ export const voluntaryGradedStrategy = {
             tempGather.push(obj);
         });
         let uniqueTempGather = objectHelper.uniqueArrayObj(tempGather);
-        console.log(uniqueTempGather, 'uniqueTempGather');
-
 
         // 两个志愿都填了哪个
         let fiveVolunteer = {
@@ -577,8 +570,6 @@ export const voluntaryGradedStrategy = {
         for (let item of uniqueTempGather) {
             fiveVolunteer[item.fk_five_volunteer_id]++;
         }
-
-        console.log(fiveVolunteer, 'fiveVolunteer');
 
         // 首先判断是否志愿数是否是2个，2个则合理，否则不合理。
         let isEnough = true;
@@ -598,11 +589,6 @@ export const voluntaryGradedStrategy = {
             uniqueTempGather[0].fk_lots_id === 6 ? 4 : uniqueTempGather[0].fk_lots_id
             ](uniqueTempGather);
 
-        console.log(schoolScoreArr, 'schoolScoreArr'); // 如果没有数据对应位置会赋值undefined
-        console.log(VOLUNTARY_NAME, 'VOLUNTARY_NAME');
-
-        // let testScoreArr = [655, 666];
-
         let scoreMsgArr = scoreGradedRationality[
             uniqueTempGather[0].fk_lots_id === 6 ? 4 : uniqueTempGather[0].fk_lots_id](schoolScoreArr);
         if (scoreMsgArr.length > 0) {
@@ -619,7 +605,6 @@ export const voluntaryGradedStrategy = {
     2: (voluntaryList, gatherOption, volunteerCount) => {
         // 判断不能志愿都一样
         let gradeDetailArr = [];
-        console.log(gatherOption, 'gatherOption');
         // 处理数据，便于计算
         let tempGather = [];
         voluntaryList.forEach(item => {
@@ -636,7 +621,6 @@ export const voluntaryGradedStrategy = {
             tempGather.push(obj);
         });
         let uniqueTempGather = objectHelper.uniqueArrayObj(tempGather);
-        console.log(uniqueTempGather, 'uniqueTempGather');
 
         // 不同风险的志愿都填了几个
         let gatherNum = {
@@ -659,9 +643,6 @@ export const voluntaryGradedStrategy = {
             gatherNum[item.gather]++;
             fiveVolunteer[item.fk_five_volunteer_id]++;
         }
-
-        console.log(gatherNum, 'gatherNum');
-        console.log(fiveVolunteer, 'fiveVolunteer');
 
         // 首先判断是否志愿数是否是5个，5个则合理，否则不合理。
         let isEnough = true;
@@ -703,10 +684,6 @@ export const voluntaryGradedStrategy = {
         let schoolScoreArr = voluntaryScoreStrategy[
             uniqueTempGather[0].fk_lots_id === 6 ? 4 : uniqueTempGather[0].fk_lots_id
             ](uniqueTempGather);
-        console.log(getMaxAndMinScore(schoolScoreArr), 'getMaxAndMinScore');
-        // let testArr = [null, null, null, null, null];
-        console.log(schoolScoreArr, 'schoolScoreArr'); // 如果没有数据对应位置会赋值undefined
-        console.log(VOLUNTARY_NAME, 'VOLUNTARY_NAME');
 
         let scoreMsgArr = scoreGradedRationality[
             uniqueTempGather[0].fk_lots_id === 6 ? 4 : uniqueTempGather[0].fk_lots_id](schoolScoreArr);
@@ -739,7 +716,6 @@ export const voluntaryGradedStrategy = {
             tempGather.push(obj);
         });
         let uniqueTempGather = objectHelper.uniqueArrayObj(tempGather);
-        console.log(uniqueTempGather, 'uniqueTempGather');
 
         // 判断志愿选择完备性
         if (voluntaryCompleteStrategy[
@@ -752,10 +728,6 @@ export const voluntaryGradedStrategy = {
             uniqueTempGather[0].fk_lots_id === 6 ? 4 : uniqueTempGather[0].fk_lots_id
             ](uniqueTempGather);
 
-        console.log(schoolScoreArr, 'schoolScoreArr'); // 如果没有数据对应位置会赋值undefined
-        console.log(VOLUNTARY_NAME, 'VOLUNTARY_NAME');
-
-
         return {
             gradeDetailArr: gradeDetailArr,
             schoolScoreArr: schoolScoreArr,
@@ -766,7 +738,6 @@ export const voluntaryGradedStrategy = {
     4: (voluntaryList, gatherOption, volunteerCount) => {
         // 判断不能志愿都一样
         let gradeDetailArr = [];
-        console.log(gatherOption, 'gatherOption');
         // 处理数据，便于计算
         let tempGather = [];
         voluntaryList.forEach(item => {
@@ -783,7 +754,6 @@ export const voluntaryGradedStrategy = {
             tempGather.push(obj);
         });
         let uniqueTempGather = objectHelper.uniqueArrayObj(tempGather);
-        console.log(uniqueTempGather, 'uniqueTempGather');
 
         // 不同风险的志愿都填了几个
         let gatherNum = {
@@ -811,9 +781,6 @@ export const voluntaryGradedStrategy = {
             gatherNum[item.gather]++;
             fiveVolunteer[item.fk_five_volunteer_id]++;
         }
-
-        console.log(gatherNum, 'gatherNum');
-        console.log(fiveVolunteer, 'fiveVolunteer');
 
         // 首先判断是否志愿数是否是10个，10个则合理，否则不合理。
         let isEnough = true;
@@ -856,10 +823,6 @@ export const voluntaryGradedStrategy = {
             uniqueTempGather[0].fk_lots_id === 6 ? 4 : uniqueTempGather[0].fk_lots_id
             ](uniqueTempGather);
 
-        console.log(schoolScoreArr, 'schoolScoreArr'); // 如果没有数据对应位置会赋值undefined
-        console.log(VOLUNTARY_NAME, 'VOLUNTARY_NAME');
-
-        // let testArr = [500, 510, undefined, 520, 530, 450, undefined, undefined, 486, 496];
         let scoreMsgArr = scoreGradedRationality[
             uniqueTempGather[0].fk_lots_id === 6 ? 4 : uniqueTempGather[0].fk_lots_id](schoolScoreArr);
         if (scoreMsgArr.length > 0) {
@@ -934,7 +897,6 @@ export const voluntaryScoreStrategy = {
         for (let item of voluntaryList) {
             schoolScoreArr[item.fk_five_volunteer_id - 1] = item.score;
         }
-        console.log(schoolScoreArr, 8888888888);
         return schoolScoreArr;
     },
     5: voluntaryList => {
@@ -998,7 +960,6 @@ export const voluntaryPlanStrategy = {
             schoolArr[item.fk_five_volunteer_id - 1] = item;
         }
         schoolArr.forEach(item => {
-            console.log(item.name, item.enrollment1, 'enrollment1');
             if (item.enrollment1 && item.enrollment1 < 30 && (item.gather === 'd' || item.gather === 'e')) {
                 planDetailArr.push(`"${item.name}"${item.year - 1}的计划招生人数较少，${item.accountCategory === 1 ? '理科' : '文科'}只招了${item.enrollment1}人。   `);
             }

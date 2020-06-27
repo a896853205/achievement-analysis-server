@@ -173,7 +173,7 @@ router.post('/getMajor', async ctx => {
     // 三批合并为二批
   // user = await userService.getUserInfo(user.uuid);
     if(lotId===4){
-        console.log(lotId,'等于'+lotId+'进的');
+        
         let majorList4 = await schoolService.getMajorList(
             schoolId,
             user.examYear,
@@ -190,7 +190,7 @@ router.post('/getMajor', async ctx => {
         );
         majorList.majorList = majorList4.majorList.concat(majorList6.majorList)
     }else {
-        console.log(lotId,'等于'+lotId+'进来进来了');
+        
         majorList = await schoolService.getMajorList(
             schoolId,
             user.examYear,

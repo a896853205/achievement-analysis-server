@@ -197,7 +197,7 @@ export default {
 
     // 查询学校的属性通过学校id
     selectSchoolProperty: async id => {
-        console.log('到这了。。。。。selectSchoolProperty');
+        
         let schoolProperty = await db.query(
             new SqlObject(schoolMapper.selectSchoolProperty, [id])
         );

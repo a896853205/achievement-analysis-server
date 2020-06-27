@@ -36,10 +36,7 @@ router.post('/updateDeepAlterTimeDrop1', async ctx=> {
 router.post('/saveVoluntary', async ctx => {
   let { lotId, voluntary, reportType } = ctx.request.body,
     user = ctx.state.data;
-    for (let i = 0; i < 5; i++) {
-        console.log(voluntary[i], i);
-    }
-    console.log('=====================================================');
+
   let voluntaryUuid = await voluntaryService.saveVoluntary(
     lotId,
     voluntary,
@@ -104,7 +101,6 @@ router.get('/getVoluntarySchoolAndMajor', async ctx => {
 
 router.get('/getLotIdByVoluntaryUuid', async ctx => {
     const { voluntaryUuid } = ctx.query;
-    console.log(voluntaryUuid, 666666);
 
     const data = await voluntaryService.getLotIdByVoluntaryUuid( voluntaryUuid );
 
@@ -134,7 +130,6 @@ router.post('/getVoluntaryDeepResult', async ctx => {
 router.post('/getMyVoluntary', async ctx => {
   let user = ctx.state.data,
     voluntaryList = await voluntaryService.queryVoluntaryList(user.uuid);
-    console.log(user.uuid,'user.uuid');
 
   ctx.body = new Result({
     data: voluntaryList
