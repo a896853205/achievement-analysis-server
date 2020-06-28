@@ -948,43 +948,59 @@ export const voluntaryScoreStrategy = {
 */
 export const voluntaryPlanStrategy = {
     //提前批
-    1: voluntaryList => {
+    1: (voluntaryList, volunteerCount) => {
         return [];
     },
     // 一批A
-    2: voluntaryList => {
+    2: (voluntaryList, volunteerCount) => {
         let planDetailArr = [];
         // 开始弄专业入学人数
         let schoolArr = [];
         for (let item of voluntaryList) {
             schoolArr[item.fk_five_volunteer_id - 1] = item;
         }
+        // 首先判断最后一个志愿填没填
+        let noHava = true;
+        let finalVoluntary = {}; // 最后一个志愿
         schoolArr.forEach(item => {
-            if (item.enrollment1 && item.enrollment1 < 30 && (item.gather === 'd' || item.gather === 'e')) {
-                planDetailArr.push(`"${item.name}"${item.year - 1}的计划招生人数较少，${item.accountCategory === 1 ? '理科' : '文科'}只招了${item.enrollment1}人。   `);
+            if(item.fk_five_volunteer_id === volunteerCount){
+                noHava = false;
+                finalVoluntary = item;
             }
         });
+        console.log(finalVoluntary, 'finalVoluntary');
+        if(noHava){
+            planDetailArr.push(`建议${VOLUNTARY_NAME[volunteerCount - 1]}要在“D-最佳匹配”或者“E完美专业”集合中选取，并且该学校去年的招生人数最好大于30人，避免滑档。`);
+        }else {
+            if (finalVoluntary.fk_five_volunteer_id === volunteerCount &&
+                finalVoluntary.enrollment1 &&
+                finalVoluntary.enrollment1 < 30 &&
+                (finalVoluntary.gather === 'd' || finalVoluntary.gather === 'e')) {
+                planDetailArr.push(`"${finalVoluntary.name}"${finalVoluntary.year - 1}的计划招生人数较少，${finalVoluntary.accountCategory === 1 ? '理科' : '文科'}只招了${finalVoluntary.enrollment1}人。   `);
+            }
+        }
+
         return planDetailArr;
     },
     // 一批B
-    3: voluntaryList => {
+    3: (voluntaryList, volunteerCount) => {
         return [];
     },
     // 二批A
-    4: voluntaryList => {
-        return voluntaryPlanStrategy[2](voluntaryList);
+    4: (voluntaryList, volunteerCount) => {
+        return voluntaryPlanStrategy[2](voluntaryList, volunteerCount);
     },
     // 二批B
-    5: voluntaryList => {
+    5: (voluntaryList, volunteerCount) => {
         return [];
     },
     // 三批
-    6: voluntaryList => {
+    6: (voluntaryList, volunteerCount) => {
         return [];
     },
     // 专科
-    7: voluntaryList => {
-        return voluntaryPlanStrategy[2](voluntaryList);
+    7: (voluntaryList, volunteerCount) => {
+        return voluntaryPlanStrategy[2](voluntaryList, volunteerCount);
     }
 };
 

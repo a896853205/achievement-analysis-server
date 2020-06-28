@@ -194,7 +194,7 @@ export default {
             // 第三项判断大计划性
             result.planResult.planDetailArr = voluntaryPlanStrategy[
                 voluntaryList[0].fk_lots_id === 6 ? 4 : voluntaryList[0].fk_lots_id
-                ](voluntaryList);
+                ](voluntaryList, volunteerCount);
 
             if (result.planResult.planDetailArr.length) {
                 result.planResult.reasonable = false;
