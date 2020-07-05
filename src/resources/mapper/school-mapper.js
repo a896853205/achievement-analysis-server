@@ -559,31 +559,23 @@ AND
 		ORDER BY
 		  fk_school_property_id
 	`,
-//   selectSchoolBasicInfo: `select 
-// a.name,
-// a.fk_province_code,
-// a.fk_nature_id,
-// a.school_address,
-// a.school_phone,
-// a.school_intro,
-// a.campus,
-// a.rank,
-// a.masterNum,
-// a.doctorNum,
-// a.englishTitle,
-// a.schoolCreateTime
-// from
-// t_school as a
-// where 
-// a.id =?`,
-selectSchoolBasicInfo: `
-SELECT
-	name,fk_province_code,fk_nature_id,school_address,school_phone,school_intro,campus,rank,masterNum,doctorNum,englishTitle,schoolCreateTime
-FROM
-	t_school
-WHERE
-	id = ?
-`,
+  selectSchoolBasicInfo: `select 
+a.name,
+a.fk_province_code,
+a.fk_nature_id,
+a.school_address,
+a.school_phone,
+a.school_intro,
+a.campus,
+a.rank,
+a.masterNum,
+a.doctorNum,
+a.englishTitle,
+a.schoolCreateTime
+from
+t_school as a
+where 
+a.id =?`,
   // 使用入学id查询优化专业码
   selectDisciplineCodeByVoluntaryInfo: `
 		SELECT
