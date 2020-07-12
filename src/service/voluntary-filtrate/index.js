@@ -970,7 +970,7 @@ export const voluntaryPlanStrategy = {
         });
         console.log(finalVoluntary, 'finalVoluntary');
         if(noHava){
-            planDetailArr.push(`建议${VOLUNTARY_NAME[volunteerCount - 1]}要在“D-最佳匹配”或者“E完美专业”集合中选取，并且该学校去年的招生人数最好大于30人，避免滑档。`);
+            planDetailArr.push(`建议${VOLUNTARY_NAME[volunteerCount - 1]}要在“D-最佳匹配”或者“E-完美专业”集合中选取，并且该学校去年的招生人数最好大于30人，避免滑档。`);
         }else {
             if (finalVoluntary.fk_five_volunteer_id === volunteerCount &&
                 finalVoluntary.enrollment1 &&
