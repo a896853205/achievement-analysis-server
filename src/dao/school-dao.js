@@ -24,7 +24,20 @@ export default {
                 examYear - 3,
             ])
         );
+       /* console.log(accountCategory, 'accountCategory');
 
+        let tempList = [];
+        for (let i = 0; i <schoolList.length ; i++) {
+            if(schoolList[i].accountCategory==accountCategory){
+                tempList.push(schoolList[i]);
+            }
+        }
+        console.log("============");
+        tempList.forEach(item=>{
+            if(item.school_name=='大理大学'){
+                console.log(item)
+            }
+        });*/
         return initSchool(schoolList);
     },
 
@@ -60,8 +73,13 @@ export default {
                 [lotId, accountCategory]
             )
         );
-
-        return originalSchoolList;
+        let tempList = [];
+        originalSchoolList.forEach(item=>{
+            if(item.accountCategory==accountCategory){
+                tempList.push(item);
+            }
+        });
+        return tempList;
     },
 
     // 查询所有学校

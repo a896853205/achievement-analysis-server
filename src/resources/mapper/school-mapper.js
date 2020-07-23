@@ -78,7 +78,8 @@ export default {
 	c.*,
 	sys_t_major.id as major_id,
 	sys_t_major.major_name,
-	t_major_enrollment_info.enrollment_score as major_score
+	t_major_enrollment_info.enrollment_score as major_score,
+	t_major_enrollment_info.accountCategory
 	from 
 	merge_school_lots a
 	inner join
@@ -352,7 +353,8 @@ AND
 	c.*,
 	sys_t_major.id as major_id,
 	sys_t_major.major_name as major_name,
-	t_major_enrollment_info.enrollment_score as major_score
+	t_major_enrollment_info.enrollment_score as major_score,
+	t_major_enrollment_info.accountCategory
 	from 
 	merge_school_lots a
 	inner join
