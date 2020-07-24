@@ -163,7 +163,7 @@ export default {
     // 计算风险系数
     resultSchoolList = culRiskRateStrategies[lotId]({
       culList: resultSchoolList,
-      examYear: examYear - 1,
+      examYear: examYear,
     });
 
     // 删除前端不使用的数据
@@ -244,7 +244,7 @@ export default {
     // 计算风险系数
     resultSchoolList = culRiskRateStrategies[lotId]({
       culList: resultSchoolList,
-      examYear: examYear - 1,
+      examYear: examYear,
     });
 
     return {
@@ -358,7 +358,7 @@ export default {
     // 计算风险系数
     resultSchoolList = culRiskRateStrategies[lotId]({
       culList: resultSchoolList,
-      examYear: examYear - 1,
+      examYear: examYear,
     });
 
     // 删除前端不使用的数据
@@ -459,7 +459,7 @@ export default {
     // 计算风险系数
     majorList = culRiskRateStrategies[lotId]({
       culList: majorList,
-      examYear: examYear - 1,
+      examYear: examYear,
     });
 
     return {

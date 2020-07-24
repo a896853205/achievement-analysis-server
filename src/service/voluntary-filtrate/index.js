@@ -976,7 +976,7 @@ export const voluntaryPlanStrategy = {
                 finalVoluntary.enrollment1 &&
                 finalVoluntary.enrollment1 < 30 &&
                 (finalVoluntary.gather === 'd' || finalVoluntary.gather === 'e')) {
-                planDetailArr.push(`"${finalVoluntary.name}"${finalVoluntary.year - 1}的计划招生人数较少，${finalVoluntary.accountCategory === 1 ? '理科' : '文科'}只招了${finalVoluntary.enrollment1}人。   `);
+                planDetailArr.push(`"${finalVoluntary.name}"${finalVoluntary.year}的计划招生人数较少，${finalVoluntary.accountCategory === 1 ? '理科' : '文科'}只招了${finalVoluntary.enrollment1}人。   `);
             }
         }
 
