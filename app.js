@@ -1,6 +1,5 @@
 import Koa from 'koa';
 import json from 'koa-json';
-import onerror from 'koa-onerror';
 import bodyparser from 'koa-bodyparser';
 import xmlParser from 'koa-xml-body';
 import logger from 'koa-logger';

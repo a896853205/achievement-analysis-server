@@ -1,6 +1,7 @@
 import { DATA_BASE_KEY, LOCATION_DATA_BASE_KEY } from '../constants/keys';
 import { SAP_CONTROL } from '../config/app-config';
 import { ENVIRONMENT } from '../constants/app-constants';
+
 export let dbConfig = {
   host: '62.234.76.58',
   user: 'root',
