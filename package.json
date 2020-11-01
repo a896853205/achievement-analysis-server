@@ -13,7 +13,7 @@
     "alipay-sdk": "^3.0.8",
     "axios": "^0.19.2",
     "debug": "^4.1.1",
-    "ejs": "~2.3.3",
+    "ejs": "~2.5.5",
     "fs": "^0.0.1-security",
     "https": "^1.0.0",
     "jsonwebtoken": "^8.5.1",
