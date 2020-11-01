@@ -448,6 +448,7 @@ export default {
       oldThreeLotsScore,
     });
 
+    console.log('lotId', lotId);
     // 计算提档概率
     majorList = culEnrollRateStrategies[lotId]({
       stuOldOneScoreAndRank: oldOneScoreAndRank,
@@ -475,22 +476,22 @@ export default {
   // 通过学校的id和科目类型查询出历年分数
   getSchoolScores: async (fk_school_id, accountCategory) => {
     let [schoolList, lotsList] = await Promise.all([
-      schoolDao.querySchoolScores(fk_school_id, accountCategory),
-      schoolDao.selectSchoolLots(),
-    ]),
+        schoolDao.querySchoolScores(fk_school_id, accountCategory),
+        schoolDao.selectSchoolLots(),
+      ]),
       schoolScoreList = [],
       scoreAndRankDao = [];
 
     for (let item of schoolList) {
       let {
-        fk_lots_id,
-        score,
-        year,
-        gender,
-        poverty,
-        enrollment,
-        maxScore,
-      } = item,
+          fk_lots_id,
+          score,
+          year,
+          gender,
+          poverty,
+          enrollment,
+          maxScore,
+        } = item,
         { lots_name, gradation } = lotsList.find(
           lotsItem => lotsItem.id === fk_lots_id
         );

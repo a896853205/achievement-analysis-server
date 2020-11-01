@@ -23,142 +23,147 @@ router.post('/getSchool', async ctx => {
       provinceListValues,
       gatherValue,
       schoolName,
-      majorName
+      majorName,
     } = ctx.request.body,
     user = ctx.state.data,
     schoolList = {
-        schoolList: []
+      schoolList: [],
     };
 
   if (type === 1) {
     // 院校优先
-      // 三批合并为二批
-      if(lotId==4){
-          let schoolList4 = await schoolService.getSchoolListByLotsScore({
-              lotId,
-              natureValues,
-              propertyValues,
-              typeValues,
-              areaFeatureValues,
-              provinceListValues,
-              gatherValue,
-              accountCategory: user.accountCategory,
-              examYear: user.examYear,
-              score: user.score
-          });
-          let schoolList6 = await schoolService.getSchoolListByLotsScore({
-              lotId: 6,
-              natureValues,
-              propertyValues,
-              typeValues,
-              areaFeatureValues,
-              provinceListValues,
-              gatherValue,
-              accountCategory: user.accountCategory,
-              examYear: user.examYear,
-              score: user.score
-          });
-          schoolList.schoolList = schoolList4.schoolList.concat(schoolList6.schoolList);
-      }else {
-          schoolList = await schoolService.getSchoolListByLotsScore({
-              lotId,
-              natureValues,
-              propertyValues,
-              typeValues,
-              areaFeatureValues,
-              provinceListValues,
-              gatherValue,
-              accountCategory: user.accountCategory,
-              examYear: user.examYear,
-              score: user.score
-          });
-      }
-
+    // 三批合并为二批
+    if (lotId == 4) {
+      let schoolList4 = await schoolService.getSchoolListByLotsScore({
+        lotId,
+        natureValues,
+        propertyValues,
+        typeValues,
+        areaFeatureValues,
+        provinceListValues,
+        gatherValue,
+        accountCategory: user.accountCategory,
+        examYear: user.examYear,
+        score: user.score,
+      });
+      let schoolList6 = await schoolService.getSchoolListByLotsScore({
+        lotId: 6,
+        natureValues,
+        propertyValues,
+        typeValues,
+        areaFeatureValues,
+        provinceListValues,
+        gatherValue,
+        accountCategory: user.accountCategory,
+        examYear: user.examYear,
+        score: user.score,
+      });
+      schoolList.schoolList = schoolList4.schoolList.concat(
+        schoolList6.schoolList
+      );
+    } else {
+      schoolList = await schoolService.getSchoolListByLotsScore({
+        lotId,
+        natureValues,
+        propertyValues,
+        typeValues,
+        areaFeatureValues,
+        provinceListValues,
+        gatherValue,
+        accountCategory: user.accountCategory,
+        examYear: user.examYear,
+        score: user.score,
+      });
+    }
   } else if (type === 2) {
     // 专业优先
-      // 三批合并为二批
-      if(lotId == 4){
-          let schoolList4 = await schoolService.getSchoolListByMajorName({
-                  lotId,
-                  natureValues,
-                  propertyValues,
-                  typeValues,
-                  areaFeatureValues,
-                  provinceListValues,
-                  majorName,
-                  score: user.score,
-                  accountCategory: user.accountCategory,
-                  examYear: user.examYear,
-                  gatherValue
-          });
-          let schoolList6 = await schoolService.getSchoolListByMajorName({
-              lotId: 6,
-              natureValues,
-              propertyValues,
-              typeValues,
-              areaFeatureValues,
-              provinceListValues,
-              majorName,
-              score: user.score,
-              accountCategory: user.accountCategory,
-              examYear: user.examYear,
-              gatherValue
-          });
-          schoolList.schoolList = schoolList4.schoolList.concat(schoolList6.schoolList);
-      }else {
-          schoolList = await schoolService.getSchoolListByMajorName({
-              lotId,
-              natureValues,
-              propertyValues,
-              typeValues,
-              areaFeatureValues,
-              provinceListValues,
-              majorName,
-              score: user.score,
-              accountCategory: user.accountCategory,
-              examYear: user.examYear,
-              gatherValue
-          });
-      }
+    // 三批合并为二批
+    if (lotId == 4) {
+      let schoolList4 = await schoolService.getSchoolListByMajorName({
+        lotId,
+        natureValues,
+        propertyValues,
+        typeValues,
+        areaFeatureValues,
+        provinceListValues,
+        majorName,
+        score: user.score,
+        accountCategory: user.accountCategory,
+        examYear: user.examYear,
+        gatherValue,
+      });
+      let schoolList6 = await schoolService.getSchoolListByMajorName({
+        lotId: 6,
+        natureValues,
+        propertyValues,
+        typeValues,
+        areaFeatureValues,
+        provinceListValues,
+        majorName,
+        score: user.score,
+        accountCategory: user.accountCategory,
+        examYear: user.examYear,
+        gatherValue,
+      });
+      schoolList.schoolList = schoolList4.schoolList.concat(
+        schoolList6.schoolList
+      );
+    } else {
+      schoolList = await schoolService.getSchoolListByMajorName({
+        lotId,
+        natureValues,
+        propertyValues,
+        typeValues,
+        areaFeatureValues,
+        provinceListValues,
+        majorName,
+        score: user.score,
+        accountCategory: user.accountCategory,
+        examYear: user.examYear,
+        gatherValue,
+      });
+    }
   } else if (type === 3) {
     // 指定院校
-      // 三批合并为二批
-      if(lotId == 4){
-         let schoolList4 = await schoolService.getSchoolListBySchoolName({
-              lotId,
-              schoolName,
-              score: user.score,
-              accountCategory: user.accountCategory,
-              examYear: user.examYear
-          });
-          let schoolList6 = await schoolService.getSchoolListBySchoolName({
-              lotId: 6,
-              schoolName,
-              score: user.score,
-              accountCategory: user.accountCategory,
-              examYear: user.examYear
-          });
-          schoolList.schoolList = schoolList4.schoolList.concat(schoolList6.schoolList);
-      } else {
-          schoolList = await schoolService.getSchoolListBySchoolName({
-              lotId,
-              schoolName,
-              score: user.score,
-              accountCategory: user.accountCategory,
-              examYear: user.examYear
-          });
-      }
+    // 三批合并为二批
+    if (lotId == 4) {
+      let schoolList4 = await schoolService.getSchoolListBySchoolName({
+        lotId,
+        schoolName,
+        score: user.score,
+        accountCategory: user.accountCategory,
+        examYear: user.examYear,
+      });
+      let schoolList6 = await schoolService.getSchoolListBySchoolName({
+        lotId: 6,
+        schoolName,
+        score: user.score,
+        accountCategory: user.accountCategory,
+        examYear: user.examYear,
+      });
+      schoolList.schoolList = schoolList4.schoolList.concat(
+        schoolList6.schoolList
+      );
+    } else {
+      schoolList = await schoolService.getSchoolListBySchoolName({
+        lotId,
+        schoolName,
+        score: user.score,
+        accountCategory: user.accountCategory,
+        examYear: user.examYear,
+      });
+    }
   }
 
   if (schoolList.schoolList.length > 0) {
     ctx.body = new Result({
-      data: schoolList
+      data: schoolList,
     });
   } else {
     ctx.body = new Result({
       data: schoolList,
       status: 1,
-      msg: '没有符合筛选条件的学校'
+      msg: '没有符合筛选条件的学校',
     });
   }
 });
@@ -168,40 +173,38 @@ router.post('/getMajor', async ctx => {
   let { schoolId, lotId } = ctx.request.body,
     user = ctx.state.data,
     majorList = {
-        majorList:[]
+      majorList: [],
     };
-    // 三批合并为二批
+  // 三批合并为二批
   // user = await userService.getUserInfo(user.uuid);
-    if(lotId===4){
-        
-        let majorList4 = await schoolService.getMajorList(
-            schoolId,
-            user.examYear,
-            lotId,
-            user.accountCategory,
-            user.score
-        );
-        let majorList6 = await schoolService.getMajorList(
-            schoolId,
-            user.examYear,
-            6,
-            user.accountCategory,
-            user.score
-        );
-        majorList.majorList = majorList4.majorList.concat(majorList6.majorList)
-    }else {
-        
-        majorList = await schoolService.getMajorList(
-            schoolId,
-            user.examYear,
-            lotId,
-            user.accountCategory,
-            user.score
-        );
-    }
+  if (lotId === 4) {
+    let majorList4 = await schoolService.getMajorList(
+      schoolId,
+      user.examYear,
+      lotId,
+      user.accountCategory,
+      user.score
+    );
+    let majorList6 = await schoolService.getMajorList(
+      schoolId,
+      user.examYear,
+      6,
+      user.accountCategory,
+      user.score
+    );
+    majorList.majorList = majorList4.majorList.concat(majorList6.majorList);
+  } else {
+    majorList = await schoolService.getMajorList(
+      schoolId,
+      user.examYear,
+      lotId,
+      user.accountCategory,
+      user.score
+    );
+  }
 
   ctx.body = new Result({
-    data: majorList
+    data: majorList,
   });
 });
 
@@ -211,7 +214,7 @@ router.post('/getSchoolDetail', async ctx => {
   let schoolDetail = await schoolService.getSchoolDetail(schoolId);
 
   ctx.body = new Result({
-    data: schoolDetail
+    data: schoolDetail,
   });
 });
 
@@ -222,7 +225,7 @@ router.post('/searchSchool', async ctx => {
     typeValues,
     areaFeatureValues,
     schoolName,
-    page
+    page,
   } = ctx.request.body;
 
   let schoolList = await schoolService.getSchoolList({
@@ -231,11 +234,11 @@ router.post('/searchSchool', async ctx => {
     typeValues,
     areaFeatureValues,
     schoolName,
-    page
+    page,
   });
 
   ctx.body = new Result({
-    data: schoolList
+    data: schoolList,
   });
 });
 
@@ -248,7 +251,7 @@ router.post('/getSchoolScoreList', async ctx => {
   );
 
   ctx.body = new Result({
-    data: schoolScoreList
+    data: schoolScoreList,
   });
 });
 
@@ -263,7 +266,7 @@ router.post('/getEnrollmentGuideNews', async ctx => {
   );
 
   ctx.body = new Result({
-    data: schoolEnrollment
+    data: schoolEnrollment,
   });
 });
 
@@ -278,7 +281,7 @@ router.post('/getEnrollmentGuideNewsDetail', async ctx => {
   );
 
   ctx.body = new Result({
-    data: enrollmentGuideNewsDetail
+    data: enrollmentGuideNewsDetail,
   });
 });
 
@@ -291,7 +294,7 @@ router.post('/getSchoolRank', async ctx => {
   let schoolRank = await schoolService.selectSchoolRankById(schoolId);
 
   ctx.body = new Result({
-    data: schoolRank
+    data: schoolRank,
   });
 });
 
@@ -304,7 +307,7 @@ router.post('/miniAppGetSchool', async ctx => {
     gatherValue,
     examYear,
     score,
-    accountCategory
+    accountCategory,
   } = ctx.request.body;
 
   let { schoolList } = await schoolService.getSchoolListByLotsScore({
@@ -317,11 +320,11 @@ router.post('/miniAppGetSchool', async ctx => {
     gatherValue,
     accountCategory,
     examYear,
-    score
+    score,
   });
 
   ctx.body = new Result({
-    data: schoolList.slice(0, 3)
+    data: schoolList.slice(0, 3),
   });
 });
 
@@ -330,7 +333,7 @@ router.post('/getSchoolRecommendList', async ctx => {
   let schoolRecommendList = await schoolService.querySchoolRecommend();
 
   ctx.body = new Result({
-    data: schoolRecommendList
+    data: schoolRecommendList,
   });
 });
 
