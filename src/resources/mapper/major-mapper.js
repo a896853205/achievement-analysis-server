@@ -1,5 +1,5 @@
 export default {
-    getAllYear: `
+  getAllYear: `
     SELECT
      distinct year
     FROM
@@ -127,5 +127,5 @@ export default {
       sys_t_lots
       WHERE
       id = ?
-    `
+    `,
 };
