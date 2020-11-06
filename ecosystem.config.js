@@ -27,11 +27,11 @@ module.exports = {
   
         repo: 'git@github.com:a896853205/achievement-analysis-server.git', // 项目仓库地址
   
-        path: '/achievement-analysis/achievement-analysis-server', // 服务器项目创建目录，没有目录会自己新建
+        path: '/achievement-analysis-test/achievement-analysis-server', // 服务器项目创建目录，没有目录会自己新建
   
-        'post-deploy': 'npm install && npm run build', // 配置过程
+        'post-deploy': 'yarn', // 配置过程
   
-        'post-setup': 'npm install && npm run build', // 升级过程
+        'post-setup': 'yarn && pm2 restart all', // 升级过程
       },
     },
   };
