@@ -29,7 +29,7 @@ module.exports = {
   
         path: '/achievement-analysis-test/achievement-analysis-server', // 服务器项目创建目录，没有目录会自己新建
   
-        'post-deploy': 'yarn', // 配置过程
+        'post-deploy': 'yarn && pm2 start bin/www', // 配置过程
   
         'post-setup': 'yarn && pm2 restart all', // 升级过程
       },
