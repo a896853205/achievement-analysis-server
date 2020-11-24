@@ -5,7 +5,10 @@ import majorMapper from '../resources/mapper/major-mapper';
 
 export default {
 
-    getAllYear: async () => {
+  getMajorList: async (researchMajorName) => {
+    return await db.query(new SqlObject(majorMapper.getMajorList, [`%${researchMajorName}%`]));
+  },
+  getAllYear: async () => {
     return await db.query(new SqlObject(majorMapper.getAllYear));
   },
   queryMajorLevelTwo: async () => {

@@ -14,17 +14,17 @@ router.post('/getSchool', async ctx => {
   //      2专业优先
   //      3指定院校
   let {
-      type,
-      lotId,
-      natureValues,
-      propertyValues,
-      typeValues,
-      areaFeatureValues,
-      provinceListValues,
-      gatherValue,
-      schoolName,
-      majorName,
-    } = ctx.request.body,
+    type,
+    lotId,
+    natureValues,
+    propertyValues,
+    typeValues,
+    areaFeatureValues,
+    provinceListValues,
+    gatherValue,
+    schoolName,
+    majorName,
+  } = ctx.request.body,
     user = ctx.state.data,
     schoolList = {
       schoolList: [],

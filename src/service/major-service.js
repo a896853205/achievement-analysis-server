@@ -47,10 +47,10 @@ export default {
 
   selectMajorDetailByid: async majorTwoCode => {
     let {
-        major_name: majorName,
-        major_level_one_code: majorLevelOneCode,
-        major_category_code: majorCategoryCode
-      } = await majorDao.selectMajorNameById(majorTwoCode),
+      major_name: majorName,
+      major_level_one_code: majorLevelOneCode,
+      major_category_code: majorCategoryCode
+    } = await majorDao.selectMajorNameById(majorTwoCode),
       [majorLevelOne, majorCategory] = await Promise.all([
         majorDao.selectMajorLevelOneByCode(majorLevelOneCode),
         majorDao.selectMajorCategoryByCode(majorCategoryCode)
@@ -124,9 +124,9 @@ export default {
 
   querySchoolMajor: async (schoolId, accountCategory, year) => {
     let [schoolMajor, lotsNameArr] = await Promise.all([
-        majorDao.querySchoolMajor(schoolId, accountCategory, year),
-        systemDao.queryLots()
-      ]),
+      majorDao.querySchoolMajor(schoolId, accountCategory, year),
+      systemDao.queryLots()
+    ]),
       lotsName = new Map(),
       schoolMajorList = [];
 
@@ -166,8 +166,13 @@ export default {
     return schoolMajorList;
   },
 
-    getAllYear: async () => {
-        let years = await  majorDao.getAllYear();
-        return years;
-    }
+  getAllYear: async () => {
+    let years = await majorDao.getAllYear();
+    return years;
+  },
+
+  getMajorList: async (researchMajorName) => {
+    let majorList = await majorDao.getMajorList(researchMajorName);
+    return majorList;
+  }
 };

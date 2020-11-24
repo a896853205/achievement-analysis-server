@@ -53,10 +53,20 @@ router.post('/getSchoolMajor', async ctx => {
 // 获取专业录取年份
 router.get('/getAllYear', async ctx => {
 
-    let years = await majorService.getAllYear();
+  let years = await majorService.getAllYear();
 
-    ctx.body = new Result({
-        data: years
-    });
+  ctx.body = new Result({
+    data: years
+  });
+});
+
+// 获取专业列表
+router.post('/getMajorList', async ctx => {
+  const { researchMajorName } = ctx.request.body;
+  let majorList = await majorService.getMajorList(researchMajorName);
+
+  ctx.body = new Result({
+    data: majorList
+  });
 });
 export default router;

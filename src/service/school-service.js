@@ -448,7 +448,6 @@ export default {
       oldThreeLotsScore,
     });
 
-    console.log('lotId', lotId);
     // 计算提档概率
     majorList = culEnrollRateStrategies[lotId]({
       stuOldOneScoreAndRank: oldOneScoreAndRank,

@@ -18,6 +18,7 @@ import news from './src/routes/news';
 import indexData from './src/routes/index-data';
 import major from './src/routes/major';
 import payment from './src/routes/payment';
+import fuzzySearchMajor from './src/routes/fuzzy-search-major';
 
 // key
 import { TOKEN_KEY } from './src/constants/keys';
@@ -119,6 +120,7 @@ app.use(news.routes(), news.allowedMethods());
 app.use(indexData.routes(), indexData.allowedMethods());
 app.use(major.routes(), major.allowedMethods());
 app.use(payment.routes(), payment.allowedMethods());
+app.use(fuzzySearchMajor.routes(),fuzzySearchMajor.allowedMethods());
 
 app.use(sslify());
 // error-handling

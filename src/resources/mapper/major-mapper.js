@@ -1,5 +1,15 @@
 export default {
-    getAllYear: `
+  getMajorList: `
+    SELECT
+      id,major_level_two_code,major_name,comment,major_level_one_code,major_category_code
+    FROM
+      sys_t_major
+    WHERE 
+      major_name like ?
+    GROUP BY
+      major_name
+`,
+  getAllYear: `
     SELECT
      distinct year
     FROM
@@ -127,5 +137,5 @@ export default {
       sys_t_lots
       WHERE
       id = ?
-    `
+    `,
 };
