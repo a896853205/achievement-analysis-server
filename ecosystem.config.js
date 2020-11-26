@@ -18,8 +18,9 @@ module.exports = {
       ref: 'origin/dev', // 选择项目需要配置的git分支
       repo: 'git@github.com:a896853205/achievement-analysis-server.git', // 项目仓库地址
       path: '/achievement-analysis-1126/achievement-analysis-server', // 服务器项目创建目录，没有目录会自己新建
-      'post-deploy': 'yarn && pm2 start bin/www', // 配置过程
-      'post-setup': 'yarn && pm2 restart all', // 升级过程
+      'post-deploy':
+        'yarn && export NODE_ENV=production && pm2 reload ecosystem.config.js --env production',
+      'post-setup': 'yarn'
     },
   },
 };
